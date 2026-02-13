@@ -1,0 +1,670 @@
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>GPE Faculty Handbook</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            line-height: 1.6;
+            color: #333;
+            max-width: 1400px;
+            margin: 0 auto;
+            padding: 20px;
+        }
+
+        header {
+            border-bottom: 2px solid #800000;
+            margin-bottom: 20px;
+            padding-bottom: 10px;
+            width: 100%;
+        }
+
+        .header-top {
+            text-align: center;
+        }
+
+        .header-bottom-row {
+            display: flex;
+            justify-content: center;
+            align-items: flex-end;
+            margin-top: 10px;
+        }
+
+        .draft-text {
+            color: #800000;
+            font-size: 2em;
+            font-weight: bold;
+            margin: 10px 0;
+        }
+
+        h1 { color: #800000; margin: 10px 0; }
+        h2 { color: #800000; border-bottom: 1px solid #ccc; padding-bottom: 5px; margin-top: 40px; }
+        h3 { color: #555; margin-bottom: 10px; }
+
+        .main-container {
+            display: grid;
+            grid-template-columns: 320px 1fr;
+            gap: 40px;
+            align-items: start;
+        }
+
+        /* Sticky Left Column containing TOC and Search */
+        #toc-column {
+            position: sticky;
+            top: 20px;
+            background: #f9f9f9;
+            padding: 20px;
+            border-radius: 8px;
+            height: fit-content;
+            max-height: 90vh;
+            overflow-y: auto;
+            border: 1px solid #ddd;
+            box-sizing: border-box;
+        }
+
+        /* Search Box styling inside TOC */
+        #search-container {
+            background: white;
+            padding: 15px;
+            border: 2px solid #800000;
+            border-radius: 8px;
+            margin-bottom: 20px;
+            display: flex;
+            flex-direction: column;
+            gap: 8px;
+        }
+
+        #toc-column h2 { margin-top: 0; font-size: 1.2em; }
+        #toc-column h3 { font-size: 1em; margin-top: 20px; }
+        #toc-column ul { list-style-type: disc; padding-left: 20px; font-size: 0.9em; }
+        
+        #toc-column a { 
+            text-decoration: none; 
+            color: #800000; 
+            font-weight: bold; 
+            display: block; 
+            padding: 8px 0; 
+        }
+        #toc-column a:hover { text-decoration: underline; }
+
+        /* Submenu Toggle Styling */
+        .submenu {
+            display: none;
+            list-style-type: none !important;
+            padding-left: 15px !important;
+            margin-top: -5px;
+            margin-bottom: 10px;
+        }
+        .submenu.active {
+            display: block;
+        }
+        .has-children > a::after {
+            content: ' ▼';
+            font-size: 0.7em;
+            vertical-align: middle;
+            color: #888;
+        }
+        
+        #content-column { min-width: 0; }
+
+        .back-link { 
+            display: inline-block; 
+            margin-top: 10px; 
+            font-size: 0.9em; 
+            color: #800000; 
+            text-decoration: none; 
+            font-weight: bold; 
+            padding: 12px 0; 
+        }
+        
+        table { width: 100%; border-collapse: collapse; margin: 20px 0; }
+        table, th, td { border: 1px solid #ddd; padding: 10px; text-align: left; }
+        th { background-color: #f4f4f4; }
+        .staff-contact { background-color: #f9f9f9; padding: 15px; border-left: 5px solid #800000; margin: 10px 0; }
+        .important-note { background-color: #fff3f3; padding: 10px; border: 1px solid #800000; margin: 10px 0; }
+        .screenshot-container { text-align: center; margin: 20px 0; }
+        .screenshot-container img { max-width: 100%; height: auto; border: 1px solid #ccc; }
+        .section-description { font-style: italic; color: #666; margin-bottom: 10px; padding: 0 10px; border-left: 3px solid #ccc; }
+        .instructional-info-container { display: flex; align-items: flex-start; gap: 20px; margin-top: 10px; }
+        .instructional-text { flex: 2; }
+        .instructional-thumbnail { flex: 1; text-align: center; }
+        .instructional-thumbnail img { border: 1px solid #ccc; border-radius: 4px; transition: transform 0.2s; margin-bottom: 10px; }
+        .instructional-thumbnail img:hover { transform: scale(1.05); }
+
+        /* Responsive Search Controls */
+        .search-row { display: flex; gap: 8px; flex-wrap: wrap; }
+        #search-input { 
+            padding: 5px 10px; 
+            border: 1px solid #ccc; 
+            border-radius: 4px; 
+            flex: 1 1 180px; 
+            min-height: 44px; 
+            box-sizing: border-box;
+        }
+        .search-btn { 
+            background: #800000; 
+            color: white; 
+            border: none; 
+            padding: 10px 15px; 
+            border-radius: 4px; 
+            cursor: pointer; 
+            font-size: 0.85em; 
+            min-height: 44px; 
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+        #nav-controls { flex-wrap: wrap; gap: 10px; }
+        #search-info { font-size: 0.75em; color: #666; text-align: right; width: 100%; }
+        
+        .highlight { background-color: yellow; color: black; }
+        .highlight.current { background-color: orange; outline: 2px solid #800000; }
+
+        @media (max-width: 900px) {
+            .main-container { grid-template-columns: 1fr; }
+            #toc-column { position: relative; top: 0; max-height: none; }
+            .instructional-info-container { flex-direction: column; }
+            .instructional-thumbnail { width: 100%; text-align: left; }
+        }
+        
+        @media (max-width: 600px) {
+            .draft-text { font-size: 1.2em; }
+            h1 { font-size: 1.5em; }
+            table { font-size: 0.8em; display: block; overflow-x: auto; }
+        }
+    </style>
+</head>
+<body>
+
+<header id="top">
+    <div class="header-top">
+        <div class="screenshot-container"><img src="https://raw.githubusercontent.com/tmcgurk1817/handbook/main/Logo.png" alt="Dept logo"></div>
+        <h1>Department of Geography, Planning & Environment</h1>
+        <h2>Concordia University - Arts and Science</h2>
+    </div>
+    <div class="header-bottom-row">
+        <div class="draft-text">FACULTY HANDBOOK 2026-2027 DRAFT</div>
+    </div>
+</header>
+
+<div class="main-container">
+    <nav id="toc-column">
+        <div id="search-container">
+            <div class="search-row">
+                <input type="text" id="search-input" placeholder="Find in page..." onkeypress="if(event.key==='Enter') performSearch()">
+                <button class="search-btn" onclick="performSearch()">Find</button>
+            </div>
+            <div class="search-row" id="nav-controls" style="display:none; justify-content: space-between; margin-top: 8px;">
+                <button class="search-btn" style="background:#555" onclick="clearHighlights()">Clear</button>
+                <div class="search-row">
+                    <button class="search-btn" onclick="jumpPrev()">Prev ↑</button>
+                    <button class="search-btn" onclick="jumpNext()">Next ↓</button>
+                </div>
+            </div>
+            <div id="search-info"></div>
+        </div>
+
+        <h2>Table of Contents</h2>
+        <h3>I. Governance & Administration</h3>
+        <ul>
+            <li class="has-children">
+                <a href="#committee-membership" onclick="toggleSubmenu(event, 'gov-sub')">Committees & Admin</a>
+                <ul class="submenu" id="gov-sub">
+                    <li><a href="#committee-membership" style="font-weight: normal;">Committee Membership</a></li>
+                    <li><a href="#faculty-admin" style="font-weight: normal;">Administrative Positions</a></li>
+                </ul>
+            </li>
+            <li><a href="#org-chart">Organizational Chart</a></li>
+            <li class="has-children">
+                <a href="#prox-cards-keys" onclick="toggleSubmenu(event, 'access-sub')">Access & Keys</a>
+                <ul class="submenu" id="access-sub">
+                    <li><a href="#prox-cards-keys" style="font-weight: normal;">Prox Cards</a></li>
+                    <li><a href="#pt-key-instructions" style="font-weight: normal;">Part-time Key Order</a></li>
+                </ul>
+            </li>
+            <li><a href="#staff-members">Staff Members & Responsibility</a></li>
+            <li><a href="#useful-links">Useful Links</a></li>
+        </ul>
+        <h3>II. Instructional & Classroom Management</h3>
+        <ul>
+            <li><a href="#cancelling-classes">Cancelling Classes</a></li>
+            <li><a href="#copying-computing">Copying and Computing</a></li>
+            <li class="has-children">
+                <a href="#course-outlines" onclick="toggleSubmenu(event, 'instr-sub')">Course Management</a>
+                <ul class="submenu" id="instr-sub">
+                    <li><a href="#course-outlines" style="font-weight: normal;">Course Outlines</a></li>
+                    <li><a href="#grade-submissions" style="font-weight: normal;">Grade Submissions</a></li>
+                    <li><a href="#office-hour" style="font-weight: normal;">Office Hours</a></li>
+                </ul>
+            </li>
+            <li><a href="#moodle">Moodle</a></li>
+            <li class="has-children">
+                <a href="#room-changes-inside" onclick="toggleSubmenu(event, 'rooms-sub')">Room Changes</a>
+                <ul class="submenu" id="rooms-sub">
+                    <li><a href="#room-changes-inside" style="font-weight: normal;">Inside Dept</a></li>
+                    <li><a href="#room-changes-outside" style="font-weight: normal;">Outside Dept</a></li>
+                </ul>
+            </li>
+            <li><a href="#sis-section">SIS</a></li>
+        </ul>
+        <h3>III. Academic Evaluation & Grading</h3>
+        <ul>
+            <li><a href="#assignments">Assignments</a></li>
+            <li><a href="#course-evaluations">Course Evaluations</a></li>
+            <li><a href="#exams">Exams</a></li>
+            <li><a href="#grading">Grading Policy</a></li>
+            <li class="has-children">
+                <a href="#grade-changes" onclick="toggleSubmenu(event, 'grades-sub')">Grade Changes & IP</a>
+                <ul class="submenu" id="grades-sub">
+                    <li><a href="#grade-changes" style="font-weight: normal;">Grade Changes</a></li>
+                    <li><a href="#ip-notations" style="font-weight: normal;">Graduate IP Notations</a></li>
+                    <li><a href="#inc-notations" style="font-weight: normal;">Undergrad INC Notations</a></li>
+                </ul>
+            </li>
+            <li><a href="#multiple-choice">Multiple Choice Processing</a></li>
+        </ul>
+        <h3>IV. Student Relations & Academic Integrity</h3>
+        <ul>
+            <li><a href="#conflict-resolution">Conflict Resolution</a></li>
+            <li><a href="#plagiarism">Academic Misconduct</a></li>
+            <li class="has-children">
+                <a href="#students-fieldwork" onclick="toggleSubmenu(event, 'field-sub')">Students & Fieldwork</a>
+                <ul class="submenu" id="field-sub">
+                    <li><a href="#field-ethics" style="font-weight: normal;">Ethics & Subjects</a></li>
+                    <li><a href="#field-expenses" style="font-weight: normal;">Trip Expenditures</a></li>
+                </ul>
+            </li>
+        </ul>
+    </nav>
+
+    <main id="content-column">
+        <h1 id="governance">I. Governance & Administration</h1>
+        <p class="section-description">This section outlines the department's foundational structure and the essential administrative resources available to personnel. It includes the organizational chart and defined areas of responsibility for staff and faculty leadership, ensuring that roles are transparent and communication channels are clear. Additionally, this section outlines the logistics for physical and digital access, including keys, proximity cards, and a directory of key contact information.</p>
+
+        <section id="committee-membership">
+            <h2>Committee Membership 2026-2027 DRAFT</h2>
+            <table> <tr> <th>Committee</th> <th>Members</th> </tr> <tr> <td>Curriculum Committee (DCC)</td> <td>Townsend (ex-officio), Biron (GPD: MSc & PhD), Jaeger (GPD: MEnv), Gould (UPD GEOG), Rantisi (UPD URBS), ? (CUPFA)</td> </tr> <tr> <td>Dept Ethics Committee (DEC) / CER</td> <td>Gould, Kross</td> </tr> <tr> <td>Department Personnel Committee (DPC)</td> <td>Townsend (ex-officio), Biron, Caquard, Gauthier, Gould</td> </tr> <tr> <td>Department Tenure Committee (DTC)</td> <td>All GPE Tenured Faculty Members</td> </tr> <tr> <td>Graduate Committee (MSc/PhD)</td> <td>Townsend (ex-officio), Biron (GPD Fall), Matthews (GPD Winter), Akbulut, Rantisi</td> </tr> <tr> <td>Graduate Committee (MEnv)</td> <td>Townsend (ex-officio), Jaeger (GPD), Biron, Caquard</td> </tr> <tr> <td>Part-time Hiring Committee (PTHC)</td> <td>Townsend (ex-officio), Gauthier (CUFA), Gould (CUFA), Buskard (CUPFA), Freeman (CUPFA), Seto (CUPFA alternate)</td> </tr> <tr> <td>Seminar Series Coordinator</td> <td>Danyluk</td> </tr> <tr> <td>Space Committee</td> <td>Townsend (ex-officio)</td> </tr> <tr> <td>Climate Emergency Committee (CEC)</td> <td>Jaeger, students</td> </tr> <tr> <td>EDI Committee</td> <td>Rantisi, Kross</td> </tr> </table>
+            <a href="#top" class="back-link">↑ Back to Top</a>
+        </section>
+
+        <section id="faculty-admin">
+            <h2>Faculty Administrative Positions</h2>
+            <ul> <li><strong>Chair:</strong> Dr. Damon Matthews</li> <li><strong>Undergrad Advisor (Envir. Geography, Envir and Sustainability Science, Human Envir):</strong> Dr. Nalini Mohabir</li> <li><strong>Undergraduate Advisor (Urban Planning, Urban Studies):</strong> Dr. Alexandra Lesnikowski</li> <li><strong>Graduate Program Director (MSc, PhD):</strong> Dr. Sébastien Caquard</li> <li><strong>Graduate Program Director (MEnv):</strong> Dr. Sarah E. Turner</li> </ul>
+            <a href="#top" class="back-link">↑ Back to Top</a>
+        </section>
+
+        <section id="org-chart">
+            <h2>Organizational Chart</h2>
+            <div class="screenshot-container"><img src="https://raw.githubusercontent.com/tmcgurk1817/handbook/main/Org.png" alt="Dept Org Chart"> </div>
+            <a href="#top" class="back-link">↑ Back to Top</a>
+        </section>
+
+        <section id="prox-cards-keys">
+            <h2>Prox Cards and Keys</h2>
+            <p>Prox cards (access cards) are used for H1254 (Reading Room), ER1428 (equipped teaching room), and ER1442-15 (Urban Planning Studio). To order your own or to request keys, use the online forms provided below:</p>
+            <div style="margin: 20px 0; display: flex; flex-wrap: wrap; gap: 10px;"> <a href="https://forms.office.com/r/8iJZGy4EX1" target="_blank" style="background-color: #912338; color: white; padding: 12px 20px; text-decoration: none; border-radius: 5px; font-weight: bold; min-height: 44px; display: flex; align-items: center;">Get a Prox Card</a> <a href="https://www.concordia.ca/campus-life/security/services/accesses/SGW-key-request-form.html" target="_blank" style="background-color: #912338; color: white; padding: 12px 20px; text-decoration: none; border-radius: 5px; font-weight: bold; min-height: 44px; display: flex; align-items: center;">Request A Key</a> </div>
+            <h3 id="pt-key-instructions">Part-time Faculty Key Order Instructions</h3>
+            <p>The form for ordering keys via Concordia Security requires specific information for questions 9 through 15. Follow the online form prompts until Question 9, then use these responses (click image for more details):</p>
+            <div class="instructional-info-container">
+                <div class="instructional-text">
+                    <ul>
+                        <li><strong>Question # 9 (K1 Building)</strong> <em><span style="color:red;">= H - Henry F. Hall Building</span></em></li>
+                        <li><strong>Question # 10 (K1 - Type of Key)</strong> <em><span style="color:red;">= Room</span></em></li>
+                        <li><strong>Question # 11 (Room #)</strong> <em><span style="color:red;">= 1255.46</span></em></li>
+                        <li><strong>Question # 12 (Notes - Key Cut like)</strong> <em><span style="color:red;">= NEED TO ID</span></em></li>
+                        <li><strong>Question # 13 (Key ring)</strong> <em><span style="color:red;">= No</span></em></li>
+                        <li><strong>Question # 15 (Authorizer)</strong> <em><span style="color:red;">= TANYA VOLPE-STANDING</span></em></li>
+                    </ul>
+                </div>
+                <div class="instructional-thumbnail">
+                    <a href="https://raw.githubusercontent.com/tmcgurk1817/handbook/main/keys.png" target="_blank">
+                        <img src="https://raw.githubusercontent.com/tmcgurk1817/handbook/main/keys.png" alt="Key Request Form Guide" width="150">
+                        <p style="font-size: 0.8em; color: #666; margin-top: 5px;">View Form Guide</p>
+                    </a>
+                </div>
+            </div>
+            <p>Then follow the remaining prompts and submit the request. Key processing can take 2 to 4 weeks depending on demand; the department suggests submitting requests as soon as possible.</p>
+            <a href="#top" class="back-link">↑ Back to Top</a>
+        </section>
+
+        <section id="staff-members">
+            <h2>Staff Members and Areas of Responsibility</h2>
+            <div class="staff-contact">
+                <strong>DEPARTMENT ADMINISTRATOR: Tanya Volpe-Standing</strong><br>
+                <a href="mailto:administrator.gpe@concordia.ca">administrator.gpe@concordia.ca</a> | 514-848-2424, ext. 5646 | Room H-1255.23<br>
+                Work Hours: Mon-Fri 09:30-17:30 – Thursdays remote
+                <ul> <li>Day-to-day administration of GPE; policies and procedures; course scheduling</li> <li>Preparing materials for PTHC meetings; answering part-time teaching application queries</li> <li>Budget administration and payroll; assistance to faculty with expense claims and UNITY</li> <li>Contracts (CUPFA, TRAC); troubleshooting student issues and grant issues</li> <li>Complaints and conflict resolution; work assignment and supervision of GPE staff</li> <li>TA/Faculty relations; Assistant to the Chair; Department space administration</li> <li>Entering curriculum changes; preparing minutes and documents for departmental meetings</li> </ul>
+            </div>
+            <div class="staff-contact">
+                <strong>NETWORK & GEOSPATIAL TECHNOLOGIES MANAGER: Marco Burelli</strong><br>
+                <a href="mailto:M.Burelli@concordia.ca">M.Burelli@concordia.ca</a> | 514-848-2424 ext. 2060<br>
+                Work Hours: Mon-Fri 10:00-18:00
+                <ul> <li>All computer and network related issues</li> <li>All geospatial equipment: maintenance, training, and loans</li> <li>Support in teaching GIS; Reading Room/GIS Lab and staff; Department website</li> </ul>
+            </div>
+            <div class="staff-contact">
+                <strong>INTERNSHIP COORDINATOR: Niem Huynh</strong><br>
+                <a href="mailto:Menv.internship@concordia.ca">Menv.internship@concordia.ca</a> | 514-848-2424 ext. 2048<br>
+                Work Hours: Mon-Thurs 08:00-16:00 – Thursdays remote
+                <ul> <li>Master of Environmental Assessment (MEnv) graduate student internship placement and supervision</li> <li>Liaising with current, former, and potential internship partners</li> <li>Organizing and evaluating internship report presentations</li> <li>Designing and running ENVS 608: “Getting Ready for EA Internship”</li> </ul>
+            </div>
+            <div class="staff-contact">
+                <strong>GRADUATE PROGRAM ASSISTANT: Jennifer Srey</strong><br>
+                <a href="mailto:Jennifer.Srey@concordia.ca">Jennifer.Srey@concordia.ca</a> | 514-848-2424 ext. 2051<br>
+                In Office: Tue & Wed | Remote: Mon, Thurs & Fri
+                <ul> <li>Graduate student application, admission, and registration</li> <li>Graduate student requests; TA contracts</li> <li>Keeping records of graduate supervision and committee membership</li> <li>Assisting GPDs with new student orientations</li> </ul>
+            </div>
+            <div class="staff-contact">
+                <strong>UNDERGRADUATE PROGRAM ASSISTANT: Marilyn Malofy</strong><br>
+                <a href="mailto:Marilyn.malofy@concordia.ca">Marilyn.malofy@concordia.ca</a> | 514-848-2424 ext. 2446<br>
+                Work Hours: Mon-Fri 07:45-15:45 – Fridays remote
+                <ul> <li>Undergraduate registration, course overrides, and student requests</li> <li>Undergraduate program audits; course outlines collection</li> <li>Exam coordinating and department liaison for the Exams Office</li> <li>Collecting signatures/documents for student requests and Honours programs</li> <li>Assisting UPDs with new student orientations</li> </ul>
+            </div>
+            <div class="staff-contact">
+                <strong>SERVICE ASSISTANT: Thomas McGurk</strong><br>
+                <a href="mailto:geogplanenviro@concordia.ca">geogplanenviro@concordia.ca</a> | 514-848-2424 ext. 2050<br>
+                Work Hours: Mon-Fri 09:00-17:00 – Fridays remote
+                <ul> <li>Receiving and redirecting inquiries; blast email distribution</li> <li>Troubleshooting office equipment and facilities issues (Tickets)</li> <li>Office supplies; key requests; room bookings for GPE teaching spaces</li> </ul>
+            </div>
+            <a href="#top" class="back-link">↑ Back to Top</a>
+        </section>
+
+        <section id="useful-links">
+            <h2>Useful Links and E-mail Addresses</h2>
+            <div style="margin: 20px 0; display: flex; flex-wrap: wrap; gap: 10px;"> <a href="http://www.concordia.ca/artsci/students/academic-integrity.html" target="_blank" style="background-color: #912338; color: white; padding: 12px 20px; text-decoration: none; border-radius: 5px; font-weight: bold; min-height: 44px; display: flex; align-items: center;">Academic Integrity</a> <a href="https://www.concordia.ca/health/mental-health/counselling.html" target="_blank" style="background-color: #912338; color: white; padding: 12px 20px; text-decoration: none; border-radius: 5px; font-weight: bold; min-height: 44px; display: flex; align-items: center;">Counseling</a> <a href="https://www.concordia.ca/offices/ombuds.html" target="_blank" style="background-color: #912338; color: white; padding: 12px 20px; text-decoration: none; border-radius: 5px; font-weight: bold; min-height: 44px; display: flex; align-items: center;">Ombuds Office</a> <a href="http://moodle.concordia.ca/moodle/login/" target="_blank" style="background-color: #912338; color: white; padding: 12px 20px; text-decoration: none; border-radius: 5px; font-weight: bold; min-height: 44px; display: flex; align-items: center;">Moodle Help</a> <a href="mailto:facilities@concordia.ca" style="background-color: #912338; color: white; padding: 12px 20px; text-decoration: none; border-radius: 5px; font-weight: bold; min-height: 44px; display: flex; align-items: center;">Email Facilities</a> <a href="mailto:help@concordia.ca" style="background-color: #912338; color: white; padding: 12px 20px; text-decoration: none; border-radius: 5px; font-weight: bold; min-height: 44px; display: flex; align-items: center;">Email IITS</a> </div>
+            <a href="#top" class="back-link">↑ Back to Top</a>
+        </section>
+
+        <hr>
+        <h1 id="instructional">II. Instructional & Classroom Management</h1>
+        <p class="section-description">The procedures in this section are designed to support the seamless delivery of courses and the effective management of the learning environment. From establishing course outlines and maintaining office hours to using digital platforms such as Moodle and SIS, these guidelines ensure consistency in instructional standards. This section also details the protocols for room changes and the necessary steps for cancelling or rescheduling classes to minimize disruption to the academic calendar.</p>
+
+        <section id="cancelling-classes">
+            <h2>Cancelling Classes</h2>
+            <p>Should the need arise to cancel your class, log onto your portal as soon as possible to send an email to your class, and speak to or leave a message for the Chair and Department Administrator. If it is a last-minute cancellation for an 08:45 class, please also leave a message at ext. 2050.</p>
+            <a href="#top" class="back-link">↑ Back to Top</a>
+        </section>
+
+        <section id="copying-computing">
+            <h2>Copying and Computing</h2>
+            <div class="instructional-info-container">
+                <div class="instructional-text">
+                    <p>Each faculty and staff member is assigned a copier code; you may request two or more if you wish to separate research use from teaching. If you have forgotten your code, visit <strong>Carrefour > My CU Account > Personal > Accounts and Passwords</strong>.</p>
+                    <p>If you are a new user, please inform the Administrator of your code so it can be activated. Remember that the second side of a double-sided copy counts as a second page due to toner costs. Please make every attempt to avoid unnecessary photocopying by utilizing Moodle. Photocopying should ideally only be used for in-class midterm exams, quizzes, or field-related documents.</p>
+                </div>
+                <div class="instructional-thumbnail">
+                    <a href="https://raw.githubusercontent.com/tmcgurk1817/handbook/main/Passwords_2.png" target="_blank">
+                        <img src="https://raw.githubusercontent.com/tmcgurk1817/handbook/main/Passwords_2.png" alt="Accounts and passwords interface" width="150">
+                        <p style="font-size: 0.8em; color: #666; margin-top: 5px;">View Screenshot</p>
+                    </a>
+                </div>
+            </div>
+            <p>Your Netname and password will log you into any teaching or office computer in the University. Should you encounter any computing or IT problems, please initiate a ticket:</p>
+            <div style="margin: 10px 0;"> <a href="https://www.concordia.ca/it/support/open-a-ticket.html" target="_blank" style="background-color: #912338; color: white; padding: 12px 20px; text-decoration: none; border-radius: 5px; font-weight: bold; min-height: 44px; display: inline-flex; align-items: center;">Open an IT Ticket</a> </div>
+            <p>In an emergency, you may visit the Network and Geospatial Technologies Manager in person, but please follow up with a ticket.</p>
+            <a href="#top" class="back-link">↑ Back to Top</a>
+        </section>
+
+        <section id="course-outlines">
+            <h2>Course Outlines</h2>
+            <p>During the first week of classes, every student must receive a course outline for each course in which they are registered. This can be a hard copy and/or (preferably) a digital copy made available on Moodle, in conjunction with a PowerPoint presentation of the outline during the introductory class. This latter practice saves paper and aligns with the sustainability goals of the department.</p>
+            <div class="important-note"> <strong>The course outline is a contract between the professor and the student.</strong> As such, it cannot be subsequently changed without the agreement of the class. </div>
+            <ul> <li><strong>200-level Grading:</strong> The department policy of limiting "A" range grades in 200-level courses to a maximum of 25% of the class must be clearly stated.</li> <li><strong>Curving & Partitioning:</strong> If you intend to reserve the right to curve final grades, state this explicitly. Likewise, the partitioning of grades (e.g., "20% for the midterm") should be discussed, including the scheme for translating point grades into letter grades.</li> <li><strong>Attendance:</strong> If you require attendance, indicate this on the outline and maintain an attendance sign-in sheet.</li> <li><strong>Detail:</strong> Your outline should be as comprehensive as possible. Percentage weights and deadlines for assignments, midterms, and papers must be explicitly listed.</li> <li><strong>Deadlines:</strong> A copy of your outline must be sent to the Undergraduate Program Assistant <strong>one week before</strong> the first class.</li> </ul>
+            <h3>Undergraduate/Graduate Cross-listed Courses</h3>
+            <p>If you are teaching a 400-level course cross-listed as a graduate 600-level course, you must prepare two separate course outlines. Expectations for graduate students should be higher. Remember that the grading scale for graduate students is different (only A+ through C, and F; no C+, C-, or D range).</p>
+            <h3>Front Page of Course Outlines</h3>
+            <p>The University requires general points of information on the front page. The Chair or Undergraduate Program Assistant will prepare a template and email it to you two weeks before the term begins. Details of your office hours and contact information should also be clearly indicated.</p>
+            <a href="#top" class="back-link">↑ Back to Top</a>
+        </section>
+
+        <section id="makeup-classes">
+            <h2>Makeup Classes</h2>
+            <p>If you are cancelling a class and need to schedule a makeup session, please contact Carol Plathan at 514-848-2424 ext. 2620. Have the course name, number, section, day, and time ready.</p>
+            <a href="#top" class="back-link">↑ Back to Top</a>
+        </section>
+
+        <section id="moodle">
+            <h2>Moodle</h2>
+            <p>Moodle is the Concordia-supported Learning Management System (LMS), a secure online space to post content, engage in learning activities, and facilitate class communications.</p>
+            <p>Moodle courses are automatically created before the beginning of a semester. Instructors and students are added to the sites by an automatic process. Moodle can be accessed by visiting Carrefour or moodle.concordia.ca. For more information on accessing Moodle, refer to the links below:</p>
+            <div style="margin: 20px 0; display: flex; flex-wrap: wrap; gap: 10px;"> 
+                <a href="https://www.concordia.ca/it/services/moodle-lms.html" target="_blank" style="background-color: #912338; color: white; padding: 12px 20px; text-decoration: none; border-radius: 5px; font-weight: bold; min-height: 44px; display: flex; align-items: center;">Access Moodle LMS</a>
+                <a href="https://www.concordia.ca/ctl/tech-tools/teach-with-technology/moodle.html#started" target="_blank" style="background-color: #912338; color: white; padding: 12px 20px; text-decoration: none; border-radius: 5px; font-weight: bold; min-height: 44px; display: flex; align-items: center;">Getting Started with Moodle</a>
+                <a href="https://moodle.concordia.ca/moodle/login/index.php" target="_blank" style="background-color: #912338; color: white; padding: 12px 20px; text-decoration: none; border-radius: 5px; font-weight: bold; min-height: 44px; display: flex; align-items: center;">Instructor Help (Moodle Login)</a>
+                <a href="mailto:help@concordia.ca" style="background-color: #912338; color: white; padding: 12px 20px; text-decoration: none; border-radius: 5px; font-weight: bold; min-height: 44px; display: flex; align-items: center;">Email Moodle Support</a>
+                <a href="https://forms.office.com/pages/responsepage.aspx?id=hfFpVS_SE06YUM5bGrzS6ILDUX9mGlpOiIR295aYrgZUMzIwME0xUEM3REdHQkMxTU9UOFU3MlNBUCQlQCN0PWcu&route=shorturl" target="_blank" style="background-color: #912338; color: white; padding: 12px 20px; text-decoration: none; border-radius: 5px; font-weight: bold; min-height: 44px; display: flex; align-items: center;">Pedagogical Advice</a>
+            </div>
+            <a href="#top" class="back-link">↑ Back to Top</a>
+        </section>
+
+        <section id="office-hour">
+            <h2>Office Hour</h2>
+            <p>The front office is open Monday to Friday from 9:00 to 17:00. Please visit the front desk well in advance of closing time if you have inquiries or require assistance. Faculty Office Hours Faculty members are required to hold regular in-person office hours for students at least once per week. If for any reason you are unable to keep scheduled office hours, please inform the Department Administrator by phone. Note that while there are no set office hours after the exam period for a particular course, faculty must be available to students on an ad hoc basis; it is the student’s right to review their exams with their professors. Students may also need to speak to professors after the course has ended if they are dissatisfied with their grade and wish to understand their performance. This discussion could be the prelude to a formal re-evaluation request.</p>
+            <a href="#top" class="back-link">↑ Back to Top</a>
+        </section>
+
+        <section id="room-changes-inside">
+            <h2>Room Changes - Inside the Department</h2>
+            <p>Our internal rooms <strong>H1252, H1269-3, H1267, H1271, ER1428, and ER1442-15</strong> are scheduled for classes daily. However, ad hoc bookings for events, meetings, or defenses are permitted. Please use our booking page:</p>
+            <div style="margin: 20px 0;"> <a href="https://www.concordia.ca/artsci/geography-planning-environment/programs/resources/classroom-booking.html" target="_blank" style="background-color: #912338; color: white; padding: 12px 20px; text-decoration: none; border-radius: 5px; font-weight: bold; min-height: 44px; display: inline-flex; align-items: center;">Book Rooms</a> </div>
+            <a href="#top" class="back-link">↑ Back to Top</a>
+        </section>
+
+        <section id="room-changes-outside">
+            <h2>Room Changes - Outside the Department</h2>
+            <p>Contact Scheduling (Carol Plathan) at 514-848-2424 ext. 2620. Room changes related to changing enrollment are automatically tracked and accommodated throughout the registration period.</p>
+            <a href="#top" class="back-link">↑ Back to Top</a>
+        </section>
+
+        <section id="sis-section">
+            <h2>SIS</h2>
+            <h3>SIS (Student Information System) & Class Rosters</h3>
+            <p>This is accessed through Carrefour (My Faculty Centre) or My CU Account (Faculty & Academic -> My Faculty Centre) and allows you to access course and class information, including your student class list (known as the Class Roster). The pertinent selection for faculty members is "My Faculty Centre". To access your class list, click on the tab for the appropriate term, then click on the "Class Rosters" tab. Your classes for that term will be listed. Click on the "people" symbol on the left side of the line where the class is listed. The list generated is the most current list available. This application has the option to send your class an email with two simple clicks. Unfortunately, you cannot send attachments through this system, but you can copy and paste the email addresses into your own email program.</p>
+            <a href="#top" class="back-link">↑ Back to Top</a>
+        </section>
+
+        <section id="grade-submissions">
+            <h2>Grade Submissions</h2>
+            <h3>Grade Submission via SIS</h3> 
+            <div class="instructional-info-container">
+                <div class="instructional-text">
+                    <p>Grades are submitted electronically via "My Faculty Centre". Your Grade Roster (distinct from the Class Roster) is available through a process identical to the Class Roster. Posting your grades on Moodle only serves to report grades to your students; grades are only official once they are sent to the Chair for approval and posted to the student’s record via My Faculty Centre. When grades are entered, please click “Save” and then change the tab to “Submit for Review“ (this final step sends the grades to the Chair for approval).</p>
+                    <p>Final grades must be submitted no later than seven calendar days (3 calendar days for potential graduating students) after the scheduled final examination. Alternatively, where there is no final examination, grades must be submitted seven calendar days (3 calendar days for potential graduating students) after the last scheduled class. In the event of a take-home exam, grades are due seven calendar days (3 calendar days for potential graduating students) after the last University-scheduled exam. (Note: The acronym used by the University for potential graduating students is “Pot Grads”). Pot Grads will appear on a separate Grade Roster from the rest of the class so that you can process them quickly. Please complete the grading for your Pot Grads first.</p>
+                </div>
+                <div class="instructional-thumbnail">
+                    <a href="https://raw.githubusercontent.com/tmcgurk1817/handbook/main/Facultycenter_1.png" target="_blank">
+                        <img src="https://raw.githubusercontent.com/tmcgurk1817/handbook/main/Facultycenter_1.png" alt="Faculty Center Interface 1" width="150">
+                    </a>
+                    <a href="https://raw.githubusercontent.com/tmcgurk1817/handbook/main/Facultycenter_2.png" target="_blank">
+                        <img src="https://raw.githubusercontent.com/tmcgurk1817/handbook/main/Facultycenter_2.png" alt="Faculty Center Interface 2" width="150">
+                    </a>
+                    <p style="font-size: 0.8em; color: #666; margin-top: 5px;">View Screenshots</p>
+                </div>
+            </div>
+            <a href="#top" class="back-link">↑ Back to Top</a>
+        </section>
+
+        <hr>
+        <h1 id="evaluation">III. Academic Evaluation & Grading</h1>
+        <p class="section-description">This section governs the lifecycle of student assessment, providing a standardized framework for the submission, grading, and retention of academic work. It covers the technical and administrative requirements for processing exams—including multiple-choice coordination—and the specific protocols for grade submissions and subsequent changes. Faculty will also find guidance here on managing specialized notations, such as IP notations for graduate students, and the implementation of course evaluations.</p>
+
+        <section id="assignments">
+            <h2>Assignments – Submission, Distribution, & Retention</h2>
+            <ul> <li><strong>Submission:</strong> Students submit work in class, via mailboxes, or electronically (Moodle). The main office does <strong>not</strong> date-stamp assignments.</li> <li><strong>Returning:</strong> Efforts should be made to return work within one week. Leaving assignments in the Reading Room is a last resort and they must be organized alphabetically.</li> <li><strong>Retention:</strong> Student work (primarily exams) must be kept for one full academic year (3 terms). Triage outdated materials for shredding once per term.</li> <li><strong>Reading Room (H1254):</strong> Readings can be placed on reserve for 2-hour periods. Organize material in discrete folders. Textbooks can also be left on reserve.</li> <li><strong>Models:</strong> If requiring models (maquettes), ensure low environmental impact materials are used and stored neatly.</li> </ul>
+            <a href="#top" class="back-link">↑ Back to Top</a>
+        </section>
+
+        <section id="course-evaluations">
+            <h2>Course Evaluations</h2>
+            <ul> <li><strong>Full-Time:</strong> Evaluated electronically. Results are available via My CU Account.</li> <li><strong>Part-Time:</strong> Evaluated via paper questionnaires. Faculty delegate a student to distribute and collect them and must step out of the room. Results are later available online.</li> </ul> <p>Quantitative results are seen by both the faculty member and the Chair; qualitative comments are for the faculty member only.</p>
+            <a href="#top" class="back-link">↑ Back to Top</a>
+        </section>
+
+        <section id="exams">
+            <h2>Exams</h2>
+            <p>During the first week of classes, you must submit a list of courses requiring an exam scheduled by the Exams Office. Specify dates you are unavailable to invigilate and any specific needs (open-book, large space, etc.).</p>
+            <ul> <li><strong>Scheduling:</strong> No tests or examinations shall take place in class after the 11th week (due to the 12-week requirement).</li> <li><strong>Scripts:</strong> Exam scripts must be submitted to the Exams Office by the deadline for free photocopying and transport. If missed, the professor is responsible for the cost and transport.</li> <li><strong>Invigilation:</strong> Professors are expected to be present during final exams.</li><li><strong>Conflicts:</strong> Students with three exams back-to-back should contact the Exams Office. Midterm arrangements for individual students are at the professor's discretion.</li></ul>
+            <div style="margin: 20px 0;"> <a href="https://www.concordia.ca/students/exams.html" target="_blank" style="background-color: #912338; color: white; padding: 12px 20px; text-decoration: none; border-radius: 5px; font-weight: bold; min-height: 44px; display: inline-flex; align-items: center;">Go to Exams Office Page</a> </div>
+            <a href="#top" class="back-link">↑ Back to Top</a>
+        </section>
+
+        <section id="grade-changes">
+            <h2>Grade Changes</h2>
+            <ul> <li><strong>Graduate:</strong> The professor completes a grade change form after notifying the GPD and GPA. Changes are possible within three terms. An "F" grade requires a Student Request to the School of Graduate Studies.</li> <li><strong>Undergraduate:</strong> Done online through the Faculty Centre (except for cases of academic misconduct). It is recommended that the Department Administrator coach you through your first online grade change.</li> </ul>
+            <a href="#top" class="back-link">↑ Back to Top</a>
+        </section>
+
+        <section id="grading">
+            <h2>Grading</h2>
+            <p id="grading-policy">An A+ should be reserved for work that is truly outstanding. At the 200 level, no course should have more than 25% of final grades in the "A" range (A+/A/A-). This policy exists to prevent grade inflation. If you reduce grades to lower the number of As, all grades should be lowered by the same amount or according to a fair, transparent principle. The Department Chair may return grades to you for modification if they appear aberrant.</p>
+            <h3 id="undergrad-grading">Undergraduate Grading Scheme (Default)</h3> 
+            <table> <tr><th>Grade</th><th>Percentage</th><th>Description</th><th>GPA</th></tr> <tr><td>A+</td><td>90-100%</td><td>Outstanding</td><td>4.3</td></tr> <tr><td>A</td><td>85-89%</td><td>Outstanding</td><td>4.0</td></tr> <tr><td>A-</td><td>80-84%</td><td>Outstanding</td><td>3.7</td></tr> <tr><td>B+</td><td>77-79%</td><td>Very Good</td><td>3.3</td></tr> <tr><td>B</td><td>73-76%</td><td>Very Good</td><td>3.0</td></tr> <tr><td>B-</td><td>70-72%</td><td>Very Good</td><td>2.7</td></tr> <tr><td>C+</td><td>67-69%</td><td>Satisfactory</td><td>2.3</td></tr> <tr><td>C</td><td>63-66%</td><td>Satisfactory</td><td>2.0</td></tr> <tr><td>C-</td><td>60-62%</td><td>Satisfactory</td><td>1.7</td></tr> <tr><td>D+</td><td>57-59%</td><td>Marginal Pass</td><td>1.3</td></tr> <tr><td>D</td><td>53-56%</td><td>Marginal Pass</td><td>1.0</td></tr> <tr><td>D-</td><td>50-52%</td><td>Marginal Pass</td><td>0.7</td></tr> <tr><td>F/FNS</td><td>&lt;50%</td><td>Fail</td><td>0</td></tr> <tr><td>R</td><td>&lt;20%</td><td>Repeat</td><td>0</td></tr> </table>
+            <h3>Incomplete (INC) / In Progress (IP) Final Grade</h3> <p>While awarding an INC/IP grade is at the discretion of the professor, accommodations must be made if a student can prove compassionate or extenuating circumstances with supporting documentation.</p>
+            <h3>Academic Re-evaluation (Graduate & Undergraduate)</h3> <p>Students have the right to request an academic re-evaluation if they claim a miscalculation occurred or the evaluation was demonstrably unfair. This is a last resort; students must first attempt to discuss the matter with the professor. If granted, the Chair assigns an alternate professor to re-evaluation the work. The new grade may be higher, lower, or remain the same.</p>
+            <a href="#top" class="back-link">↑ Back to Top</a>
+        </section>
+
+        <section id="ip-notations">
+            <h2>IP Notations for Graduate Students</h2>
+            <p>The In Progress (IP) notation is for students who cannot complete requirements due to extenuating circumstances. It is combined with a grade (e.g., "B/IP"). Work must be completed by the following term's DNE deadline, or the grade becomes permanent. If no grade/IP is assigned within seven days of the exam period, the grade becomes an "F". Consult the Graduate Program Assistant for extensions (IPE).</p>
+            <h3 id="inc-notations">INC Notations for Undergraduate Students</h3> <p>If a student is allowed to complete work late, assign a grade (missing work = 0) plus the INC notation. Students must apply for Late Completion at the Birks Student Service Centre (fee of $25) by specific deadlines: Feb 1 for Fall; May 15 for Winter/Fall-Winter; and Sept 1 for Summer.</p>
+            <a href="#top" class="back-link">↑ Back to Top</a>
+        </section>
+
+        <section id="multiple-choice">
+            <h2>Multiple Choice Exam Processing - IITS</h2>
+            <div class="instructional-info-container">
+                <div class="instructional-text">
+                    <p>IITS provides marking services for multiple-choice exams. You must pre-book using the <strong>"Submit Online Multiple Choice Request Form"</strong> via Carrefour online profile, by clicking on the option <strong>"Faculty & staff services"</strong> and following the prompts. See the images for more details (click for larger views).</p>
+                    <p>Optical scan sheets are in the front office. They are in the large black file cabinets and a copy of the scantron sheet is attached to the drawer.</p>
+                </div>
+                <div class="instructional-thumbnail">
+                    <a href="https://raw.githubusercontent.com/tmcgurk1817/handbook/main/Scantron.png" target="_blank">
+                        <img src="https://raw.githubusercontent.com/tmcgurk1817/handbook/main/Scantron.png" alt="Scantron booking interface step 1" width="150">
+                    </a>
+                    <a href="https://raw.githubusercontent.com/tmcgurk1817/handbook/main/scantron_2.png" target="_blank">
+                        <img src="https://raw.githubusercontent.com/tmcgurk1817/handbook/main/scantron_2.png" alt="Scantron booking interface step 2" width="150">
+                    </a>
+                    <p style="font-size: 0.8em; color: #666; margin-top: 5px;">View Screenshots</p>
+                </div>
+            </div>
+            <a href="#top" class="back-link">↑ Back to Top</a>
+        </section>
+
+        <hr>
+        <h1 id="integrity">IV. Student Relations & Academic Integrity</h1>
+        <p class="section-description">This section focuses on maintaining a respectful and ethical academic community and addresses the complexities of the faculty-student relationship. It provides clear procedures for resolving conflicts and upholding the highest standards of academic integrity, including the management of plagiarism and misconduct. Furthermore, this section outlines the specific safety and administrative requirements for students engaged in fieldwork and other experiential learning opportunities.</p>
+
+        <section id="conflict-resolution">
+            <h2>Faculty-Student Conflict Resolution</h2>
+            <p>Students should first discuss issues with the professor. If unresolved, they can contact the Department Administrator for triage. Conflicts involving sexual harassment should be directed to the Sexual Assault Resource Centre (SARC). Conversations are private, but emails are public documents. Students may also seek advice from the Ombuds Office or Student Advocacy Centre. Private conversations must remain confidential.</p>
+            <a href="#top" class="back-link">↑ Back to Top</a>
+        </section>
+
+        <section id="plagiarism">
+            <h2>Plagiarism and Academic Misconduct</h2>
+            <p>Submit incident reports to the Code Administrator, Dr. Anthony Noce. Professors <strong>cannot</strong> discuss the incident with the student; they only inform the student that a report was submitted. The Code Administrator will interview the student and decide on sanctions or refer the case to the Academic Hearing Panel (AHP).</p>
+            <a href="#top" class="back-link">↑ Back to Top</a>
+        </section>
+
+        <section id="students-fieldwork">
+            <h2>Students and Field Work</h2>
+            <p id="field-ethics">Professors have an obligation to keep students out of potentially durable situations. Activities involving human subjects (interviews, photos, etc.) must be approved by the Department Ethics Committee. Forms are available from the Service Assistant.</p>
+            <h3>Photos</h3> <p>If photos of human subjects will be published, subjects must give consent via a waiver (available from the Department Administrator).</p> <h3 id="field-expenses">Class Field Trip Expenditures</h3> <p>Funds are available for excursions. Expenses must be approved by the Chair and processed by the Department Administrator, who will arrange transportation.</p>
+            <a href="#top" class="back-link">↑ Back to Top</a>
+        </section>
+    </main>
+</div>
+
+<script>
+function toggleSubmenu(event, submenuId) {
+    const submenu = document.getElementById(submenuId);
+    if (submenu) {
+        submenu.classList.toggle('active');
+    }
+}
+
+let currentMatches = [];
+let currentIndex = -1;
+
+function performSearch() {
+    clearHighlightsInternal();
+    const searchTerm = document.getElementById('search-input').value.trim();
+    if (!searchTerm) return;
+
+    const bodyText = document.getElementById('content-column');
+    const walker = document.createTreeWalker(bodyText, NodeFilter.SHOW_TEXT, null, false);
+    const nodesToReplace = [];
+    let node;
+    while(node = walker.nextNode()) {
+        if (node.parentElement.tagName !== 'SCRIPT' && node.parentElement.tagName !== 'STYLE' && 
+            node.textContent.toLowerCase().includes(searchTerm.toLowerCase())) {
+            nodesToReplace.push(node);
+        }
+    }
+    nodesToReplace.forEach(node => {
+        const regex = new RegExp(`(${searchTerm})`, 'gi');
+        const span = document.createElement('span');
+        span.innerHTML = node.textContent.replace(regex, '<mark class="highlight">$1</mark>');
+        node.parentNode.replaceChild(span, node);
+    });
+    currentMatches = document.querySelectorAll('.highlight');
+    if (currentMatches.length > 0) {
+        document.getElementById('nav-controls').style.display = 'flex';
+        currentIndex = 0;
+        updateSearchInfo();
+        scrollAndFocus();
+    } else {
+        document.getElementById('search-info').textContent = "No matches found.";
+        document.getElementById('nav-controls').style.display = 'none';
+    }
+}
+
+function jumpNext() {
+    if (currentMatches.length === 0) return;
+    currentMatches[currentIndex].classList.remove('current');
+    currentIndex = (currentIndex + 1) % currentMatches.length;
+    updateSearchInfo();
+    scrollAndFocus();
+}
+
+function jumpPrev() {
+    if (currentMatches.length === 0) return;
+    currentMatches[currentIndex].classList.remove('current');
+    currentIndex = (currentIndex - 1 + currentMatches.length) % currentMatches.length;
+    updateSearchInfo();
+    scrollAndFocus();
+}
+
+function scrollAndFocus() {
+    const el = currentMatches[currentIndex];
+    el.classList.add('current');
+    el.scrollIntoView({ behavior: 'smooth', block: 'center' });
+}
+
+function updateSearchInfo() {
+    document.getElementById('search-info').textContent = `${currentIndex + 1} of ${currentMatches.length} matches found.`;
+}
+
+function clearHighlightsInternal() {
+    const highlights = document.querySelectorAll('.highlight');
+    highlights.forEach(h => {
+        const parent = h.parentNode;
+        parent.replaceChild(document.createTextNode(h.textContent), h);
+        parent.normalize();
+    });
+    currentMatches = [];
+    currentIndex = -1;
+}
+
+function clearHighlights() {
+    clearHighlightsInternal();
+    document.getElementById('search-info').textContent = "";
+    document.getElementById('nav-controls').style.display = 'none';
+    document.getElementById('search-input').value = "";
+    window.scrollTo({ top: 0, behavior: 'smooth' });
+}
+</script>
+
+</body>
+</html>

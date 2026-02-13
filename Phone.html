@@ -1,0 +1,374 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>MS Teams Phone System FAQ</title>
+    <!-- Load Tailwind CSS from CDN -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <style>
+        /* Custom scrollbar for better aesthetics, especially in the menu pane */
+        .faq-menu::-webkit-scrollbar {
+            width: 6px;
+        }
+        .faq-menu::-webkit-scrollbar-thumb {
+            background-color: #cbd5e1; /* slate-300 */
+            border-radius: 3px;
+        }
+        .faq-menu::-webkit-scrollbar-track {
+            background-color: transparent;
+        }
+        /* Style for content rendering - ensures lists and bolding look good */
+        #faq-content p, #faq-content ul, #faq-content ol, #faq-content h3 {
+            margin-bottom: 1rem;
+        }
+        /* Ensure nested lists look good */
+        #faq-content ul, #faq-content ol {
+            padding-left: 1.5rem;
+            list-style-type: decimal; /* Default to numbers for instructions */
+        }
+        #faq-content ul {
+            list-style-type: disc; /* Use bullets for less structured lists */
+        }
+        #faq-content li {
+            margin-bottom: 0.5rem;
+        }
+        /* SharePoint compatibility: Ensure the root container takes up available space */
+        body, html {
+            height: 100%;
+            margin: 0;
+            font-family: 'Inter', sans-serif;
+            background-color: #f8f8fb;
+        }
+        .container-wrapper {
+            min-height: 100vh;
+        }
+        /* Style for step headings derived from content */
+        .step-heading {
+            font-weight: bold;
+            margin-top: 1.5rem;
+            margin-bottom: 0.5rem;
+            padding-left: 1.5rem;
+            border-left: 4px solid #5b69c2; /* teams-blue */
+            padding-left: 0.75rem;
+        }
+    </style>
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: {
+                        'teams-blue': '#5b69c2',
+                        'teams-dark': '#3a4a83',
+                        'teams-light': '#e6e8f7',
+                    },
+                }
+            }
+        }
+    </script>
+</head>
+<body class="bg-gray-50">
+
+<div class="container-wrapper p-4 md:p-8">
+    <header class="mb-6">
+        <h1 class="text-3xl font-extrabold text-teams-dark tracking-tight">
+            MS Teams Phone System FAQ
+        </h1>
+        <p class="text-gray-600 mt-1">Quick answers for calls, transfers, and notifications.</p>
+    </header>
+
+    <div id="faq-app" class="flex flex-col lg:flex-row gap-6">
+
+        <!-- Left Column: Search and Menu -->
+        <div class="lg:w-1/3 bg-white p-4 rounded-xl shadow-lg h-full lg:sticky lg:top-8">
+            <h2 class="text-xl font-bold text-teams-dark mb-4 border-b pb-2">FAQ Topics</h2>
+
+            <!-- Search Input -->
+            <div class="mb-4">
+                <div class="relative">
+                    <input type="text" id="search-input" onkeyup="filterFaqs()" placeholder="Search titles and content..."
+                           class="w-full p-2 pl-10 border border-gray-300 rounded-lg focus:ring-teams-blue focus:border-teams-blue transition duration-150"
+                           aria-label="Search FAQs">
+                    <svg class="absolute left-3 top-1/2 transform -translate-y-1/2 w-5 h-5 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"></path></svg>
+                </div>
+            </div>
+
+            <!-- FAQ List Menu -->
+            <div id="faq-menu" class="faq-menu space-y-2 max-h-[70vh] lg:max-h-[80vh] overflow-y-auto pr-2">
+                <!-- FAQ Links will be injected here by JavaScript -->
+            </div>
+            <p id="no-results" class="text-center text-gray-500 mt-4 hidden">No results found.</p>
+        </div>
+
+        <!-- Right Column: FAQ Content Viewer -->
+        <div class="lg:w-2/3 bg-white p-6 rounded-xl shadow-lg border border-gray-200">
+            <div id="faq-detail">
+                <h2 id="faq-title" class="text-2xl font-extrabold text-teams-dark mb-4">Welcome to the MS Teams Phone FAQ</h2>
+                <div id="faq-content" class="text-gray-700 leading-relaxed space-y-4">
+                    <p>Select a topic from the menu on the left to view the details. Use the search bar to quickly filter through the questions.</p>
+                    <p class="mt-4 p-4 bg-teams-light text-teams-dark rounded-lg border-l-4 border-teams-blue">
+                        These answers are sourced directly from your provided internal documents and cover common questions regarding call handling, notifications, and dialing.
+                    </p>
+                    <div class="flex flex-wrap gap-3 mt-6">
+                        <span class="px-3 py-1 bg-gray-100 text-gray-600 text-sm font-medium rounded-full">Call Handling</span>
+                        <span class="px-3 py-1 bg-gray-100 text-gray-600 text-sm font-medium rounded-full">Notifications</span>
+                        <span class="px-3 py-1 bg-gray-100 text-gray-600 text-sm font-medium rounded-full">Setup</span>
+                    </div>
+                </div>
+
+                <!-- Modals/Message Box for future use -->
+                <div id="message-box" class="fixed inset-0 z-50 flex items-center justify-center bg-black bg-opacity-50 hidden">
+                    <div class="bg-white p-6 rounded-lg shadow-2xl max-w-sm w-full text-center">
+                        <p id="message-text" class="text-lg font-semibold text-gray-800 mb-4"></p>
+                        <button onclick="document.getElementById('message-box').classList.add('hidden')"
+                                class="bg-teams-blue text-white px-4 py-2 rounded-lg hover:bg-teams-dark transition duration-150">
+                            Close
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script>
+    // --- FAQ Data from Uploaded Documents ---
+    // The content has been automatically cleaned of footnote markers (like 1, 2$\cdots$) for better presentation.
+    const rawFaqs = [
+        { title: "Secondary Ringers", content: "The Secondary Ringer is a feature in the Microsoft Teams desktop app that lets you use two different audio devices for calls: one for the conversation (your headset) and a different one for the ringtone (your PC speakers). This is the recommended setup if you use a headset but don't wear it all day. Here are the steps to set up your Secondary Ringer:\n\nSteps to Set the Secondary Ringer\n\nOpen the Microsoft Teams desktop application (Windows or Mac).\nClick on your Profile Picture or the three dots (...) next to it in the top right corner.\nSelect Settings.\nGo to the Devices section.\nUnder the main Audio devices section:\nFor Speaker, select your Headset (e.g., \"Jabra,\" \"AirPods,\" \"USB Headset\"). This is your primary device and will handle the conversation audio.\nScroll down to the Secondary Ringer section.\nClick the dropdown menu next to Secondary Ringer and select your PC Speakers or Laptop Speakers (e.g., \"Speakers (Realtek Audio),\" \"Built-in Output\").\nResult:\nIncoming Ringtone: The selected PC Speakers will play the ringtone when a call comes in.\nConversation Audio: When you answer the call, the sound will immediately switch to your primary device (your headset).\nTip: If you ever notice the ringer stops working, a quick check of this setting (or a restart of Teams/your computer) often resolves the issue, as the setting can sometimes reset, especially after connecting new peripherals." },
+        { title: "Quite Time -Mobile App", content: "In Microsoft Teams, the feature for setting regular, scheduled downtime is called Quiet Time (available on the mobile app) or Focus Time (scheduled via the desktop/web client and Viva Insights). Here is how to set up both for optimal downtime:\n\n1. Setting up Quiet Time (Mobile App Only)\n\nQuiet Time is the feature that automatically silences Teams notifications on your mobile device during specific times or days.\n\nOpen the Teams App on your mobile device (iOS or Android).\nTap your Profile Picture in the top left corner.\nSelect Notifications.\nUnder the section Block notifications, select During quiet time (or Quiet hours).\nYou will see options to configure two schedules:\nCertain hours (Daily Downtime):\n- Turn this toggle ON.\n- Set the Start Time (e.g., 5:00 PM) and End Time (e.g., 8:00 AM) when you want notifications muted.\n- Select the Days you want this schedule to apply (e.g., Monday through Friday).\nAll Day (Quiet Days):\n- Turn this toggle ON.\n- Select the Days (e.g., Saturday and Sunday) when you want notifications muted for the entire day.\nOptional Sync: You may see a toggle labeled \"Set on Teams and Outlook.\" If you enable this, your quiet time schedule will sync across your Teams and Outlook mobile apps using the same Microsoft account.\n\n2. Setting up Focus/Do Not Disturb (Desktop/Web)\n\nWhile the desktop app doesn't have a scheduled quiet time setting, you can schedule Focus Time or set a manual Do Not Disturb duration.\n\nA. Manual Do Not Disturb (Quick Downtime)\n\nThis blocks all notifications temporarily:\n- Click your Profile Picture in the top right of the Teams desktop app.\n- Select your current status (e.g., Available).\n- Change your status to Do not disturb.\nNote: This status blocks all notifications, but it still allows \"Urgent\" messages and messages from Priority Access contacts to come through (which you can set up under Settings > Privacy).\n\nB. Set a Status Duration\n\nYou can set a time limit for your manual Do Not Disturb status:\n- Click your Profile Picture > your current status > Duration.\n- Under Status, select Do not disturb.\n- Under Reset status after, choose the length of time (e.g., 1 hour) or a custom date and time.\n- Click Done.\n\nC. Schedule Focus Time (Via Viva Insights / Outlook)\n\nFor recurring downtime on your desktop that syncs with your calendar:\n- Go to the Viva Insights app in Teams (you may need to search for it).\n- Use the Focus section to book uninterrupted time in your calendar. When this time arrives, your Teams status will automatically switch to Focusing (or DND), silencing notifications until the time slot is over." },
+        { title: "Cell Phone App – MS Teams", content: "To ensure that calls ring your cell phone through the Teams App, you typically need to check and adjust two main areas: Notification Settings within the Teams App and Operating System (OS) Settings on your phone. Teams is designed to ring all your devices simultaneously, but sometimes mobile notifications are suppressed, especially if you are active on your desktop.\n\n1. Check Teams Mobile App Settings\n\nThis is the most likely place where mobile notifications are disabled.\n- Open the Teams App on your cell phone (iOS or Android).\n- Tap your Profile Picture or the menu icon (usually three horizontal lines).\n- Go to Settings > Notifications.\n- Look for the \"Block notifications\" section (or similar phrasing). You need to specifically look at how the app behaves when you are using your computer:\n    - \"When active on desktop\": Ensure the toggle switch for this option is OFF (or set to Don't Block).\n    - If this is ON, the app will assume you are at your desk and actively using the desktop client, so it silences the mobile app. Turning it OFF ensures your mobile app rings even when you are working on your computer.\n- Also, ensure the main notification setting is set to All activity or that Calls are explicitly enabled and set to ring.\n\n2. Check Your Phone's OS Settings\n\nYour phone's global settings can override the Teams app settings, especially on Android devices.\n- Go to your phone's main Settings app.\n- Navigate to Apps (or Applications or App Management).\n- Find and select the Teams app.\n- Go to Notifications for the Teams app and ensure Allow Notifications is ON.\n\nCheck Battery Optimization (Android Only): This is a very common issue.\n- In the Teams app settings on your phone, look for Battery or Power Management.\n- Ensure Teams is set to \"Unrestricted\" or \"Don't optimize\". If the OS optimizes the app, it will \"put it to sleep\" and prevent it from receiving call signals in the background.\n\nCheck Do Not Disturb/Focus Mode: Make sure your phone's built-in Do Not Disturb or Focus modes are not active, or that Teams is added as an exception to those modes.\n\n3. Verify Call Answering Rules (Desktop/Web)\n\nEnsure you haven't set up call forwarding rules on your desktop that bypass your phone entirely.\n- Open the Teams Desktop App or Teams Web App.\n- Click your Profile Picture > Settings > Calls.\n- Under Call handling and forwarding, make sure the rule is set to:\n    - \"Ring me\" (or Ring my devices).\n    - Ensure Call Forwarding is not enabled to send all calls directly to voicemail or a different number." },
+        { title: "Outside Line Access", content: "No, you generally do not have to dial '9' before making an external call in Microsoft Teams Phone. Teams Phone System is a modern, cloud-based phone service that replaces traditional PBX systems, and the requirement to dial an external line prefix (like '9') is usually eliminated.\n\nHere is what you need to know about dialing in Teams:\n- For External Calls (Off-Campus/Off-Net): You should simply dial the full 10-digit number (e.g., 555-123-4567) or the full E.164 format number (e.g., +15551234567). Teams automatically handles the call routing to the Public Switched Telephone Network (PSTN).\n- For Long Distance/International Calls: You will typically dial the full E.164 number:\n    - Long Distance (within your country): 1 + Area Code + Number\n    - International: + [Country Code] [City/Area Code] [Number] (e.g., +44207XXXXXXX for London).\n- For Internal Calls (Teams Users): You can call a colleague by simply:\n    - Typing their name in the search bar or dial pad.\n    - Dialing their internal extension (if your organization has configured extensions).\n\nThe exception to this rule would be if your organization's IT admin has specifically created a custom dial plan that requires a prefix (like '9') to ensure compatibility with a very specific legacy dialing practice. However, this is rare and runs counter to the standard Teams Phone experience." },
+        { title: "Group Calling", content: "There are a few straightforward ways to set up a group call in Microsoft Teams, depending on whether you want to start a spontaneous call or use the dedicated phone features.\n\nMethod 1: Start from a New Group Chat (Most Common)\n\nThis is the fastest way to start a group call with internal Teams users.\n- Click Chat on the left side of Teams.\n- Click the New Chat icon (it looks like a pencil and paper or a message bubble with a pen).\n- In the \"To:\" field, enter the names or email addresses of all the people you want to include in the group call.\n- Once the chat group is created, look in the upper right corner of the chat window for the call icons:\n    - Click the Video call icon (camera) or the Audio call icon (phone) to start calling all participants simultaneously.\n\nMethod 2: Use the Calls Tab\n\nIf you are calling external phone numbers or frequently call the same group, you can use the Calls app.\n- Click Calls on the left side of Teams.\n- In the search/dial bar at the top, you can often type the names of multiple internal people and/or dial external phone numbers (if your account has a Calling Plan).\n- Select the contacts and numbers, and then click the Call button (the phone icon) to initiate the group call.\n\nMethod 3: Initiate a \"Meet Now\" Conference (for larger groups)\n\nIf you need meeting features, such as recording, large capacity, or screen sharing, you can start an impromptu meeting.\n- Go to the Calendar tab on the left side of Teams.\n- Click Meet now in the top right corner.\n- A meeting window will open. Click Join now.\n- Once you are in the meeting, use the People tab to invite participants by typing their names or phone numbers in the \"Invite someone\" box. Teams will call them instantly.\n\nTip: If you are already on a one-on-one call, you can add people to turn it into a group call using the People button in your active call window (as explained in the previous answer)." },
+        { title: "Add people to a call", content: "When you are in a one-on-one Teams call (either a direct call or a PSTN call), you can easily add more people to turn it into a group call. Here is the process for the desktop application:\n\nHow to Add People to an Active Call\n\n- Be in an active call.\n- In the call controls window, click on the People icon (which usually looks like two figures) or the Participants tab.\n- A Participants pane will open on the right side of your screen.\n- At the top of this pane, you will see a search box labeled \"Invite someone or dial a number.\"\n- Type in the name of the person (if they are in your organization) or the full phone number (including country code) you want to add.\n- Select the contact/number from the dropdown list.\n- Teams will immediately initiate a call to that person/number, and once they answer, they will be joined into the existing call, effectively turning it into a conference (group call).\nYou can repeat this process to add multiple participants, up to the maximum participant limit for a group call (which is typically 20, though meeting limits are higher)." },
+        { title: "Park and Retrieve", content: "The Call Park and Retrieve feature in Microsoft Teams Phone allows you to place a call on hold in a virtual location (a \"parking lot\") and then have the original user or a colleague pick it up from any other Teams device using a unique code. Note: This feature must be enabled by your organization's Teams administrator before you can use it.\n\nHere is the step-by-step process:\n\n1. To Park a Call (Placing the Call on Hold)\n\n- Be in an active one-on-one call in your Teams application (desktop or mobile).\n- In the call controls window, click the More actions button (three dots: ...).\n- Select Call park (or Park call).\n- Teams will place the caller on hold and display a unique, short numerical code (e.g., 10, 15, 23).\n- Share the code: You must communicate this code to the person who needs to retrieve the call (e.g., by chatting it to them, sending a text, or announcing it over a public address system).\n\n2. To Retrieve (Unpark) a Call (Picking up the Call)\n\nThe person who wants to retrieve the call (it could be you on a different device, or a colleague) follows these steps:\n- Go to the Calls app in the main Teams window.\n- Look for the dial pad section.\n- Near the dial pad, click or tap the Parked calls button (sometimes also called Unpark).\n- A prompt will appear asking for the code. Enter the unique numerical code you received earlier.\n- Click or tap Pick up (or Unpark).\n- The call will immediately connect to the retrieving person, and the call is no longer parked.\n\nImportant Timeout Information:\n- If the parked call is not picked up within a certain amount of time (the default is often 5 minutes), it will automatically \"ring back\" to the person who originally parked it." },
+        { title: "Transfer - Blind (Quick) and Announced (Warm)", content: "Microsoft Teams Phone allows you to transfer a call in two main ways: Blind (or Direct) Transfer and Consult then Transfer. The process is generally the same on the Teams desktop and mobile apps (for one-on-one calls).\n\n1. Blind Transfer (Quick Transfer)\n\nA blind transfer immediately sends the call to the new recipient without you first speaking to them.\n- While in an active call, click on the More actions button (the three dots: ...) in the call controls.\n- Select Transfer.\n- In the search box that appears, start typing the name or phone number of the person you want to transfer the call to.\n- When you select the contact, you will usually see a Transfer button (this is the blind transfer). Click it to complete the transfer.\n- (Optional for internal contacts): You may see an option to transfer directly to their Work Voicemail.\n\n2. Consult then Transfer (Warm Transfer)\n\nA consultative transfer allows you to check in with the recipient before completing the transfer, ensuring they are available and have context about the caller.\n- While in an active call, click on the More actions button (the three dots: ...).\n- Select Consult then transfer.\n- In the search box, start typing the name or phone number of the person you want to transfer the call to.\n- When you select the contact, you will be given two options to consult:\n    - Call: This puts your current caller on hold and starts a new call to the person you are consulting with.\n    - Chat: This puts your current caller on hold and opens a private chat with the person you are consulting with.\n- Once you have spoken to the recipient and they are ready to take the call, click the Transfer button (which appears in the consultation window) to finalize the transfer.\nNote: If the person you consulted with is unavailable, you can simply close the consultation window and click Resume on your original call to continue the conversation with the original caller.\n\nUseful Option: Ring Back if No Answer\n\n- When doing a Blind Transfer to another internal Teams user, Teams will often offer a checkbox for Ring back if there's no answer. If you check this option, the call will automatically be routed back to you if the recipient doesn't answer the transfer, preventing the caller from being sent to an unintended voicemail or dropped." },
+        { title: "Hold Calls", content: "Putting a call on hold and picking it back up in Microsoft Teams Phone is a very simple process, whether you're using the desktop or mobile app.\n\nOn the MS Teams Desktop App (Windows/Mac)\n\nWhen you are in an active one-on-one call, the controls are usually displayed prominently in the call window.\n\n1. To Put the Call on Hold:\n\n- Look for the call control buttons in the call window.\n- Click the More actions button (the three dots: ...).\n- From the menu that appears, select Hold (or the pause icon ||).\n- What happens: The call will be placed on hold. The person you are speaking to will hear music (on-hold music, if configured by your organization), and a prominent \"On hold\" message will appear on your screen.\n\n2. To Pick Up/Resume the Call:\n\n- While the call is on hold, the Hold button will be replaced by a large Resume button.\n- Click the Resume button.\n- What happens: The call will immediately be taken off hold, and you can continue your conversation.\n\nOn the MS Teams Mobile App (iOS/Android)\n\nThe process is nearly identical on the mobile app.\n\n1. To Put the Call on Hold:\n\n- While in an active call, tap the screen to bring up the controls.\n- Tap the More actions button (the three dots: ...).\n- Tap Put call on hold.\n\n2. To Pick Up/Resume the Call:\n\n- While the call is on hold, the screen will display a large Resume button (often a purple phone icon with an arrow).\n- Tap the Resume button." },
+        { title: "Control Notifications on the Mobile App", content: "Generally, Microsoft Teams is designed to ring on all your active endpoints (desktop, mobile app, and physical Teams phone, if applicable) simultaneously when you receive a call to your Teams number. However, here are the main ways to influence where calls ring, especially to prioritize your desktop:\n\n1. Control Notifications on the Mobile App\n\nThe most common way to stop your cell phone from ringing (while keeping the desktop ringing) is by adjusting Notifications within the Teams mobile app:\n- Open the Teams app on your cell phone (iOS or Android).\n- Tap your profile picture (or menu icon).\n- Go to Settings > Notifications.\n- Look for an option like:\n    - Block notifications > When active on desktop. (This is often the key setting to silence the mobile app when you are actively using the desktop app).\n- You might also be able to customize notifications and specifically turn off the ring/notification for Calls.\nNote: This relies on Teams recognizing you as \"active\" on the desktop, which usually times out after a few minutes of inactivity.\n\n2. Check for Simultaneous Ring or Call Forwarding Settings (Desktop)\n\nYou can manage where calls ring through your Teams desktop app settings:\n- Open Microsoft Teams on your desktop.\n- Click the three dots (...) or your profile picture in the top right corner.\n- Select Settings.\n- Go to Calls (or Devices then Calls).\n- Look under Call handling and forwarding or When you receive a call.\n    - Forwarding: If you have Forward all calls set to your mobile number, switch it back to Voicemail or Do not forward.\n    - Simultaneous Ring: If you have Also ring set to your mobile phone number, remove it or change it back to Do not ring another device.\n\n3. Use Focus Assist / Do Not Disturb on Your Mobile Phone\n\nYou can use the built-in operating system features on your cell phone to silence the Teams mobile app:\n- iOS/Android: Enable Do Not Disturb or a similar Focus mode on your phone. You may be able to configure it to allow calls from certain contacts, but it should block the general Teams app notification/ring.\n- Teams Status: Setting your Teams status to Do not disturb will block incoming calls from ringing on all your Teams endpoints, and send the call to voicemail. (This may not be what you want if you want the desktop to ring.)" },
+        { title: "International Calls", content: "When dialing an international number in the Teams app, you should use the E.164 format:\n\n1. Go to the \"Calls\" tab in Microsoft Teams.\n2. Open the Dial Pad.\n3. Dial the international access code 011+\n4. Dial an international number using the E.164 format:\n\n- Format:[Access Code]+ [Country Code] [Area Code] [Local Number]\n" }
+    ];
+
+    let currentActiveId = null;
+
+    /**
+     * Cleans up the raw text by converting simple markdown-like elements
+     * and removing numerical footnote markers, and STRUCTURES the content
+     * using HTML lists and headings to preserve the step-by-step nature.
+     * @param {string} text 
+     * @returns {string} HTML formatted text
+     */
+    function formatContent(text) {
+        // 1. Remove remaining numerical/symbolic markers from source docs
+        let cleaned = text.replace(/(\s\([0-9]+\$?[.\w\s]+\$?\)|\s[0-9]+|\\Vert|\\cdots|\\$\\\cdots\$|\\$\\\Vert\$|\.([0-9]+))/g, '');
+
+        // 2. Normalize and split the text into lines
+        const lines = cleaned.split('\n');
+        let htmlContent = '';
+        let listOpen = false;
+        let isOrderedList = false;
+
+        // Helper to close any open list
+        const closeList = () => {
+            if (listOpen) {
+                htmlContent += isOrderedList ? '</ol>' : '</ul>';
+                listOpen = false;
+            }
+        };
+
+        // Process each line
+        lines.forEach(line => {
+            line = line.trim();
+            if (!line) {
+                // Empty line, close any open list and start a new paragraph context
+                closeList();
+                htmlContent += '<p></p>'; // Acts as a line break/separator
+                return;
+            }
+
+            // A. Check for Headings/Sections (e.g., "1. To Park a Call", "Method 1: Start from")
+            const methodMatch = line.match(/^(Method [0-9]: .*?)$/);
+            const stepHeadingMatch = line.match(/^([0-9]+\. [A-Z].*?|A\.|B\.|C\.) (.*?)$/);
+            const subSectionMatch = line.match(/^(Check [A-Z].*?|Important Timeout Information:|Useful Option: Ring Back if No Answer|Note:.*)$/);
+
+            if (methodMatch) {
+                closeList();
+                htmlContent += `<h3 class="text-lg font-bold mt-4 mb-2 text-teams-dark border-l-4 border-teams-blue pl-2">${methodMatch[1]}</h3>`;
+                return;
+            }
+            if (stepHeadingMatch) {
+                closeList();
+                // Use a custom class for visual distinction
+                htmlContent += `<div class="step-heading">${stepHeadingMatch[0]}</div>`;
+                return;
+            }
+            if (subSectionMatch) {
+                closeList();
+                // Use strong for important subsections
+                htmlContent += `<p><strong>${subSectionMatch[1]}</strong></p>`;
+                return;
+            }
+
+
+            // B. Check for List Items (starting with hyphen or a bullet)
+            const listItemMatch = line.match(/^- (.*)|(^\u2022 .*)/); // Matches hyphen or unicode bullet
+            const numberedListItemMatch = line.match(/^[0-9]+\. (.*)$/); // Matches numbered list
+
+            if (listItemMatch) {
+                // If a numbered list was open, close it, and open a bullet list
+                if (isOrderedList && listOpen) {
+                    closeList();
+                }
+
+                if (!listOpen || isOrderedList) {
+                    htmlContent += '<ul>';
+                    listOpen = true;
+                    isOrderedList = false;
+                }
+                const content = listItemMatch[1] || listItemMatch[2];
+                htmlContent += `<li>${content}</li>`;
+                return;
+            }
+            
+            // C. Final catch for numbered steps (not already caught by stepHeadingMatch)
+            // We use this for the primary list of steps
+            if (numberedListItemMatch) {
+                // If a bullet list was open, close it, and open a numbered list
+                if (!isOrderedList && listOpen) {
+                    closeList();
+                }
+
+                if (!listOpen || !isOrderedList) {
+                    htmlContent += '<ol>';
+                    listOpen = true;
+                    isOrderedList = true;
+                }
+                htmlContent += `<li>${numberedListItemMatch[1]}</li>`;
+                return;
+            }
+
+            // D. Default to Paragraph if not recognized as a step/list/heading
+            closeList();
+            htmlContent += `<p>${line}</p>`;
+
+        });
+
+        // Close any final open list
+        closeList();
+
+        // 3. Final Bolding Pass
+        // Ensure bolding for internal text (like "Teams App" or "Profile Picture") is maintained
+        htmlContent = htmlContent.replace(/<strong>(.*?)<\/strong>/g, (match, p1) => {
+            // Check if the content inside strong tags contains typical Word bolding cues like quotes
+            if (p1.startsWith('"') && p1.endsWith('"')) {
+                return `<strong>${p1.slice(1, -1)}</strong>`; // Remove quotes
+            }
+            return match;
+        });
+        
+        // Final pass for strong tags around text that was marked bold in the original document (e.g., ' Profile Picture ')
+        htmlContent = htmlContent.replace(/\s(Open the Teams App)\s/g, ' <strong>$1</strong> ');
+        htmlContent = htmlContent.replace(/\s(Profile Picture)\s/g, ' <strong>$1</strong> ');
+        htmlContent = htmlContent.replace(/\s(Settings)\s/g, ' <strong>$1</strong> ');
+        htmlContent = htmlContent.replace(/\s(Notifications)\s/g, ' <strong>$1</strong> ');
+        htmlContent = htmlContent.replace(/\s(More actions)\s/g, ' <strong>$1</strong> ');
+        htmlContent = htmlContent.replace(/\s(Call park)\s/g, ' <strong>$1</strong> ');
+        htmlContent = htmlContent.replace(/\s(Consult then transfer)\s/g, ' <strong>$1</strong> ');
+        htmlContent = htmlContent.replace(/\s(Resume)\s/g, ' <strong>$1</strong> ');
+        htmlContent = htmlContent.replace(/\s(Hold)\s/g, ' <strong>$1</strong> ');
+
+
+        return htmlContent;
+    }
+
+    /**
+     * Renders the full list of FAQs into the menu pane.
+     * @param {Array} filteredFaqs - The list of FAQs to display.
+     */
+    function renderMenu(filteredFaqs) {
+        const menuEl = document.getElementById('faq-menu');
+        const noResultsEl = document.getElementById('no-results');
+        menuEl.innerHTML = '';
+
+        if (filteredFaqs.length === 0) {
+            noResultsEl.classList.remove('hidden');
+            return;
+        }
+
+        noResultsEl.classList.add('hidden');
+
+        filteredFaqs.forEach((faq, index) => {
+            const isActive = faq.id === currentActiveId;
+            const item = document.createElement('a');
+            item.href = "javascript:void(0)";
+            item.className = `block p-3 rounded-lg text-sm font-medium transition duration-150 ease-in-out ${
+                isActive ? 'bg-teams-blue text-white shadow-md' : 'text-gray-700 hover:bg-gray-100 hover:text-teams-dark'
+            }`;
+            item.textContent = faq.title.replace(/\.docx/g, '').replace(/_/g, ' '); // Clean filename for display
+            item.setAttribute('data-id', faq.id);
+            item.onclick = () => displayFaq(faq.id);
+            menuEl.appendChild(item);
+        });
+    }
+
+    /**
+     * Displays the content of the selected FAQ.
+     * @param {number} id - The unique ID of the FAQ to display.
+     */
+    function displayFaq(id) {
+        const faq = faqData.find(f => f.id === id);
+        if (!faq) return;
+
+        // Update the detail pane
+        document.getElementById('faq-title').textContent = faq.title.replace(/\.docx/g, '').replace(/_/g, ' ');
+        document.getElementById('faq-content').innerHTML = formatContent(faq.content);
+
+        // Update active state in menu
+        currentActiveId = id;
+        filterFaqs(); // Re-render menu to apply active style
+    }
+
+    /**
+     * Filters the FAQ list based on the search input.
+     */
+    function filterFaqs() {
+        const searchTerm = document.getElementById('search-input').value.toLowerCase();
+        
+        const filtered = faqData.filter(faq => {
+            const titleMatch = faq.title.toLowerCase().includes(searchTerm);
+            const contentMatch = faq.content.toLowerCase().includes(searchTerm);
+            return titleMatch || contentMatch;
+        });
+
+        renderMenu(filtered);
+    }
+
+    // --- Initialization ---
+
+    // 1. Create a fully processed FAQ data array with unique IDs
+    const faqData = rawFaqs.map((faq, index) => ({
+        id: index + 1,
+        title: faq.title.replace(/\.docx/g, '').replace(/_/g, ' '),
+        content: faq.content
+    }));
+
+    // Sort the FAQ items alphabetically by title
+    faqData.sort((a, b) => a.title.localeCompare(b.title));
+
+    // 2. Initialize the application when the window loads
+    window.onload = function() {
+        // Render the full menu on initial load
+        filterFaqs();
+        
+        // Automatically display the first FAQ item if it exists
+        if (faqData.length > 0) {
+            // The first element is now the first alphabetically
+            displayFaq(faqData[0].id);
+        } else {
+             document.getElementById('faq-title').textContent = 'No FAQs Loaded';
+             document.getElementById('faq-content').innerHTML = '<p class=\"text-red-500\">Error: No FAQ data could be loaded from the source documents.</p>';
+        }
+    };
+</script>
+
+</body>
+</html>
