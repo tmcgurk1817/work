@@ -3,15 +3,14 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>MEnv Internship Program Guide</title>
+    <title>MEnv Internship Help Guide</title>
     
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
 
     <style>
-        /* Color Palette: #222831 (1), #393e46 (2), #0092ca (3), #eeeeee (4) */
-
+        /* Color Palette: #222831, #393e46, #0092ca, #eeeeee */
         body {
             font-family: 'Inter', sans-serif;
             line-height: 1.6;
@@ -71,64 +70,29 @@
         }
         #toc-column a:hover { color: #0092ca; text-decoration: underline; }
 
-        /* Submenu Styling */
-        .submenu { display: none; padding-left: 15px !important; margin-bottom: 10px; }
-        .submenu.active { display: block; }
-        .has-children > a::after { content: ' ▼'; font-size: 0.7em; color: #0092ca; }
-
-        /* Search Container Styling */
-        #search-container {
-            background: #eeeeee;
-            padding: 12px;
-            border: 2px solid #222831;
-            border-radius: 8px;
-            margin-bottom: 15px;
-            display: flex;
-            flex-direction: column;
-            gap: 8px;
-        }
-
-        #search-input {
-            padding: 8px;
-            border: 1px solid #393e46;
-            border-radius: 4px;
-            flex: 1;
-        }
-
-        .search-btn {
-            background: #222831;
-            color: white;
-            border: none;
-            padding: 8px 12px;
-            border-radius: 4px;
-            cursor: pointer;
-            font-weight: bold;
-        }
-        .search-btn:hover { background: #0092ca; }
-
-        .highlight { background-color: #0092ca; color: white; } 
-        .highlight.current { background-color: #222831; color: white; outline: 2px solid #0092ca; }
-
-        /* PDF Button Styling */
-        .pdf-btn {
+        /* Action Buttons */
+        .action-btn {
             background-color: #0092ca;
             color: white;
-            padding: 12px;
+            padding: 10px 15px;
             border-radius: 6px;
-            text-decoration: none;
             font-weight: bold;
-            display: flex;
+            display: inline-flex;
             align-items: center;
             justify-content: center;
             gap: 8px;
             border: none;
             cursor: pointer;
-            width: 100%;
             transition: background 0.2s;
+            margin-right: 5px;
+            margin-bottom: 10px;
+            font-size: 0.85em;
         }
-        .pdf-btn:hover { background-color: #222831; }
+        .action-btn:hover { background-color: #222831; }
+        .action-btn.secondary { background-color: #393e46; }
+        .action-btn.danger { background-color: #800000; }
 
-        /* Floating Back to Top Button */
+        /* Floating Back to Top */
         #floating-back-top {
             position: fixed;
             bottom: 30px;
@@ -139,17 +103,19 @@
             border-radius: 50px;
             text-decoration: none;
             font-weight: bold;
-            font-size: 0.9em;
             display: none;
             box-shadow: 0 4px 10px rgba(0,0,0,0.3);
             z-index: 1000;
             border: 2px solid #0092ca;
-            transition: all 0.3s ease;
         }
-        #floating-back-top:hover { background-color: #0092ca; transform: translateY(-3px); }
 
-        /* Content Column Components */
-        #content-column { min-width: 0; }
+        /* Tracker Table */
+        .log-table { width: 100%; border-collapse: collapse; background: white; margin-top: 10px; }
+        .log-table th, .log-table td { border: 1px solid #393e46; padding: 10px; text-align: left; }
+        .log-table th { background: #222831; color: white; font-size: 0.85em; }
+        .log-table input { width: 100%; border: none; font-family: inherit; font-size: 0.9em; background: transparent; padding: 5px; box-sizing: border-box; }
+        .log-table input:focus { outline: 1px solid #0092ca; background: #f0f9ff; }
+
         .card {
             background-color: #ffffff;
             border-radius: 0.75rem;
@@ -158,40 +124,29 @@
             margin-bottom: 1.5rem;
             border: 1px solid #393e46;
         }
-        .icon-wrapper {
-            background-color: #eeeeee;
-            color: #0092ca;
-            border-radius: 9999px;
-            padding: 0.75rem;
-            margin-bottom: 1rem;
-            display: inline-flex;
-        }
+
+        /* Leads Grid */
         .grid-leads { display: grid; grid-template-columns: repeat(auto-fill, minmax(240px, 1fr)); gap: 1rem; }
         .lead-item {
             display: block; background: white; padding: 0.75rem; border-radius: 0.5rem;
             border: 1px solid #393e46; text-decoration: none; font-size: 0.85em; color: #222831; font-weight: 500;
         }
         .lead-item:hover { border-color: #0092ca; background: #eeeeee; }
-        
-        .gov-link {
-            display: block; text-align: center; padding: 2rem; background: white;
-            border-radius: 0.75rem; border: 1px solid #393e46; text-decoration: none; color: #222831;
-        }
-        .gov-link:hover { border-color: #0092ca; }
-        
-        .back-link { display: inline-block; margin-top: 15px; font-size: 0.85em; color: #0092ca; font-weight: 600; text-decoration: none; }
+
+        /* New Highlight/Box Styles */
+        .highlight-text { background-color: #fff9c4; padding: 2px 4px; font-weight: 600; border-radius: 3px; }
+        .strategy-box { background: #f8f8f8; padding: 15px; border-radius: 8px; border: 1px solid #393e46; font-size: 0.9em; }
 
         @media (max-width: 900px) {
             .main-container { grid-template-columns: 1fr; }
             #toc-column { position: relative; top: 0; max-height: none; }
+            .log-table { display: block; overflow-x: auto; }
         }
 
         @media print {
-            #toc-column, .back-link, .pdf-btn, #floating-back-top { display: none !important; }
+            #toc-column, #floating-back-top, .action-btn { display: none !important; }
             .main-container { display: block; }
-            body { background: white; color: black; }
-            .card { break-inside: avoid; border: 1px solid #ddd; }
-            a { color: #0092ca !important; text-decoration: underline !important; -webkit-print-color-adjust: exact; }
+            body { background: white; }
         }
     </style>
 </head>
@@ -206,73 +161,33 @@
     <nav id="toc-column">
         <h2>Table of Contents</h2>
         <ul>
-            <li class="has-children">
-                <a href="#roles" onclick="toggleSubmenu(event, 'roles-sub')">I. Understanding Roles</a>
-                <ul class="submenu" id="roles-sub">
-                    <li><a href="#program-role" style="font-weight: normal;">MEnv Program's Role</a></li>
-                    <li><a href="#student-role" style="font-weight: normal;">The Student's Role</a></li>
-                </ul>
-            </li>
+            <li><a href="#roles">I. Understanding Roles</a></li>
             <li><a href="#strategy">II. Search Strategy</a></li>
-            <li class="has-children">
-                <a href="#leads" onclick="toggleSubmenu(event, 'leads-sub')">III. Internship Leads</a>
-                <ul class="submenu" id="leads-sub">
-                    <li><a href="#corporate-leads" style="font-weight: normal;">Corporate & Municipal</a></li>
-                    <li><a href="#gov-leads" style="font-weight: normal;">Federal & Provincial</a></li>
-                </ul>
-            </li>
-            <li><a href="#tips">IV. Key Tips for Success</a></li>
+            <li><a href="#app-log">III. Application Tracker</a></li>
+            <li><a href="#leads">IV. Internship Leads</a></li>
+            <li><a href="#tips">V. Key Tips</a></li>
         </ul>
-
-        <div id="search-container">
-            <div style="display: flex; gap: 5px;">
-                <input type="text" id="search-input" placeholder="Search page..." onkeypress="if(event.key==='Enter') performSearch()">
-                <button class="search-btn" onclick="performSearch()">Find</button>
-            </div>
-            <div id="nav-controls" style="display:none; justify-content: space-between; align-items: center;">
-                <button style="background:#393e46; color: white; border: none; padding: 4px 8px; border-radius: 4px; cursor: pointer; font-size: 0.8em;" onclick="clearHighlights()">Clear</button>
-                <div style="display: flex; gap: 4px;">
-                    <button class="search-btn" style="padding: 4px 8px;" onclick="jumpPrev()">↑</button>
-                    <button class="search-btn" style="padding: 4px 8px;" onclick="jumpNext()">↓</button>
-                </div>
-            </div>
-            <div id="search-info" style="font-size: 0.7em; color: #222831; text-align: right;"></div>
-        </div>
-
-        <button class="pdf-btn" onclick="window.print()">
-            Download PDF
-        </button>
+        <button class="action-btn" style="width:100%" onclick="window.print()">Download PDF</button>
     </nav>
 
     <main id="content-column">
         <section id="roles">
             <h2>Understanding the Internship Process</h2>
-            <div id="program-role" class="card">
-                <div class="icon-wrapper">
-                    <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M6 22V4a2 2 0 0 1 2-2h8a2 2 0 0 1 2 2v18"/><path d="M6 12H4a2 2 0 0 0-2 2v6a2 2 0 0 0 2 2h2"/><path d="M18 9h2a2 2 0 0 1 2 2v9"/><path d="M10 6h4"/><path d="M10 10h4"/><path d="M10 14h4"/><path d="M10 18h4"/></svg>
-                </div>
+            <div class="card">
                 <h3>The MEnv Program's Role</h3>
-                <p>The program and department are here to prepare and support you.</p>
                 <ul>
-                    <li><strong>Preparation:</strong> ENVS 608 seminars provide practical tools like project management, CV/cover letter writing, and interview skills.</li>
-                    <li><strong>Resource Provision:</strong> We share internship leads, provide access to listings, and facilitate information sharing.</li>
-                    <li><strong>Vetting Placements:</strong> The coordinator ensures each placement is relevant, meets hour requirements, and provides a safe, respectful work environment.</li>
+                    <li><strong>Preparation:</strong> ENVS 608 seminars provide project management and CV tools.</li>
+                    <li><strong>Resource Provision:</strong> The Internship Cooordinator shares leads and listing via internal and external networks.</li>
+                    <li><strong>Vetting:</strong> The coordinator ensures each placement meets program requirements.</li>
                 </ul>
-                <a href="#top" class="back-link">↑ Back to Top</a>
             </div>
-
-            <div id="student-role" class="card">
-                <div class="icon-wrapper">
-                    <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M19 21v-2a4 4 0 0 0-4-4H9a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/></svg>
-                </div>
+            <div class="card">
                 <h3>The Student's Role</h3>
-                <p>You are the driver of your internship search. Your proactivity is key.</p>
                 <ul>
-                    <li><strong>Finding Opportunities:</strong> Actively monitor program postings, check company websites directly, and leverage platforms like LinkedIn.</li>
-                    <li><strong>Building Your Network:</strong> Connect with peers, faculty, and industry professionals. Attend events and conduct informational interviews.</li>
-                    <li><strong>Securing the Placement:</strong> You are ultimately responsible for searching for, applying to, and securing your internship.</li>
+                    <li><strong>Finding Opportunities:</strong> Actively monitor program postings and LinkedIn.</li>
+                    <li><strong>Building Your Network:</strong> Connect with peers and industry professionals.</li>
+                    <li><strong>Securing:</strong> You are responsible for applying to and landing the internship.</li>
                 </ul>
-                <a href="#top" class="back-link">↑ Back to Top</a>
             </div>
         </section>
 
@@ -280,20 +195,39 @@
             <h2>Your Search Strategy</h2>
             <div class="card">
                 <h3>The Personalized Digital Approach</h3>
-                <p>Move beyond simply filling out online applications. A thoughtful, personalized effort is what will set you apart.</p>
-                <ul>
-                    <li><strong>Leverage LinkedIn:</strong> Build a professional profile, connect with individuals at target companies, and engage with industry conversations.</li>
-                    <li><strong>Active Networking:</strong> Attend career fairs and industry events. Request informational interviews to learn and uncover hidden opportunities.</li>
-                    <li><strong>Targeted Cold Emailing:</strong> A well-crafted, personalized email to a recruiter or team lead is powerful and less intrusive than a cold call.</li>
-                </ul>
-
-                <h3>High-Risk, High-Reward Tactics</h3>
-                <p>In-person visits and cold calls can make you stand out, but require thorough preparation and professionalism. They are best used as supplemental tools.</p>
+                <p><span class="highlight-text">Focus on quality over quantity: optimize LinkedIn, network actively, and send targeted cold emails.</span></p>
                 
                 <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 20px; margin-top: 15px;">
-                    <div style="background: #eeeeee; padding: 15px; border-radius: 8px; border: 1px solid #393e46;">
+                    <div class="strategy-box">
+                        <h4 style="margin-top:0; color: #0092ca;">Optimize LinkedIn</h4>
+                        <ul style="padding-left: 20px;">
+                            <li>Use a professional headshot and a headline mentioning "Impact Assessment."</li>
+                            <li>Feature your MEnv projects in the "Featured" section.</li>
+                            <li>Follow companies from the leads list below to see their news and job posts.</li>
+                            <li>Engage with content posted by industry leaders.</li>
+                        </ul>
+                    </div>
+                    <div class="strategy-box">
+                        <h4 style="margin-top:0; color: #0092ca;">Targeted Cold Emailing</h4>
+                        <ul style="padding-left: 20px;">
+                            <li>Research the specific project manager or ESG lead.</li>
+                            <li>Subject line should be specific (e.g., "MEnv Student - Inquiry regarding IA projects").</li>
+                            <li>Keep it brief: Who you are, why you admire their work, and how you can add value.</li>
+                            <li>Attach your CV in PDF format only.</li>
+                        </ul>
+                    </div>
+                </div>
+                <div class="strategy-box" style="margin-top: 20px; width: 100%;">
+                    <h4 style="margin-top:0; color: #0092ca;">Network Actively</h4>
+                    <p>Don't just add people; build relationships. Attend local environmental planning webinars or municipal town halls. Reach out to MEnv alumni for "informational interviews" to learn about their firm’s culture before applying.</p>
+                </div>
+
+                <h3 style="margin-top: 30px;">High-Risk, High-Reward Tactics</h3>
+                <p>In-person visits and cold calls require professionalism and thorough prep. They are supplemental tools.</p>
+                <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 20px;">
+                    <div class="strategy-box">
                         <h4 style="margin-top:0;">If Visiting In-Person:</h4>
-                        <ul style="font-size: 0.9em;">
+                        <ul style="padding-left: 20px;">
                             <li>Best for smaller/medium businesses.</li>
                             <li>Dress professionally.</li>
                             <li>Have your resume and cover letter ready.</li>
@@ -301,10 +235,10 @@
                             <li>Follow up with a thank-you email.</li>
                         </ul>
                     </div>
-                    <div style="background: #eeeeee; padding: 15px; border-radius: 8px; border: 1px solid #393e46;">
+                    <div class="strategy-box">
                         <h4 style="margin-top:0;">If Cold Calling:</h4>
-                        <ul style="font-size: 0.9em;">
-                            <li>Research who to call and what their team does.</li>
+                        <ul style="padding-left: 20px;">
+                            <li>Research who to call and their team.</li>
                             <li>Have a clear goal (e.g., get an email address).</li>
                             <li>Script your opening and respect their time.</li>
                             <li>Ask for a better time to call if they are busy.</li>
@@ -315,34 +249,45 @@
             </div>
         </section>
 
-        <section id="leads">
-            <h2>Potential Internship Leads</h2>
-            <h3 id="corporate-leads">Corporate, Non-Profit & Municipal</h3>
-            <div id="leads-container" class="grid-leads">
+        <section id="app-log">
+            <h2>Internship Application Log</h2>
+            <div class="card">
+                <div style="margin-bottom: 15px;">
+                    <button class="action-btn" onclick="exportTableToCSV('internship_log.csv')">Export Log (.csv)</button>
+                    <button class="action-btn secondary" onclick="addRow()">+ Add Row</button>
+                    <button class="action-btn danger" onclick="clearAllRows()">Clear All</button>
                 </div>
-
-            <h3 id="gov-leads" style="margin-top: 40px;">Federal & Provincial</h3>
-            <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 20px;">
-                <a href="https://www.canada.ca/en/services/jobs/opportunities/government.html" target="_blank" class="gov-link">
-                    <h4>Jobs Canada</h4>
-                    <p>Federal government job opportunities.</p>
-                </a>
-                <a href="https://www.carrieres.gouv.qc.ca/emplois-etudiants-et-stages/stages/offres-de-stage-en-cours" target="_blank" class="gov-link">
-                    <h4>Stages Québec</h4>
-                    <p>Internship offers from the Québec government.</p>
-                </a>
+                <p style="font-size: 0.85em; color: #666; margin-bottom: 10px;">
+                    <strong>Phase Examples:</strong> Initial Contact, Application Submitted, Application Pending, Finalizing Offer.
+                </p>
+                <table class="log-table" id="trackerTable">
+                    <thead>
+                        <tr>
+                            <th>Phase</th>
+                            <th>Company Name</th>
+                            <th>Contact Person</th>
+                            <th>Date</th>
+                            <th>Status / Follow-Up</th>
+                        </tr>
+                    </thead>
+                    <tbody id="trackerBody">
+                        <tr><td><input type="text"></td><td><input type="text"></td><td><input type="text"></td><td><input type="text"></td><td><input type="text"></td></tr>
+                        <tr><td><input type="text"></td><td><input type="text"></td><td><input type="text"></td><td><input type="text"></td><td><input type="text"></td></tr>
+                        <tr><td><input type="text"></td><td><input type="text"></td><td><input type="text"></td><td><input type="text"></td><td><input type="text"></td></tr>
+                    </tbody>
+                </table>
             </div>
-            <a href="#top" class="back-link">↑ Back to Top</a>
         </section>
 
-        <section id="tips">
-            <h2>Key Points for Your Search</h2>
-            <div style="display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 20px;">
-                <div class="card" style="text-align: center;"><strong>Be Flexible:</strong> Be open to different types of work and opportunities.</div>
-                <div class="card" style="text-align: center;"><strong>Network & Explore:</strong> Success hinges on networking and exploring resources.</div>
-                <div class="card" style="text-align: center;"><strong>Relocating:</strong> Consider relocating to open up wider possibilities.</div>
+        <section id="leads">
+            <h2>Potential Internship Leads</h2>
+            <h3>Corporate, Non-Profit & Municipal</h3>
+            <div id="leads-container" class="grid-leads"></div>
+            <h3 style="margin-top:40px;">Federal & Provincial</h3>
+            <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 20px;">
+                <a href="https://www.canada.ca/en/services/jobs/opportunities/government.html" target="_blank" class="lead-item">Jobs Canada (Federal)</a>
+                <a href="https://www.carrieres.gouv.qc.ca/emplois-etudiants-et-stages/stages/offres-de-stage-en-cours" target="_blank" class="lead-item">Stages Québec (Provincial)</a>
             </div>
-            <a href="#top" class="back-link">↑ Back to Top</a>
         </section>
     </main>
 </div>
@@ -350,22 +295,42 @@
 <a href="#top" id="floating-back-top">↑ Top</a>
 
 <script>
-function toggleSubmenu(event, submenuId) {
-    const submenu = document.getElementById(submenuId);
-    if (submenu) submenu.classList.toggle('active');
+/* Table Controls */
+function addRow() {
+    const table = document.getElementById("trackerBody");
+    const newRow = table.insertRow();
+    for (let i = 0; i < 5; i++) { newRow.insertCell(i).innerHTML = '<input type="text">'; }
+}
+function clearAllRows() { document.querySelectorAll("#trackerTable input").forEach(input => input.value = ""); }
+
+/* CSV Export */
+function exportTableToCSV(filename) {
+    const csv = [];
+    const rows = document.getElementById("trackerTable").querySelectorAll("tr");
+    for (let i = 0; i < rows.length; i++) {
+        const row = [], cols = rows[i].querySelectorAll("td, th");
+        for (let j = 0; j < cols.length; j++) {
+            const input = cols[j].querySelector("input");
+            row.push(input ? '"' + input.value + '"' : '"' + cols[j].innerText + '"');
+        }
+        csv.push(row.join(","));
+    }
+    const csvFile = new Blob([csv.join("\n")], { type: "text/csv" });
+    const downloadLink = document.createElement("a");
+    downloadLink.download = filename;
+    downloadLink.href = window.URL.createObjectURL(csvFile);
+    downloadLink.style.display = "none";
+    document.body.appendChild(downloadLink);
+    downloadLink.click();
 }
 
-/* Floating Button Visibility Logic */
+/* UI Logic */
 window.onscroll = function() {
     const btn = document.getElementById('floating-back-top');
-    if (document.body.scrollTop > 300 || document.documentElement.scrollTop > 300) {
-        btn.style.display = "block";
-    } else {
-        btn.style.display = "none";
-    }
+    btn.style.display = (document.documentElement.scrollTop > 300) ? "block" : "none";
 };
 
-/* Audited Lead Injection */
+/* Load Leads */
 document.addEventListener('DOMContentLoaded', () => {
     const leads = [
         { name: "Agnico Eagle", url: "https://agnicoeagle.com/English/home/default.aspx" },
@@ -404,47 +369,6 @@ document.addEventListener('DOMContentLoaded', () => {
         container.appendChild(a);
     });
 });
-
-/* Search Functionality Logic */
-let currentMatches = [];
-let currentIndex = -1;
-
-function performSearch() {
-    clearHighlightsInternal();
-    const searchTerm = document.getElementById('search-input').value.trim();
-    if (!searchTerm) return;
-    const bodyText = document.getElementById('content-column');
-    const walker = document.createTreeWalker(bodyText, NodeFilter.SHOW_TEXT, null, false);
-    const nodes = [];
-    let node;
-    while(node = walker.nextNode()) {
-        if (!['SCRIPT', 'STYLE'].includes(node.parentElement.tagName) && 
-            node.textContent.toLowerCase().includes(searchTerm.toLowerCase())) {
-            nodes.push(node);
-        }
-    }
-    nodes.forEach(node => {
-        const span = document.createElement('span');
-        span.innerHTML = node.textContent.replace(new RegExp(`(${searchTerm})`, 'gi'), '<mark class="highlight">$1</mark>');
-        node.parentNode.replaceChild(span, node);
-    });
-    currentMatches = document.querySelectorAll('.highlight');
-    if (currentMatches.length) {
-        document.getElementById('nav-controls').style.display = 'flex';
-        currentIndex = 0;
-        updateSearchInfo();
-        scrollAndFocus();
-    } else {
-        document.getElementById('search-info').textContent = "No matches.";
-    }
-}
-
-function jumpNext() { if (currentMatches.length) { currentMatches[currentIndex].classList.remove('current'); currentIndex = (currentIndex + 1) % currentMatches.length; updateSearchInfo(); scrollAndFocus(); } }
-function jumpPrev() { if (currentMatches.length) { currentMatches[currentIndex].classList.remove('current'); currentIndex = (currentIndex - 1 + currentMatches.length) % currentMatches.length; updateSearchInfo(); scrollAndFocus(); } }
-function scrollAndFocus() { const el = currentMatches[currentIndex]; el.classList.add('current'); el.scrollIntoView({ behavior: 'smooth', block: 'center' }); }
-function updateSearchInfo() { document.getElementById('search-info').textContent = `${currentIndex + 1}/${currentMatches.length}`; }
-function clearHighlightsInternal() { document.querySelectorAll('.highlight').forEach(h => { const p = h.parentNode; p.replaceChild(document.createTextNode(h.textContent), h); p.normalize(); }); currentMatches = []; currentIndex = -1; }
-function clearHighlights() { clearHighlightsInternal(); document.getElementById('nav-controls').style.display = 'none'; document.getElementById('search-input').value = ""; }
 </script>
 
 </body>
