@@ -1,0 +1,381 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>GPE Room Booking & Schedules - Ver 38.0</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            line-height: 1.4;
+            color: #333;
+            max-width: 1400px;
+            margin: 0 auto;
+            padding: 5px 15px 15px 15px;
+            scroll-behavior: smooth;
+        }
+
+        /* Unified Main Grid with Border */
+        .main-grid {
+            display: grid;
+            grid-template-columns: 1fr 3fr;
+            gap: 30px;
+            align-items: stretch;
+            border: 1px solid #ddd;
+            padding: 20px;
+            border-radius: 8px;
+            background-color: #fff;
+        }
+
+        /* Top Header Alignment */
+        .top-header-row {
+            display: grid;
+            grid-template-columns: 1fr 3fr;
+            gap: 30px;
+            align-items: start; 
+            margin-bottom: 20px;
+            padding-left: 20px; 
+        }
+
+        .sidebar-logo-container {
+            text-align: left;
+        }
+
+        .sidebar-logo-container img {
+            max-width: 100%;
+            height: auto;
+            max-height: 112px;
+            display: block;
+        }
+
+        .main-section-header h1 {
+            color: #800000;
+            font-size: 2.8em;
+            margin: 38px 0 0 0; 
+            padding: 0;
+            font-weight: bold;
+            line-height: 1;
+        }
+
+        .content-header-row {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 15px;
+            align-items: baseline;
+            margin-bottom: 15px;
+        }
+
+        h2 { 
+            color: #800000; 
+            margin: 0; 
+            font-size: 1.3em; 
+            line-height: 1;
+        }
+
+        .jump-link {
+            color: #800000;
+            font-weight: bold;
+            text-decoration: none;
+            font-size: 1.1em;
+            letter-spacing: 0.5px;
+            transition: color 0.3s;
+            border-bottom: none; 
+            white-space: nowrap;
+            justify-self: start;
+        }
+
+        .jump-link:hover {
+            color: #b30000;
+            text-decoration: underline;
+        }
+
+        .calendar-column {
+            display: flex;
+            flex-direction: column;
+        }
+
+        /* Updated Instruction Box Styles for Bullets */
+        .instruction-box {
+            background-color: #f4f4f4;
+            border-left: 4px solid #800000;
+            padding: 12px;
+            margin-bottom: 15px;
+            font-size: 1.05em;
+            font-weight: 500;
+            margin-top: 15px;
+        }
+
+        .instruction-box ul {
+            margin: 10px 0 0 0;
+            padding-left: 20px;
+        }
+
+        .instruction-box li {
+            margin-bottom: 8px;
+        }
+
+        .calendar-instruction {
+            font-weight: bold;
+            font-style: italic;
+            color: #800000;
+            font-size: 1.05em;
+            margin-bottom: 10px;
+            text-align: center;
+        }
+
+        .calendar-slider {
+            display: flex;
+            flex-direction: column;
+            gap: 15px;
+        }
+
+        .calendar-thumb {
+            border: 1px solid #ddd;
+            padding: 8px;
+            text-align: center;
+            cursor: pointer;
+            transition: transform 0.2s;
+            background: #fff;
+            flex-shrink: 0;
+        }
+
+        .calendar-thumb:hover {
+            transform: scale(1.02);
+            border-color: #800000;
+        }
+
+        .calendar-thumb img {
+            width: 100%;
+            height: auto;
+            max-height: 150px;
+            object-fit: contain;
+        }
+
+        .calendar-thumb p { margin: 5px 0 0 0; font-size: 0.8em; font-weight: bold; }
+
+        .main-content-section {
+            display: flex;
+            flex-direction: column;
+        }
+
+        .details-column {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 15px;
+            margin-bottom: 20px;
+        }
+
+        .room-card {
+            border: 1px solid #ddd;
+            padding: 12px;
+            border-radius: 6px;
+            background: #ffffff;
+            display: flex;
+            flex-direction: row;
+            justify-content: space-between;
+            align-items: stretch;
+            gap: 15px;
+            box-shadow: 0 1px 3px rgba(0,0,0,0.05);
+        }
+
+        .room-info {
+            flex: 1.2;
+            font-size: 0.85em;
+        }
+        
+        .room-info h3 { 
+            color: #555555; 
+            margin-bottom: 8px; 
+            margin-top: 0; 
+            font-size: 1.1em; 
+            border-bottom: 1px solid #ddd; 
+            padding-bottom: 3px; 
+        }
+
+        .room-image-container {
+            flex: 1;
+            text-align: right;
+            background: #f9f9f9;
+            padding: 8px;
+            border-radius: 4px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .room-image-container img {
+            max-width: 100%;
+            height: auto;
+            max-height: 140px; 
+            border-radius: 2px;
+        }
+
+        .form-section {
+            text-align: center;
+            width: 100%;
+            flex-grow: 1; 
+            display: flex;
+            flex-direction: column;
+        }
+
+        iframe {
+            width: 100%;
+            flex-grow: 1; 
+            min-height: 850px; 
+            border: none;
+        }
+
+        footer {
+            margin-top: 40px;
+            padding-top: 15px;
+            border-top: 1px solid #ccc;
+            text-align: right;
+            font-size: 0.75em;
+            color: #777;
+        }
+
+        @media (max-width: 1000px) {
+            .main-grid, .top-header-row { grid-template-columns: 1fr; padding: 10px; }
+            .content-header-row { grid-template-columns: 1fr; gap: 10px; }
+            .room-card { flex-direction: column; }
+            .top-header-row { align-items: center; }
+            .main-section-header h1 { margin-top: 10px; }
+            iframe { height: 800px; }
+        }
+    </style>
+</head>
+<body>
+
+<div class="top-header-row">
+    <div class="sidebar-logo-container">
+        <img src="https://raw.githubusercontent.com/tmcgurk1817/handbook/main/Logo.png" alt="Dept logo">
+    </div>
+    <header class="main-section-header">
+        <h1>GPE Room Booking</h1>
+    </header>
+</div>
+
+<div class="main-grid">
+    <section class="calendar-column">
+        <div class="content-header-row" style="grid-template-columns: 1fr;">
+            <h2>Recurring Room Schedules</h2>
+        </div>
+        
+        <div class="instruction-box">
+            <ul>
+                <li>The calendars below show the teaching bookings for the current semester. It does not show ad-hoc bookings which may have been added.</li>
+                <li>The goal of the tools is to give users an idea of the likelihood of a given time slot for a given room.</li>
+                <li>If you enter a request for a room that is not available the department attempts to book you in an equivalent space.</li>
+                <li>You can also request preferred options in the notes section of the form <i>(e.g., If not 1271 then 1267)</i>.</li>
+                <li>You will receive an invitation from Outlook Calendars once your booking is confirmed.</li>
+            </ul>
+        </div>
+        
+        <div class="calendar-instruction">
+            Click thumbnails for larger images. 
+        </div>
+
+        <div class="calendar-slider">
+            <div class="calendar-thumb" onclick="window.open('https://raw.githubusercontent.com/tmcgurk1817/calendars/main/h1252.jpg', '_blank')">
+                <img src="https://raw.githubusercontent.com/tmcgurk1817/calendars/main/h1252.jpg" alt="H-1252 Calendar">
+                <p>H-1252</p>
+            </div>
+            <div class="calendar-thumb" onclick="window.open('https://raw.githubusercontent.com/tmcgurk1817/calendars/main/h1255.43.jpg', '_blank')">
+                <img src="https://raw.githubusercontent.com/tmcgurk1817/calendars/main/h1255.43.jpg" alt="H-1255.43 Calendar">
+                <p>H-1255.43</p>
+            </div>
+            <div class="calendar-thumb" onclick="window.open('https://raw.githubusercontent.com/tmcgurk1817/calendars/main/h1269.3.jpg', '_blank')">
+                <img src="https://raw.githubusercontent.com/tmcgurk1817/calendars/main/h1269.3.jpg" alt="H-1269.3 Calendar">
+                <p>H-1269.3</p>
+            </div>
+            <div class="calendar-thumb" onclick="window.open('https://raw.githubusercontent.com/tmcgurk1817/calendars/main/h1267.jpg', '_blank')">
+                <img src="https://raw.githubusercontent.com/tmcgurk1817/calendars/main/h1267.jpg" alt="H-1267 Calendar">
+                <p>H-1267</p>
+            </div>
+            <div class="calendar-thumb" onclick="window.open('https://raw.githubusercontent.com/tmcgurk1817/calendars/main/h1271.jpg', '_blank')">
+                <img src="https://raw.githubusercontent.com/tmcgurk1817/calendars/main/h1271.jpg" alt="H-1271 Calendar">
+                <p>H-1271</p>
+            </div>
+        </div>
+    </section>
+
+    <section class="main-content-section">
+        <div class="content-header-row">
+            <h2>Room Details</h2>
+            <a href="https://forms.office.com/r/bTgMX6Z6uT" target="_blank" class="jump-link">Book in MS Forms</a>
+        </div>
+
+        <div class="details-column">
+            <div class="room-card">
+                <div class="room-info">
+                    <h3>Seminar Room H-1252</h3>
+                    <p><strong>Capacity:</strong> 36 seats</p>
+                    <p><strong>Suitable for:</strong> Teaching medium to small size classes</p>
+                    <p><strong>Includes:</strong> Projector, blackboards, whiteboards and desks that can be reconfigured</p>
+                    <p><em>Note: Hours of room availability may vary.</em></p>
+                </div>
+                <div class="room-image-container">
+                    <a href="https://raw.githubusercontent.com/tmcgurk1817/calendars/main/1756303086991.jpg" target="_blank">
+                        <img src="https://raw.githubusercontent.com/tmcgurk1817/calendars/main/1756303086991.jpg" alt="View of seminar Room H-1252">
+                    </a>
+                </div>
+            </div>
+
+            <div class="room-card">
+                <div class="room-info">
+                    <h3>Seminar Room H-1269</h3>
+                    <p><strong>Capacity:</strong> 22 seats</p>
+                    <p><strong>Suitable for:</strong> Teaching small classes</p>
+                    <p><strong>Includes:</strong> Projector, blackboards, whiteboards and desks that can be reconfigured</p>
+                    <p><em>Note: Hours of room availability may vary.</em></p>
+                </div>
+                <div class="room-image-container">
+                    <a href="https://raw.githubusercontent.com/tmcgurk1817/calendars/main/1756303074020.jpg" target="_blank">
+                        <img src="https://raw.githubusercontent.com/tmcgurk1817/calendars/main/1756303074020.jpg" alt="View of Seminar Room H-1269">
+                    </a>
+                </div>
+            </div>
+
+            <div class="room-card">
+                <div class="room-info">
+                    <h3>Geology Classroom H-1271</h3>
+                    <p><strong>Capacity:</strong> 40 seats</p>
+                    <p><strong>Suitable for:</strong> Medium to large classes or labs</p>
+  		    <p><strong>Includes:</strong> Projector, blackboards, whiteboards and desks that can be reconfigured</p>
+                    <p><em>Note: Hours of room availability may vary.</em></p>
+                </div>
+                <div class="room-image-container">
+                    <a href="https://raw.githubusercontent.com/tmcgurk1817/calendars/main/1759499825535.jpg" target="_blank">
+                        <img src="https://raw.githubusercontent.com/tmcgurk1817/calendars/main/1759499825535.jpg" alt="View of room H-1271">
+                    </a>
+                </div>
+            </div>
+
+            <div class="room-card">
+                <div class="room-info">
+                    <h3>Large Classroom H-1267</h3>
+                    <p><strong>Capacity:</strong> 40 seats</p>
+                    <p><strong>Suitable for:</strong> Medium to large classes or labs</p>
+                    <p><strong>Includes:</strong> Projector, blackboards, whiteboards and desks that can be reconfigured</p>
+                    <p><em>Note: Hours of room availability may vary.</em></p>
+                </div>
+                <div class="room-image-container">
+                    <a href="https://raw.githubusercontent.com/tmcgurk1817/calendars/main/Untitled.jpg" target="_blank">
+                        <img src="https://raw.githubusercontent.com/tmcgurk1817/calendars/main/Untitled.jpg" alt="View of room H-1267">
+                    </a>
+                </div>
+            </div>
+        </div>
+
+        <div class="form-section">
+            <iframe src="https://forms.office.com/Pages/ResponsePage.aspx?id=hfFpVS_SE06YUM5bGrzS6M2bxn8qiOJKoa3i5fjh1jJUMkRJTTQ4OURBQkZYTFRMNTBIOVI0Mk9PRSQlQCN0PWcu&embed=true" allowfullscreen webkitallowfullscreen mozallowfullscreen msallowfullscreen> </iframe>
+        </div>
+    </section>
+</div>
+
+<footer>
+    <time datetime="2026-02-18">Updated Feb 18, 2026 Ver 38.0</time>
+</footer>
+
+</body>
+</html>
