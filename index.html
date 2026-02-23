@@ -3,46 +3,77 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate">
+    <meta http-equiv="Pragma" content="no-cache">
+    <meta http-equiv="Expires" content="0">
+    
     <title>Tom McGurk – Work Samples</title>
 
-	<style>
+    <style>
         body {
             font-family: 'Helvetica Neue', Arial, sans-serif;
             line-height: 1.6;
             color: #2d3436;
-            max-width: 850px;
-            margin: 50px auto;
-            padding: 0 30px;
+            margin: 0;
+            padding: 0;
             background-color: #f0f2f5;
+            display: flex;
+            flex-direction: column;
+            height: 100vh;
         }
 
         header {
             background: #2c3e50;
             color: white;
-            padding: 40px;
-            border-radius: 12px 12px 0 0;
+            padding: 20px 40px;
             text-align: left;
             border-bottom: 5px solid #3498db;
+            flex-shrink: 0;
         }
 
         h1 {
             margin: 0;
-            font-size: 2.2em;
+            font-size: 1.8em;
             font-weight: 300;
             letter-spacing: 1px;
         }
 
-        .intro-text {
-            margin-top: 10px;
+        h2 {
+            margin: 5px 0 0 0;
             font-size: 1.1em;
-            opacity: 0.9;
+            font-weight: 300;
+            opacity: 0.8;
         }
 
-        main {
+        .container {
+            display: flex;
+            flex: 1;
+            overflow: hidden;
+        }
+
+        /* 1/4 Section: Sidebar with sticky-style scrolling list */
+        aside {
+            flex: 1;
             background: white;
-            padding: 40px;
-            border-radius: 0 0 12px 12px;
-            box-shadow: 0 4px 15px rgba(0,0,0,0.08);
+            border-right: 1px solid #dfe6e9;
+            overflow-y: auto;
+            padding: 20px;
+            box-shadow: 2px 0 10px rgba(0,0,0,0.05);
+            z-index: 10;
+        }
+
+        /* 3/4 Section: Content Display area */
+        main {
+            flex: 3;
+            background: #fff;
+            position: relative;
+        }
+
+        iframe {
+            width: 100%;
+            height: 100%;
+            border: none;
+            display: block;
         }
 
         ul {
@@ -52,41 +83,43 @@
         }
 
         li {
-            margin-bottom: 12px;
+            margin-bottom: 10px;
         }
 
         .file-link {
             text-decoration: none;
             color: #2c3e50;
             font-weight: 600;
-            display: flex;
-            align-items: center;
-            padding: 15px 20px;
+            display: block;
+            padding: 12px 15px;
             background: #f8f9fa;
             border-left: 4px solid #dfe6e9;
             border-radius: 4px;
             transition: all 0.2s ease-in-out;
+            font-size: 0.9em;
         }
 
         .file-link:hover {
             background: #ebf5fb;
             border-left: 4px solid #3498db;
             color: #3498db;
-            transform: translateX(8px);
-        }
-
-        .file-link::before {
-            content: "•";
-            color: #3498db;
-            font-size: 1.5em;
-            margin-right: 15px;
+            transform: translateX(5px);
         }
 
         footer {
-            margin-top: 30px;
+            background: #f8f9fa;
+            padding: 10px 40px;
             text-align: center;
             font-size: 0.85em;
             color: #636e72;
+            border-top: 1px solid #dfe6e9;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .timestamp {
+            font-style: italic;
         }
     </style>
 </head>
@@ -94,35 +127,34 @@
 
     <header>
         <h1>Tom McGurk – Work Samples</h1>
-		<h2>Web based documenation examples for GPE Concorida</h2>
+        <h2>Web based documenation examples for GPE Concorida</h2>
     </header>
 
-    <main>
-        <ul>
-            <li><a class="file-link" href="Draft%20Faculty%20Handbook%20GPE.html" target="_blank">Faculty Handbook - Draft (v20)</a></li>
-            <li><a class="file-link" href="GradHandBook_v4.html" target="_blank">Graduate Handbook - Draft (v4)</a></li>
-            <li><a class="file-link" href="Internship%20Resources.html" target="_blank">Internship Resources</a></li>
-			<li><a class="file-link" href="Journal_tracker_v1_" target="_blank">Journal Tracker</a></li>
-            <li><a class="file-link" href="Report%20Writing.html" target="_blank">Report Writing Guide</a></li>
-			<li><a class="file-link" href="GPE-room booking.html">Room Booking Page</a></li>
-            <li><a class="file-link" href="Room.html" target="_blank">Room Finder App</a></li>
-            <li><a class="file-link" href="SCPA_DIR.html" target="_blank">SCPA Directory</a></li>
-	        <li><a class="file-link" href="Phone.html" target="_blank">Teams Phone Help</a></li>
-            <li><a class="file-link" href="TA%20Contract%20Guide%20(2).html" target="_blank">TA Contract Guide (Version 2)</a></li>
-       
-        </ul>
-    </main>
+    <div class="container">
+        <aside>
+            <ul>
+                <li><a class="file-link" href="Draft%20Faculty%20Handbook%20GPE.html" target="preview-frame">Faculty Handbook - Draft (v20)</a></li>
+                <li><a class="file-link" href="GradHandBook_v4.html" target="preview-frame">Graduate Handbook - Draft (v4)</a></li>
+                <li><a class="file-link" href="Internship%20Resources.html" target="preview-frame">Internship Resources</a></li>
+                <li><a class="file-link" href="Journal_tracker_v1_" target="preview-frame">Journal Tracker</a></li>
+                <li><a class="file-link" href="Report%20Writing.html" target="preview-frame">Report Writing Guide</a></li>
+                <li><a class="file-link" href="GPE-room booking.html" target="preview-frame">Room Booking Page</a></li>
+                <li><a class="file-link" href="Room.html" target="preview-frame">Room Finder App</a></li>
+                <li><a class="file-link" href="SCPA_DIR.html" target="preview-frame">SCPA Directory</a></li>
+                <li><a class="file-link" href="Phone.html" target="preview-frame">Teams Phone Help</a></li>
+                <li><a class="file-link" href="TA%20Contract%20Guide%20(2).html" target="preview-frame">TA Contract Guide (Version 2)</a></li>
+            </ul>
+        </aside>
+
+        <main>
+            <iframe name="preview-frame" src="about:blank" title="Content Preview"></iframe>
+        </main>
+    </div>
 
     <footer>
-        &copy; 2026 Tom McGurk
+        <span>&copy; 2026 Tom McGurk</span>
+        <time class="timestamp" datetime="2026-02-23">Updated Feb 23, 2026 Ver #2</time>
     </footer>
 
 </body>
-
 </html>
-
-
-
-
-
-
