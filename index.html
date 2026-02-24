@@ -51,7 +51,6 @@
             overflow: hidden;
         }
 
-        /* Sidebar reduced by an additional 25% */
         aside {
             flex: 0 0 14%; 
             background: white;
@@ -60,10 +59,9 @@
             padding: 15px 10px;
             box-shadow: 2px 0 10px rgba(0,0,0,0.05);
             z-index: 10;
-            min-width: 160px; /* Minimum width to keep text readable */
+            min-width: 160px;
         }
 
-        /* Main Content Display */
         main {
             flex: 1;
             background: #fff;
@@ -134,7 +132,7 @@
 
     <div class="container">
         <aside>
-            <ul>
+            <ul id="sidebar-links">
                 <li><a class="file-link" href="Draft%20Faculty%20Handbook%20GPE.html" target="preview-frame">Faculty Handbook - Draft (v20)</a></li>
                 <li><a class="file-link" href="GradHandBook_v4.html" target="preview-frame">Graduate Handbook - Draft (v4)</a></li>
                 <li><a class="file-link" href="Internship%20Resources.html" target="preview-frame">Internship Resources</a></li>
@@ -155,8 +153,23 @@
 
     <footer>
         <span>&copy; 2026 Tom McGurk</span>
-        <time class="timestamp" datetime="2026-02-23">Updated Feb 23, 2026 Ver #4</time>
+        <time class="timestamp" datetime="2026-02-24">Updated Feb 24, 2026 Ver #6</time>
     </footer>
+
+    <script>
+        // Automatically appends a unique timestamp to each link to bypass caching
+        document.addEventListener("DOMContentLoaded", function() {
+            const links = document.querySelectorAll('.file-link');
+            const cacheBuster = new Date().getTime(); 
+            
+            links.forEach(link => {
+                const originalHref = link.getAttribute('href');
+                // Check if URL already has a query string
+                const separator = originalHref.includes('?') ? '&' : '?';
+                link.setAttribute('href', `${originalHref}${separator}cb=${cacheBuster}`);
+            });
+        });
+    </script>
 
 </body>
 </html>
