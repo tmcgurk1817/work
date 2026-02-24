@@ -48,6 +48,11 @@
             border-radius: 5px;
             margin-bottom: 15px;
         }
+        .search-controls {
+            display: flex;
+            gap: 10px;
+            margin: 10px 0;
+        }
         input[type="text"], input[type="url"], textarea {
             width: 100%;
             padding: 10px;
@@ -64,9 +69,18 @@
             border-radius: 4px;
             cursor: pointer;
             width: 100%;
+            transition: background-color 0.2s ease;
         }
         button:hover {
             background-color: #2980b9;
+        }
+        .btn-clear {
+            background-color: #95a5a6;
+            width: auto;
+            white-space: nowrap;
+        }
+        .btn-clear:hover {
+            background-color: #7f8c8d;
         }
         .btn-export {
             background-color: #2ecc71;
@@ -121,6 +135,15 @@
             margin-top: 50px;
             font-style: italic;
         }
+        .total-badge {
+            font-size: 0.6em;
+            background: #34495e;
+            color: white;
+            padding: 2px 8px;
+            border-radius: 12px;
+            vertical-align: middle;
+            margin-left: 10px;
+        }
     </style>
 </head>
 <body>
@@ -128,26 +151,37 @@
 <div class="main-layout">
     <div class="left-col">
         <div class="container-box">
-            <h1>GPE Database</h1>
-            <p style="font-size: 0.85em;">Search or add questionable journals to the internal Concordia GPE database.</p>
+            <h1>GPE Journal Database</h1>
+            <p style="font-size: 0.85em; margin-bottom: 20px; color: #666;">Search or add questionable journals to the internal Concordia GPE database.</p>
             
             <div class="search-container">
-                <h2>Search</h2>
-                <input type="text" id="searchInput" onkeyup="searchJournals()" placeholder="Enter journal name...">
+                <h2 style="font-size: 1.2em;">Search</h2>
+                <div class="search-controls">
+                    <input type="text" id="searchInput" onkeyup="searchJournals()" placeholder="Enter journal name..." style="margin: 0;">
+                    <button class="btn-clear" onclick="clearSearch()">Clear</button>
+                </div>
             </div>
 
             <div class="add-container">
-                <h2>Add New</h2>
+                <h2 style="font-size: 1.2em;">Add New</h2>
                 <input type="text" id="newJournalName" placeholder="Journal Name">
                 <input type="url" id="newJournalLink" placeholder="Homepage URL">
                 <textarea id="newJournalRationale" rows="3" placeholder="Rationale..."></textarea>
                 <button id="addBtn" onclick="addJournal()">Add Entry</button>
             </div>
 
- <div class="container" style="box-shadow: none; padding: 0; background: transparent; margin-bottom: 20px;">
-        <p>To verify a journal’s legitimacy, it is recommended to check the <a href="https://doaj.org/" target="_blank" rel="noopener noreferrer">Directory of Open Access Journals (DOAJ)</a>, which has a rigorous vetting process, or the <a href="https://publicationethics.org/" target="_blank" rel="noopener noreferrer">Committee on Publication Ethics (COPE)</a> membership list.</p>
-    </div>
-
+            <div class="container" style="box-shadow: none; padding: 10px 0; background: transparent; margin-bottom: 20px; border-top: 1px solid #eee;">
+                <p style="text-align: justify; line-height: 1.5; font-size: 0.9em; font-weight: bold; color: #2c3e50;">If a journal’s legitimacy is in question, it is recommended to consult the resources below, all of which involve rigorous vetting processes:</p>
+                <ul style="list-style-type: none; padding-left: 0; text-align: left; margin-top: 10px;">
+                    <li style="text-align: left; line-height: 1.6; margin-bottom: 8px;"><a href="https://doaj.org/" target="_blank" rel="noopener noreferrer" style="color: #2980b9; text-decoration: none;">&rarr; Directory of Open Access Journals (DOAJ)</a></li>
+                    <li style="text-align: left; line-height: 1.6; margin-bottom: 8px;"><a href="https://www.elsevier.com/products/scopus" target="_blank" rel="noopener noreferrer" style="color: #2980b9; text-decoration: none;">&rarr; Scopus</a></li>
+                    <li style="text-align: left; line-height: 1.6; margin-bottom: 8px;"><a href="https://publicationethics.org/" target="_blank" rel="noopener noreferrer" style="color: #2980b9; text-decoration: none;">&rarr; Committee on Publication Ethics (COPE) membership list</a></li>
+                </ul>
+                
+                <div style="text-align: right; margin-top: 10px;">
+                    <time datetime="2026-02-24">Updated Feb 24, 2026 Ver 1.5</time>
+                </div>
+            </div>
             
             <button class="btn-export" onclick="exportToCSV()">Export All to CSV</button>
         </div>
@@ -155,7 +189,7 @@
 
     <div class="right-col" id="resultsArea">
         <div id="resultsContent">
-            <h2 id="resultsTitle">Database Status</h2>
+            <h2 id="resultsTitle">Database Status <span id="totalCount" class="total-badge">0</span></h2>
             <div id="loadingMessage" style="font-style: italic;">Connecting to Google Sheets...</div>
             <ul id="journalList" class="journal-list">
                 <li class="empty-state">Enter a search term on the left to view specific entries.</li>
@@ -165,13 +199,12 @@
 </div>
 
 <div class="version-info">
-    <time datetime="2026-02-23">Updated Feb 23, 2026 Ver 2.8</time>
+    <time datetime="2026-02-24">Updated Feb 24, 2026 Ver 3.1</time>
 </div>
 
 <script>
     const WEB_APP_URL = "https://script.google.com/macros/s/AKfycbxs1367Mh_Qj37vXbkYdifnaIGL2MdOBgqhP9XNu4HjnKMV3mle1OfU_A7eyOuRZUbusg/exec";
 
-    // These are used ONLY as fallback data if the Google Sheet connection fails
     let fallbackJournals = [
         { title: "Journal of Geography & Natural Disasters (OMICS International)", rationale: "Published by OMICS, subject of FTC lawsuit for deceptive practices.", link: "https://www.omicsonline.org/geography-natural-disasters.php" },
         { title: "Environment and Ecology Research (Horizon Research Publishing)", rationale: "HRPUB cited for questionable editorial board practices.", link: "https://www.hrpub.org/journals/jour_info.php?id=40" },
@@ -188,22 +221,25 @@
     const journalListElement = document.getElementById('journalList');
     const loadingMessage = document.getElementById('loadingMessage');
     const resultsTitle = document.getElementById('resultsTitle');
+    const totalCountElement = document.getElementById('totalCount');
+
+    function updateTotalCount() {
+        totalCountElement.textContent = journals.length;
+    }
 
     async function fetchFromSheet() {
         if (WEB_APP_URL === "YOUR_GOOGLE_WEB_APP_URL_HERE") {
             journals = [...fallbackJournals];
             loadingMessage.textContent = "Offline Mode: Using local fallback data.";
+            updateTotalCount();
             return;
         }
         try {
             const response = await fetch(WEB_APP_URL, { redirect: 'follow' });
             const sheetData = await response.json();
-            
-            // If the sheet has data, use it exclusively
             if (sheetData && sheetData.length > 0) {
                 journals = sheetData.reverse();
             } else {
-                // If the sheet is empty, use the fallback list
                 journals = [...fallbackJournals];
             }
             loadingMessage.textContent = "Database Connected: Ready to search.";
@@ -212,17 +248,18 @@
             journals = [...fallbackJournals];
             loadingMessage.textContent = "Offline Mode: Using local fallback data.";
         }
+        updateTotalCount();
     }
 
     function renderJournals(data, isSearch) {
         journalListElement.innerHTML = '';
         if (!isSearch) {
-            resultsTitle.textContent = "Database Status";
+            resultsTitle.innerHTML = `Database Status <span id="totalCount" class="total-badge">${journals.length}</span>`;
             journalListElement.innerHTML = '<li class="empty-state">Enter a search term on the left to view specific entries.</li>';
             return;
         }
 
-        resultsTitle.textContent = "Search Results (" + data.length + ")";
+        resultsTitle.innerHTML = `Search Results (${data.length})`;
         if (data.length === 0) {
             journalListElement.innerHTML = '<li class="empty-state">No journals found matching that name.</li>';
             return;
@@ -247,6 +284,11 @@
         renderJournals(filtered, true);
     }
 
+    function clearSearch() {
+        document.getElementById('searchInput').value = "";
+        renderJournals([], false);
+    }
+
     async function addJournal() {
         const nameInput = document.getElementById('newJournalName');
         const linkInput = document.getElementById('newJournalLink');
@@ -257,6 +299,7 @@
         if (!entry.title || !entry.rationale) { alert("Title and Rationale are required."); return; }
 
         journals.unshift(entry);
+        updateTotalCount();
         nameInput.value = ''; linkInput.value = ''; rationaleInput.value = '';
         
         if (WEB_APP_URL !== "YOUR_GOOGLE_WEB_APP_URL_HERE") {
@@ -267,7 +310,6 @@
             } catch (e) { alert("Local save only."); }
             addBtn.textContent = "Add Entry"; addBtn.disabled = false;
         }
-        // If searching while adding, update results immediately
         searchJournals();
     }
 
