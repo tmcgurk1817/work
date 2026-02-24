@@ -5,6 +5,10 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>A Six-Step Guide to Crafting and Presenting a Rigorous Research Report</title>
     
+    <meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate">
+    <meta http-equiv="Pragma" content="no-cache">
+    <meta http-equiv="Expires" content="0">
+    
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Source+Serif+Pro:wght@400;600;700&display=swap" rel="stylesheet">
@@ -15,20 +19,18 @@
         html{line-height:1.5;-webkit-text-size-adjust:100%;-moz-tab-size:4;tab-size:4;font-family:Inter,sans-serif;scroll-behavior: smooth;}
         body{margin:0;line-height:inherit;display: flex; flex-direction: column; min-height: 100vh; background-color: #fdfcfb; color: #374151;}
         
-        /* Typography Hierarchy */
-        h1, h2 { font-family: 'Source Serif Pro', serif; font-weight: 700; color: #111827; }
+        /* Typography */
+        h1, h2, h3 { font-family: 'Source Serif Pro', serif; font-weight: 700; color: #111827; }
         header h1 { font-size: 2.25rem; color: #ffffff; margin: 0; }
-        .hero-sub { font-size: 2rem; line-height: 1.2; color: #800000; } /* Crimson accent */
+        .hero-sub { font-size: 2rem; line-height: 1.2; color: #800000; }
 
-        /* Layout */
         .container{width:100%;margin-right:auto;margin-left:auto;padding-right:1.5rem;padding-left:1.5rem}
         @media (min-width:1024px){.container{max-width:1024px}}
 
-        /* Branding: Crimson & Slate */
+        /* Branding: Crimson */
         .bg-crimson { background-color: #800000; }
-        .border-crimson { border-color: #800000; }
         
-        /* Navigation Menu */
+        /* Navigation */
         .nav-sticky {
             position: sticky;
             top: 0;
@@ -42,21 +44,27 @@
         .nav-links {
             display: flex;
             justify-content: center;
-            gap: 1.5rem;
+            align-items: center;
+            gap: 1.25rem;
             list-style: none;
             padding: 0;
             margin: 0;
             font-weight: 600;
-            font-size: 0.9rem;
+            font-size: 0.8rem;
             text-transform: uppercase;
-            letter-spacing: 0.05em;
         }
-        .nav-links a {
-            color: #374151;
-            text-decoration: none;
-            transition: color 0.2s;
-        }
+        .nav-links a { color: #374151; text-decoration: none; transition: color 0.2s; }
         .nav-links a:hover { color: #800000; }
+
+        .btn-action {
+            background-color: #800000;
+            color: white !important;
+            padding: 0.4rem 0.8rem;
+            border-radius: 4px;
+            font-size: 0.75rem;
+            cursor: pointer;
+            border: none;
+        }
 
         /* Step Cards */
         .step-card {
@@ -80,22 +88,30 @@
             font-size: 1.5rem;
             font-weight: 700;
             margin-right: 2rem;
+            flex-shrink: 0;
         }
 
-        /* Tactics List */
-        .tactic-list { list-style: none; padding: 0; }
+        /* Checklist */
+        .tactic-list { list-style: none; padding: 0; margin-top: 1.5rem; }
         .tactic-list li {
-            position: relative;
-            padding-left: 2rem;
-            margin-bottom: 1rem;
-            line-height: 1.6;
+            display: flex;
+            align-items: flex-start;
+            gap: 1rem;
+            margin-bottom: 1.25rem;
+            padding: 0.75rem;
+            border-radius: 4px;
         }
-        .tactic-list li::before {
-            content: "→";
-            position: absolute;
-            left: 0;
-            color: #800000;
-            font-weight: bold;
+        input[type="checkbox"] {
+            width: 1.25rem;
+            height: 1.25rem;
+            accent-color: #800000;
+            cursor: pointer;
+            margin-top: 0.25rem;
+        }
+        .tactic-text { line-height: 1.6; }
+        input[type="checkbox"]:checked + .tactic-text {
+            color: #9ca3af;
+            text-decoration: line-through;
         }
 
         .iterative-loop-card {
@@ -106,8 +122,29 @@
             border-radius: 0.5rem;
         }
 
+        /* Resources Section */
+        .resources-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 1.5rem;
+            margin-top: 2rem;
+        }
+        .resource-card {
+            background: #fff;
+            padding: 1.5rem;
+            border: 1px solid #e5e7eb;
+            border-radius: 0.5rem;
+        }
+        .resource-card h4 { margin: 0 0 0.5rem 0; color: #800000; }
+        .resource-card a { color: #3b82f6; text-decoration: underline; font-size: 0.9rem; }
+
         footer { margin-top: auto; position: relative; background-color: #1a1a1a; color: #d1d1d1; }
         .version-tag { position: absolute; bottom: 1rem; right: 1.5rem; font-size: 0.75rem; color: #666; }
+
+        @media print {
+            .nav-sticky, .version-tag, .btn-action { display: none !important; }
+            .step-card { break-inside: avoid; border: 1px solid #ccc; box-shadow: none; }
+        }
     </style>
 </head>
 <body>
@@ -127,12 +164,14 @@
                 <li><a href="#step4">4. Writing</a></li>
                 <li><a href="#step5">5. Feedback</a></li>
                 <li><a href="#step6">6. Presentation</a></li>
+                <li><a href="#resources">Resources</a></li>
+                <li><button onclick="window.print()" class="btn-action">PDF</button></li>
+                <li><button onclick="clearProgress()" class="btn-action" style="background-color: #4b5563;">Reset</button></li>
             </ul>
         </div>
     </nav>
 
     <main class="container py-12">
-
         <section class="text-center mb-16">
             <h2 class="hero-sub mb-6">A Six-Step Guide for Graduate Students</h2>
             <p class="max-w-3xl mx-auto text-xl text-gray-600 leading-relaxed">The journey from a nascent research idea to a polished, defensible report is a defining challenge. This guide provides a roadmap for navigating this intricate process, from the initial proposal to the final oral presentation.</p>
@@ -156,14 +195,14 @@
                 <div>
                     <h2 class="text-3xl mb-2">Initiating the Process</h2>
                     <h3 class="text-xl text-gray-500 mb-6 italic">The Proposal as a Blueprint</h3>
-                    <p class="mb-6 text-lg"><strong>Intent:</strong> To lay a solid foundation for your research by clearly defining its scope, significance, and feasibility. This is a critical thinking exercise to articulate your research question, justify its importance, and map out a realistic plan.</p>
-                    <h4 class="text-lg font-bold mb-4 text-gray-800 uppercase tracking-wide">Tactics for Success:</h4>
+                    <p class="mb-6 text-lg"><strong>Intent:</strong> To lay a solid foundation for your research by clearly defining its scope, significance, and feasibility.</p>
+                    <h4 class="text-lg font-bold text-gray-800 uppercase border-b pb-2">Checklist:</h4>
                     <ul class="tactic-list">
-                        <li><strong>Deconstruct the "Why":</strong> Clearly articulate the gap in existing research your work will address. Frame your research question to be SMART (Specific, Measurable, Achievable, Relevant, Time-bound).</li>
-                        <li><strong>Conduct a Preliminary Literature Review:</strong> Demonstrate your understanding of the field, refine your research question, and identify potential methodologies.</li>
-                        <li><strong>Outline the "How":</strong> Detail your proposed research methods, data collection techniques, and analytical approach.</li>
-                        <li><strong>Develop a Timeline:</strong> Create a realistic timeline with key milestones, using a Gantt chart for a visual representation.</li>
-                        <li><strong>Seek Early Feedback:</strong> Share your draft proposal with your supervisor and trusted peers for invaluable feedback.</li>
+                        <li><input type="checkbox" id="c1-1"><span class="tactic-text"><strong>Deconstruct the "Why":</strong> Clearly articulate the gap in research. Frame SMART questions.</span></li>
+                        <li><input type="checkbox" id="c1-2"><span class="tactic-text"><strong>Literature Review:</strong> Demonstrate field understanding and identify methodologies.</span></li>
+                        <li><input type="checkbox" id="c1-3"><span class="tactic-text"><strong>Outline the "How":</strong> Detail methods, data collection, and analytical approach.</span></li>
+                        <li><input type="checkbox" id="c1-4"><span class="tactic-text"><strong>Develop a Timeline:</strong> Create a realistic timeline with key milestones.</span></li>
+                        <li><input type="checkbox" id="c1-5"><span class="tactic-text"><strong>Seek Early Feedback:</strong> Share your draft proposal for peer and supervisor feedback.</span></li>
                     </ul>
                 </div>
             </div>
@@ -175,13 +214,13 @@
                 <div>
                     <h2 class="text-3xl mb-2">Planning the Research</h2>
                     <h3 class="text-xl text-gray-500 mb-6 italic">Building a Solid Framework</h3>
-                    <p class="mb-6 text-lg"><strong>Intent:</strong> To move from the conceptual proposal to a detailed, operational plan for conducting the research. This stage is about translating your "what" and "why" into a concrete "how."</p>
-                    <h4 class="text-lg font-bold mb-4 text-gray-800 uppercase tracking-wide">Tactics for Success:</h4>
+                    <p class="mb-6 text-lg"><strong>Intent:</strong> To move from the conceptual proposal to a detailed, operational plan for conducting the research.</p>
+                    <h4 class="text-lg font-bold text-gray-800 uppercase border-b pb-2">Checklist:</h4>
                     <ul class="tactic-list">
-                        <li><strong>Refine Your Methodology:</strong> Finalize your research design based on feedback and further reading. Justify any novel methods rigorously.</li>
-                        <li><strong>Develop Data Management Protocols:</strong> Establish a clear system for organizing, storing, and backing up your data from the outset.</li>
-                        <li><strong>Create a Detailed Research Diary:</strong> Document everything—activities, observations, reflections, and challenges—to ensure reproducibility.</li>
-                        <li><strong>Pilot Your Instruments:</strong> Test surveys, interview protocols, or experimental setups with a pilot study before full-scale implementation.</li>
+                        <li><input type="checkbox" id="c2-1"><span class="tactic-text"><strong>Refine Methodology:</strong> Finalize research design and justify novel methods rigorously.</span></li>
+                        <li><input type="checkbox" id="c2-2"><span class="tactic-text"><strong>Data Management:</strong> Establish a system for organizing, storing, and backing up data.</span></li>
+                        <li><input type="checkbox" id="c2-3"><span class="tactic-text"><strong>Research Diary:</strong> Document activities, observations, and reflections for reproducibility.</span></li>
+                        <li><input type="checkbox" id="c2-4"><span class="tactic-text"><strong>Pilot Instruments:</strong> Test protocols or setups with a pilot study before full implementation.</span></li>
                     </ul>
                 </div>
             </div>
@@ -193,13 +232,13 @@
                 <div>
                     <h2 class="text-3xl mb-2">Developing Tools for Writing</h2>
                     <h3 class="text-xl text-gray-500 mb-6 italic">From Data to Narrative</h3>
-                    <p class="mb-6 text-lg"><strong>Intent:</strong> To strategically approach the writing process by breaking it down into manageable tasks and developing a clear narrative structure for your report.</p>
-                    <h4 class="text-lg font-bold mb-4 text-gray-800 uppercase tracking-wide">Tactics for Success:</h4>
+                    <p class="mb-6 text-lg"><strong>Intent:</strong> To strategically approach the writing process by breaking it into manageable tasks.</p>
+                    <h4 class="text-lg font-bold text-gray-800 uppercase border-b pb-2">Checklist:</h4>
                     <ul class="tactic-list">
-                        <li><strong>Adopt the IMRaD Structure:</strong> Use the Introduction, Methods, Results, and Discussion format as your framework.</li>
-                        <li><strong>Outline Extensively:</strong> Create a detailed outline for each section to ensure a logical flow of ideas.</li>
-                        <li><strong>Write for an Audience of One (Initially):</strong> In your first draft, focus on getting your ideas down on paper without worrying about perfection.</li>
-                        <li><strong>Master the "Ugly First Draft":</strong> Give yourself permission to write a messy first draft to overcome writer's block.</li>
+                        <li><input type="checkbox" id="c3-1"><span class="tactic-text"><strong>IMRaD Structure:</strong> Use Introduction, Methods, Results, and Discussion format.</span></li>
+                        <li><input type="checkbox" id="c3-2"><span class="tactic-text"><strong>Outline Extensively:</strong> Create a detailed outline for each section to ensure logical flow.</span></li>
+                        <li><input type="checkbox" id="c3-3"><span class="tactic-text"><strong>Write for Audience of One:</strong> Focus on getting ideas down without worrying about perfection.</span></li>
+                        <li><input type="checkbox" id="c3-4"><span class="tactic-text"><strong>Ugly First Draft:</strong> Give yourself permission to write messily to overcome block.</span></li>
                     </ul>
                 </div>
             </div>
@@ -211,14 +250,14 @@
                 <div>
                     <h2 class="text-3xl mb-2">The Writing Process</h2>
                     <h3 class="text-xl text-gray-500 mb-6 italic">Crafting a Compelling Text</h3>
-                    <p class="mb-6 text-lg"><strong>Intent:</strong> To translate your research into a clear, concise, and persuasive written report that adheres to the standards of scientific rigor.</p>
-                    <h4 class="text-lg font-bold mb-4 text-gray-800 uppercase tracking-wide">Tactics for Success:</h4>
+                    <p class="mb-6 text-lg"><strong>Intent:</strong> To translate research into a clear, concise, and persuasive written report.</p>
+                    <h4 class="text-lg font-bold text-gray-800 uppercase border-b pb-2">Checklist:</h4>
                     <ul class="tactic-list">
-                        <li><strong>Write with Precision and Clarity:</strong> Use clear, unambiguous language and define key terms.</li>
-                        <li><strong>Maintain an Objective Tone:</strong> Present findings and arguments impartially, avoiding emotive language.</li>
-                        <li><strong>Integrate Evidence Seamlessly:</strong> Support all claims with evidence from your research and the literature, using proper citations.</li>
-                        <li><strong>Revise in Passes:</strong> Edit in multiple stages, focusing on the big picture, then paragraphs, then sentences.</li>
-                        <li><strong>Read Your Work Aloud:</strong> This simple technique helps identify awkward phrasing and errors.</li>
+                        <li><input type="checkbox" id="c4-1"><span class="tactic-text"><strong>Precision and Clarity:</strong> Use unambiguous language and define key terms.</span></li>
+                        <li><input type="checkbox" id="c4-2"><span class="tactic-text"><strong>Objective Tone:</strong> Present findings impartially, avoiding emotive language.</span></li>
+                        <li><input type="checkbox" id="c4-3"><span class="tactic-text"><strong>Integrate Evidence:</strong> Support all claims with evidence and proper citations.</span></li>
+                        <li><input type="checkbox" id="c4-4"><span class="tactic-text"><strong>Revise in Passes:</strong> Edit in stages: big picture, paragraphs, then sentences.</span></li>
+                        <li><input type="checkbox" id="c4-5"><span class="tactic-text"><strong>Read Aloud:</strong> Identify awkward phrasing and errors through oral reading.</span></li>
                     </ul>
                 </div>
             </div>
@@ -230,14 +269,14 @@
                 <div>
                     <h2 class="text-3xl mb-2">Seeking and Accepting Feedback</h2>
                     <h3 class="text-xl text-gray-500 mb-6 italic">The Power of Peer Review</h3>
-                    <p class="mb-6 text-lg"><strong>Intent:</strong> To leverage the insights of others to identify weaknesses and improve your report's overall quality. Constructive criticism is a gift.</p>
-                    <h4 class="text-lg font-bold mb-4 text-gray-800 uppercase tracking-wide">Tactics for Success:</h4>
+                    <p class="mb-6 text-lg"><strong>Intent:</strong> To leverage insights of others to identify weaknesses and improve quality.</p>
+                    <h4 class="text-lg font-bold text-gray-800 uppercase border-b pb-2">Checklist:</h4>
                     <ul class="tactic-list">
-                        <li><strong>Be Strategic in Seeking Feedback:</strong> Choose reviewers carefully, including your supervisor, peers, and mentors.</li>
-                        <li><strong>Provide Specific Guidance to Reviewers:</strong> Ask for feedback on specific aspects like argument clarity or evidence strength.</li>
-                        <li><strong>Listen Actively and Don't Be Defensive:</strong> Your goal is to understand the reviewer's perspective. Ask clarifying questions.</li>
-                        <li><strong>Synthesize and Prioritize Feedback:</strong> Weigh different perspectives, identify recurring themes, and decide which changes will most improve your report.</li>
-                        <li><strong>Create a Revision Plan:</strong> After receiving feedback, create a concrete plan to address the suggested changes efficiently.</li>
+                        <li><input type="checkbox" id="c5-1"><span class="tactic-text"><strong>Strategic Seeking:</strong> Choose reviewers including supervisors, peers, and mentors.</span></li>
+                        <li><input type="checkbox" id="c5-2"><span class="tactic-text"><strong>Specific Guidance:</strong> Ask for feedback on clarity, argument, or evidence strength.</span></li>
+                        <li><input type="checkbox" id="c5-3"><span class="tactic-text"><strong>Listen Actively:</strong> Understand the reviewer's perspective without being defensive.</span></li>
+                        <li><input type="checkbox" id="c5-4"><span class="tactic-text"><strong>Synthesize:</strong> Identify recurring themes and prioritize changes for improvement.</span></li>
+                        <li><input type="checkbox" id="c5-5"><span class="tactic-text"><strong>Revision Plan:</strong> Create a concrete plan to address suggested changes efficiently.</span></li>
                     </ul>
                 </div>
             </div>
@@ -249,19 +288,40 @@
                 <div>
                     <h2 class="text-3xl mb-2">The Final Oral Presentation</h2>
                     <h3 class="text-xl text-gray-500 mb-6 italic">Sharing Your Work with the World</h3>
-                    <p class="mb-6 text-lg"><strong>Intent:</strong> To effectively communicate the key findings and significance of your research to a live audience in a clear, engaging, and professional manner.</p>
-                    <h4 class="text-lg font-bold mb-4 text-gray-800 uppercase tracking-wide">Tactics for Success:</h4>
+                    <p class="mb-6 text-lg"><strong>Intent:</strong> To effectively communicate findings to a live audience professionally.</p>
+                    <h4 class="text-lg font-bold text-gray-800 uppercase border-b pb-2">Checklist:</h4>
                     <ul class="tactic-list">
-                        <li><strong>Know Your Audience:</strong> Tailor your presentation to their knowledge level and interests.</li>
-                        <li><strong>Focus on a Core Message:</strong> Identify the single most important message you want your audience to take away.</li>
-                        <li><strong>Create Clear and Concise Visuals:</strong> Use slides to complement, not distract. Use minimal text and high-quality images.</li>
-                        <li><strong>Practice, Practice, Practice:</strong> Rehearse your presentation multiple times to ensure timing, clarity, and confidence.</li>
-                        <li><strong>Prepare for Questions:</strong> Anticipate potential questions and prepare thoughtful answers to engage in a scholarly dialogue.</li>
+                        <li><input type="checkbox" id="c6-1"><span class="tactic-text"><strong>Know Your Audience:</strong> Tailor content to their knowledge level and interests.</span></li>
+                        <li><input type="checkbox" id="c6-2"><span class="tactic-text"><strong>Core Message:</strong> Identify the single most important message for the audience.</span></li>
+                        <li><input type="checkbox" id="c6-3"><span class="tactic-text"><strong>Concise Visuals:</strong> Use slides with minimal text and high-quality images.</span></li>
+                        <li><input type="checkbox" id="c6-4"><span class="tactic-text"><strong>Practice:</strong> Rehearse multiple times for timing, clarity, and confidence.</span></li>
+                        <li><input type="checkbox" id="c6-5"><span class="tactic-text"><strong>Prepare for Questions:</strong> Anticipate potential queries for scholarly dialogue.</span></li>
                     </ul>
                 </div>
             </div>
         </div>
 
+        <section id="resources" class="step-card" style="border-top-color: #4b5563;">
+            <h2 class="text-3xl mb-4">Academic Resources</h2>
+            <p class="text-gray-600">Essential tools to assist in the research and writing journey.</p>
+            <div class="resources-grid">
+                <div class="resource-card">
+                    <h4>Citation Managers</h4>
+                    <a href="https://www.zotero.org/" target="_blank">Zotero</a> | 
+                    <a href="https://www.mendeley.com/" target="_blank">Mendeley</a>
+                </div>
+                <div class="resource-card">
+                    <h4>Writing & Grammar</h4>
+                    <a href="https://owl.purdue.edu/" target="_blank">Purdue OWL</a> | 
+                    <a href="https://www.grammarly.com/" target="_blank">Grammarly</a>
+                </div>
+                <div class="resource-card">
+                    <h4>Research Discovery</h4>
+                    <a href="https://scholar.google.com/" target="_blank">Google Scholar</a> | 
+                    <a href="https://www.researchgate.net/" target="_blank">ResearchGate</a>
+                </div>
+            </div>
+        </section>
     </main>
 
     <footer class="py-12">
@@ -269,9 +329,25 @@
             <p>&copy; 2025 Graduate Research Guide. All Rights Reserved.</p>
         </div>
         <div class="version-tag">
-            <time datetime="2026-02-24">Updated Feb 24, 2026 Ver #1.2</time>
+            <time datetime="2026-02-24">Updated Feb 24, 2026 Ver #1.6</time>
         </div>
     </footer>
 
+    <script>
+        const checkboxes = document.querySelectorAll('input[type="checkbox"]');
+        checkboxes.forEach(cb => {
+            cb.addEventListener('change', () => localStorage.setItem(cb.id, cb.checked));
+            if (localStorage.getItem(cb.id) === 'true') cb.checked = true;
+        });
+
+        function clearProgress() {
+            if (confirm("Reset all progress?")) {
+                checkboxes.forEach(cb => {
+                    cb.checked = false;
+                    localStorage.removeItem(cb.id);
+                });
+            }
+        }
+    </script>
 </body>
 </html>
