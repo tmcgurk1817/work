@@ -68,6 +68,19 @@
             position: relative;
         }
 
+        /* Styling for the initial welcome message */
+        #welcome-message {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            font-size: 1.2em;
+            color: #636e72;
+            text-align: center;
+            width: 80%;
+            pointer-events: none;
+        }
+
         iframe {
             width: 100%;
             height: 100%;
@@ -147,24 +160,31 @@
         </aside>
 
         <main>
+            <div id="welcome-message">Click on links on the left to see examples of Tom's work.</div>
             <iframe name="preview-frame" src="about:blank" title="Content Preview"></iframe>
         </main>
     </div>
 
     <footer>
         <span>&copy; 2026 Tom McGurk</span>
-        <time class="timestamp" datetime="2026-02-24">Updated Feb 24, 2026 Ver #6</time>
+        <time class="timestamp" datetime="2026-02-24">Updated Feb 24, 2026 Ver #7</time>
     </footer>
 
     <script>
-        // Automatically appends a unique timestamp to each link to bypass caching
         document.addEventListener("DOMContentLoaded", function() {
             const links = document.querySelectorAll('.file-link');
             const cacheBuster = new Date().getTime(); 
+            const welcomeMsg = document.getElementById('welcome-message');
             
             links.forEach(link => {
+                // Hide the welcome message when any link is clicked
+                link.addEventListener('click', function() {
+                    if (welcomeMsg) {
+                        welcomeMsg.style.display = 'none';
+                    }
+                });
+
                 const originalHref = link.getAttribute('href');
-                // Check if URL already has a query string
                 const separator = originalHref.includes('?') ? '&' : '?';
                 link.setAttribute('href', `${originalHref}${separator}cb=${cacheBuster}`);
             });
