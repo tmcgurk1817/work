@@ -5,111 +5,27 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Concordia GPE Internal Database</title>
     <style>
-        body {
-            font-family: Arial, sans-serif;
-            margin: 0;
-            padding: 20px;
-            background-color: #f9f9f9;
-            color: #333;
-        }
-        .main-layout {
-            display: grid;
-            grid-template-columns: 1fr 2.5fr;
-            gap: 20px;
-            max-width: 1400px;
-            margin: 0 auto;
-        }
-        .container-box {
-            background: #fff;
-            padding: 20px;
-            border-radius: 8px;
-            box-shadow: 0 4px 6px rgba(0,0,0,0.1);
-            margin-bottom: 20px;
-        }
+        body { font-family: Arial, sans-serif; margin: 0; padding: 20px; background-color: #f9f9f9; color: #333; }
+        .main-layout { display: grid; grid-template-columns: 1fr 2.5fr; gap: 20px; max-width: 1400px; margin: 0 auto; }
+        .container-box { background: #fff; padding: 20px; border-radius: 8px; box-shadow: 0 4px 6px rgba(0,0,0,0.1); margin-bottom: 20px; }
         h1, h2 { color: #2c3e50; margin-top: 0; font-size: 1.2em; }
-        .section-box {
-            padding: 15px;
-            background: #ecf0f1;
-            border-radius: 5px;
-            margin-bottom: 15px;
-            border-left: 4px solid #3498db;
-        }
-        input[type="text"], input[type="url"], textarea {
-            width: 100%;
-            padding: 10px;
-            margin: 8px 0;
-            border: 1px solid #ccc;
-            border-radius: 4px;
-            box-sizing: border-box;
-        }
-        button {
-            padding: 10px 15px;
-            background-color: #3498db;
-            color: white;
-            border: none;
-            border-radius: 4px;
-            cursor: pointer;
-            width: 100%;
-            transition: background-color 0.2s ease;
-            font-weight: bold;
-        }
+        .section-box { padding: 15px; background: #ecf0f1; border-radius: 5px; margin-bottom: 15px; border-left: 4px solid #3498db; }
+        input[type="text"], input[type="url"], textarea { width: 100%; padding: 10px; margin: 8px 0; border: 1px solid #ccc; border-radius: 4px; box-sizing: border-box; }
+        button { padding: 10px 15px; background-color: #3498db; color: white; border: none; border-radius: 4px; cursor: pointer; width: 100%; transition: background-color 0.2s ease; font-weight: bold; }
         button:hover { background-color: #2980b9; }
         .doaj-station { border-left-color: #f39c12; background: #fff9f0; }
-        .doaj-result-preview {
-            font-size: 0.85em;
-            background: white;
-            padding: 10px;
-            border: 1px dashed #f39c12;
-            margin-top: 10px;
-            display: none;
-        }
-        .btn-insert { background-color: #e67e22; margin-top: 5px; }
-        
-        .journal-item {
-            background: #fff;
-            border: 1px solid #e0e0e0;
-            margin-bottom: 15px;
-            padding: 15px;
-            border-radius: 5px;
-            border-left: 5px solid #e74c3c;
-        }
+        .btn-zapier { background-color: #8e44ad; margin-top: 8px; }
+        .journal-item { background: #fff; border: 1px solid #e0e0e0; margin-bottom: 15px; padding: 15px; border-radius: 5px; border-left: 5px solid #e74c3c; }
         .journal-title { font-weight: bold; font-size: 1.1em; }
-        .journal-title a { color: #2980b9; text-decoration: none; }
-        
-        .verify-controls {
-            display: flex;
-            flex-wrap: wrap;
-            gap: 8px;
-            margin-top: 10px;
-        }
-        .btn-v {
-            font-size: 0.75em;
-            padding: 4px 10px;
-            width: auto;
-        }
+        .verify-controls { display: flex; flex-wrap: wrap; gap: 8px; margin-top: 10px; }
+        .btn-v { font-size: 0.75em; padding: 4px 10px; width: auto; }
         .btn-doaj { background-color: #f39c12; }
-        .btn-scopus { background-color: #2c3e50; }
-        .btn-cope { background-color: #7f8c8d; }
-        .btn-gemini { background-color: #8e44ad; }
-
-        .doaj-status-badge {
-            display: block;
-            margin-top: 8px;
-            font-size: 0.8em;
-            padding: 4px 8px;
-            border-radius: 4px;
-        }
+        .btn-gemini-v { background-color: #8e44ad; }
+        .doaj-status-badge { display: block; margin-top: 8px; font-size: 0.8em; padding: 4px 8px; border-radius: 4px; }
         .status-verified { background: #d4edda; color: #155724; border: 1px solid #c3e6cb; }
         .status-notfound { background: #fff3cd; color: #856404; border: 1px solid #ffeeba; }
-
-        .version-info {
-            position: fixed; bottom: 10px; right: 10px; font-size: 0.9em;
-            color: #7f8c8d; background: rgba(255, 255, 255, 0.8); padding: 5px;
-        }
-        .total-badge {
-            font-size: 0.6em; background: #34495e; color: white;
-            padding: 2px 8px; border-radius: 12px; vertical-align: middle; margin-left: 10px;
-        }
+        .version-info { position: fixed; bottom: 10px; right: 10px; font-size: 0.9em; color: #7f8c8d; background: rgba(255, 255, 255, 0.8); padding: 5px; }
+        .total-badge { font-size: 0.6em; background: #34495e; color: white; padding: 2px 8px; border-radius: 12px; margin-left: 10px; }
     </style>
 </head>
 <body>
@@ -118,15 +34,14 @@
     <div class="left-col">
         <div class="container-box">
             <h1>GPE Journal Tools</h1>
-            
             <div class="section-box doaj-station">
-                <h2>1. Live DOAJ Vetting</h2>
-                <input type="text" id="doajQuery" placeholder="Verify Title before adding...">
-                <button onclick="searchDOAJ()">Verify via API</button>
-                <div id="doajPreview" class="doaj-result-preview">
-                    <div id="doajInfo"></div>
-                    <button class="btn-insert" onclick="transferToDoajForm()">↑ Populate Entry Form</button>
+                <h2>1. Vetting Station</h2>
+                <input type="text" id="doajQuery" placeholder="Enter Journal Name...">
+                <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 8px;">
+                    <button onclick="searchDOAJ()">Verify DOAJ API</button>
+                    <button class="btn-zapier" id="zapierBtnLeft" onclick="classifyJournal(document.getElementById('doajQuery').value, 'zapierBtnLeft')">Send to AI & Sheet</button>
                 </div>
+                <p style="font-size: 0.8em; color: #666; margin-top: 10px; font-style: italic;">If you are using the Send to AI & Sheet option, simply click paste into Gemini, and the instructions will transfer automatically.</p>
             </div>
 
             <div class="section-box">
@@ -141,60 +56,69 @@
                 <h2>3. Add New Entry</h2>
                 <input type="text" id="newJournalName" placeholder="Journal Name">
                 <input type="url" id="newJournalLink" placeholder="Homepage URL">
-                <textarea id="newJournalRationale" rows="3" placeholder="Rationale for flagging..."></textarea>
+                <textarea id="newJournalRationale" rows="3" placeholder="Rationale..."></textarea>
                 <button id="addBtn" onclick="addJournal()">Save to G-Sheet</button>
             </div>
-
-            <div style="padding: 10px 0; border-top: 1px solid #eee; margin-top: 10px;">
-                <p style="line-height: 1.5; font-size: 0.85em; font-weight: bold; color: #2c3e50;">If a journal’s legitimacy is in question, consult these vetting processes:</p>
-                <ul style="list-style-type: none; padding-left: 0; font-size: 0.85em;">
-                    <li style="margin-bottom: 8px;"><a href="https://doaj.org/" target="_blank" style="color: #2980b9; text-decoration: none;">&rarr; DOAJ</a></li>
-                    <li style="margin-bottom: 8px;"><a href="https://www.scopus.com/sources" target="_blank" style="color: #2980b9; text-decoration: none;">&rarr; Scopus (Elsevier)</a></li>
-                    <li style="margin-bottom: 8px;"><a href="https://publicationethics.org/members" target="_blank" style="color: #2980b9; text-decoration: none;">&rarr; COPE</a></li>
-                </ul>
-            </div>
             
-            <button style="background:#2ecc71; margin-top: 10px;" onclick="exportToCSV()">Export All to CSV</button>
+            <button style="background:#2ecc71;" onclick="exportToCSV()">Export All to CSV</button>
         </div>
     </div>
 
     <div class="right-col">
         <h2>Database Status <span id="totalCount" class="total-badge">0</span></h2>
-        <div id="loadingMessage" style="font-style: italic; color: #7f8c8d; margin-bottom: 15px;">Connecting...</div>
-        <ul id="journalList" class="journal-list" style="list-style:none; padding:0;">
-            <li style="text-align:center; color:#999; margin-top:50px;">Search above to view entries.</li>
-        </ul>
+        <div id="loadingMessage" style="font-style: italic; color: #7f8c8d;">Connecting...</div>
+        <ul id="journalList" style="list-style:none; padding:0;"></ul>
     </div>
 </div>
 
 <div class="version-info">
-    <time datetime="2026-04-16">Updated Apr 16, 2026 Ver 4.6</time>
+    <time datetime="2026-04-16">Updated Apr 16, 2026 Ver 5.5</time>
 </div>
 
 <script>
     const WEB_APP_URL = "https://script.google.com/macros/s/AKfycbxs1367Mh_Qj37vXbkYdifnaIGL2MdOBgqhP9XNu4HjnKMV3mle1OfU_A7eyOuRZUbusg/exec";
     let journals = [];
-    let lastDoajResult = null;
 
-    // --- API & External Vetting ---
+    // --- OPTIMIZED CLASSIFICATION LOGIC (CLIPBOARD + POP-UP BYPASS) ---
+    async function classifyJournal(journalName, btnId) {
+        if (!journalName || !journalName.trim()) { alert("Please enter a journal name first."); return; }
+        
+        const promptText = `Please check online resources for information on the journal "${journalName}". Advise if it is listed anywhere as a second-tier, predatory, or questionable journal. Look for mentions in Beall's List (or its successors), Cabells, or academic forums discussing deceptive publishing practices.`;
+
+        // 1. CLIPBOARD ACCESS (Immediate user-initiated event)
+        try {
+            await navigator.clipboard.writeText(promptText);
+        } catch (err) {
+            // Fallback for restricted environments
+            const textArea = document.createElement("textarea");
+            textArea.value = promptText;
+            document.body.appendChild(textArea);
+            textArea.select();
+            document.execCommand("copy");
+            document.body.removeChild(textArea);
+        }
+
+        // 2. OPEN GEMINI IMMEDIATELY (Bypass blockers)
+        const geminiUrl = `https://gemini.google.com/app?q=${encodeURIComponent(promptText)}`;
+        window.open(geminiUrl, '_blank');
+
+        // 3. BACKGROUND ZAPIER CALL
+        fetch('https://hooks.zapier.com/hooks/catch/27249740/uj6xzh2/', {
+            method: 'POST',
+            mode: 'no-cors',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({ journal_name: journalName })
+        }).catch(error => console.error('Zapier Error:', error));
+    }
+
     async function searchDOAJ() {
         const query = document.getElementById('doajQuery').value.trim();
-        const info = document.getElementById('doajInfo');
         if(!query) return;
-        document.getElementById('doajPreview').style.display = "block";
-        info.innerHTML = "Querying DOAJ...";
         try {
             const resp = await fetch(`https://doaj.org/api/v2/search/journals/title:${encodeURIComponent(query)}`);
             const data = await resp.json();
-            if (data.total > 0) {
-                const j = data.results[0].bibjson;
-                lastDoajResult = { title: j.title, link: (j.link?.[0]?.content || "") };
-                info.innerHTML = `<b style="color:green;">✓ Found in DOAJ</b><br>${j.title}`;
-            } else {
-                lastDoajResult = null;
-                info.innerHTML = `<b style="color:red;">✗ Not found.</b>`;
-            }
-        } catch (e) { info.innerHTML = "Error."; }
+            alert(data.total > 0 ? "✓ Found in DOAJ: " + data.results[0].bibjson.title : "✗ Not found in DOAJ.");
+        } catch (e) { alert("DOAJ API Error."); }
     }
 
     async function checkDOAJRight(journalTitle, statusId) {
@@ -215,34 +139,6 @@
         } catch (error) { statusEl.innerHTML = "Error."; }
     }
 
-    function openScopus(title) {
-        window.open(`https://www.scopus.com/sources.uri?resultsPerPage=20&st1=${encodeURIComponent(title)}`, '_blank');
-    }
-
-    function openCOPE(title) {
-        window.open(`https://publicationethics.org/members?search_api_views_fulltext=${encodeURIComponent(title)}`, '_blank');
-    }
-
-    function searchGemini(title) {
-        const promptText = `Please check online resources for information on the journal "${title}". Advise if it is listed anywhere as a second-tier, predatory, or questionable journal. Look for mentions in Beall's List (or its successors), Cabells, or academic forums discussing deceptive publishing practices.`;
-        
-        // Automated URL prompt for Gemini
-        const geminiUrl = `https://gemini.google.com/app?q=${encodeURIComponent(promptText)}`;
-        
-        // Fail-safe clipboard backup
-        navigator.clipboard.writeText(promptText);
-        window.open(geminiUrl, '_blank');
-    }
-
-    function transferToDoajForm() {
-        if(lastDoajResult) {
-            document.getElementById('newJournalName').value = lastDoajResult.title;
-            document.getElementById('newJournalLink').value = lastDoajResult.link;
-            document.getElementById('newJournalRationale').focus();
-        }
-    }
-
-    // --- Spreadsheet & Sync ---
     async function fetchFromSheet() {
         try {
             const response = await fetch(WEB_APP_URL, { redirect: 'follow' });
@@ -260,13 +156,11 @@
         if (!name.value || !rat.value) return alert("Fields missing.");
         const entry = { title: name.value.trim(), link: link.value.trim(), rationale: rat.value.trim() };
         journals.unshift(entry);
-        document.getElementById('addBtn').textContent = "Saving...";
         try {
             await fetch(WEB_APP_URL, { method: 'POST', mode: 'no-cors', body: JSON.stringify(entry) });
-            alert("Entry Saved!");
+            alert("Saved to Google Sheet!");
             name.value = ''; link.value = ''; rat.value = '';
-        } catch (e) { alert("Local save only."); }
-        document.getElementById('addBtn').textContent = "Save to G-Sheet";
+        } catch (e) { alert("Sync failed."); }
         updateTotalCount();
         searchJournals();
     }
@@ -274,20 +168,21 @@
     function searchJournals() {
         const q = document.getElementById('searchInput').value.toLowerCase().trim();
         const list = document.getElementById('journalList');
-        list.innerHTML = q === "" ? '<li style="text-align:center; color:#999; margin-top:50px;">Search above to view entries.</li>' : "";
+        list.innerHTML = q === "" ? '<li style="text-align:center; color:#999; margin-top:50px;">Search internal database...</li>' : "";
         if (q === "") return;
         journals.filter(j => j.title.toLowerCase().includes(q)).forEach((j, idx) => {
             const li = document.createElement('li');
             li.className = 'journal-item';
             const sId = `st-${idx}`;
+            const gBtnId = `gem-btn-${idx}`;
             li.innerHTML = `
-                <div class="journal-title">${j.link?`<a href="${j.link}" target="_blank">${j.title}</a>`:j.title}</div>
+                <div class="journal-title">${j.title}</div>
                 <div class="journal-rationale"><b>Rationale:</b> ${j.rationale}</div>
                 <div class="verify-controls">
                     <button class="btn-v btn-doaj" onclick="checkDOAJRight('${j.title.replace(/'/g, "\\'")}', '${sId}')">Verify DOAJ</button>
-                    <button class="btn-v btn-scopus" onclick="openScopus('${j.title.replace(/'/g, "\\'")}')">Search Scopus</button>
-                    <button class="btn-v btn-cope" onclick="openCOPE('${j.title.replace(/'/g, "\\'")}')">Search COPE</button>
-                    <button class="btn-v btn-gemini" onclick="searchGemini('${j.title.replace(/'/g, "\\'")}')">Gemini Analysis</button>
+                    <button class="btn-v" onclick="window.open('https://www.scopus.com/sources.uri?st1=${encodeURIComponent(j.title)}', '_blank')">Scopus</button>
+                    <button class="btn-v" onclick="window.open('https://publicationethics.org/members?search_api_views_fulltext=${encodeURIComponent(j.title)}', '_blank')">COPE</button>
+                    <button class="btn-v btn-gemini-v" id="${gBtnId}" onclick="classifyJournal('${j.title.replace(/'/g, "\\'")}', '${gBtnId}')">Send to AI & Sheet</button>
                 </div>
                 <div id="${sId}"></div>
             `;
@@ -306,4 +201,3 @@
 </script>
 </body>
 </html>
-
