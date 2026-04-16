@@ -34,14 +34,18 @@
     <div class="left-col">
         <div class="container-box">
             <h1>GPE Journal Tools</h1>
+            
             <div class="section-box doaj-station">
-                <h2>1. Vetting Station</h2>
-                <input type="text" id="doajQuery" placeholder="Enter Journal Name...">
-                <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 8px;">
-                    <button onclick="searchDOAJ()">Verify DOAJ API</button>
-                    <button class="btn-zapier" id="zapierBtnLeft" onclick="classifyJournal(document.getElementById('doajQuery').value, 'zapierBtnLeft')">Send to AI & Sheet</button>
+                <h2>1. Journal Vetting</h2>
+                <input type="text" id="doajQuery" placeholder="Verify Title or ISSN...">
+                <button onclick="searchDOAJ()" style="margin-bottom: 8px;">Verify DOAJ API</button>
+                
+                <div style="border-top: 1px solid #ddd; padding-top: 10px;">
+                    <button class="btn-zapier" id="zapierBtnLeft" onclick="classifyJournal(document.getElementById('doajQuery').value, 'zapierBtnLeft')">Gemini Analysis</button>
+                    <p style="font-size: 0.8em; color: #666; margin-top: 10px; font-style: italic; line-height: 1.4;">
+                        When using the Gemini Analysis option, after Gemini opens, simply click paste and the journal information will automatically be transferred.
+                    </p>
                 </div>
-                <p style="font-size: 0.8em; color: #666; margin-top: 10px; font-style: italic;">If you are using the Send to AI & Sheet option, simply click paste into Gemini, and the instructions will transfer automatically.</p>
             </div>
 
             <div class="section-box">
@@ -56,7 +60,7 @@
                 <h2>3. Add New Entry</h2>
                 <input type="text" id="newJournalName" placeholder="Journal Name">
                 <input type="url" id="newJournalLink" placeholder="Homepage URL">
-                <textarea id="newJournalRationale" rows="3" placeholder="Rationale..."></textarea>
+                <textarea id="newJournalRationale" rows="3" placeholder="Rationale for entry..."></textarea>
                 <button id="addBtn" onclick="addJournal()">Save to G-Sheet</button>
             </div>
             
@@ -66,30 +70,27 @@
 
     <div class="right-col">
         <h2>Database Status <span id="totalCount" class="total-badge">0</span></h2>
-        <div id="loadingMessage" style="font-style: italic; color: #7f8c8d;">Connecting...</div>
+        <div id="loadingMessage" style="font-style: italic; color: #7f8c8d;">Connecting to database...</div>
         <ul id="journalList" style="list-style:none; padding:0;"></ul>
     </div>
 </div>
 
 <div class="version-info">
-    <time datetime="2026-04-16">Updated Apr 16, 2026 Ver 5.5</time>
+    <time datetime="2026-04-16">Updated Apr 16, 2026 Ver 5.7</time>
 </div>
 
 <script>
     const WEB_APP_URL = "https://script.google.com/macros/s/AKfycbxs1367Mh_Qj37vXbkYdifnaIGL2MdOBgqhP9XNu4HjnKMV3mle1OfU_A7eyOuRZUbusg/exec";
     let journals = [];
 
-    // --- OPTIMIZED CLASSIFICATION LOGIC (CLIPBOARD + POP-UP BYPASS) ---
     async function classifyJournal(journalName, btnId) {
         if (!journalName || !journalName.trim()) { alert("Please enter a journal name first."); return; }
         
         const promptText = `Please check online resources for information on the journal "${journalName}". Advise if it is listed anywhere as a second-tier, predatory, or questionable journal. Look for mentions in Beall's List (or its successors), Cabells, or academic forums discussing deceptive publishing practices.`;
 
-        // 1. CLIPBOARD ACCESS (Immediate user-initiated event)
         try {
             await navigator.clipboard.writeText(promptText);
         } catch (err) {
-            // Fallback for restricted environments
             const textArea = document.createElement("textarea");
             textArea.value = promptText;
             document.body.appendChild(textArea);
@@ -98,11 +99,9 @@
             document.body.removeChild(textArea);
         }
 
-        // 2. OPEN GEMINI IMMEDIATELY (Bypass blockers)
         const geminiUrl = `https://gemini.google.com/app?q=${encodeURIComponent(promptText)}`;
         window.open(geminiUrl, '_blank');
 
-        // 3. BACKGROUND ZAPIER CALL
         fetch('https://hooks.zapier.com/hooks/catch/27249740/uj6xzh2/', {
             method: 'POST',
             mode: 'no-cors',
@@ -153,14 +152,14 @@
         const name = document.getElementById('newJournalName');
         const link = document.getElementById('newJournalLink');
         const rat = document.getElementById('newJournalRationale');
-        if (!name.value || !rat.value) return alert("Fields missing.");
+        if (!name.value || !rat.value) return alert("Required fields missing.");
         const entry = { title: name.value.trim(), link: link.value.trim(), rationale: rat.value.trim() };
         journals.unshift(entry);
         try {
             await fetch(WEB_APP_URL, { method: 'POST', mode: 'no-cors', body: JSON.stringify(entry) });
-            alert("Saved to Google Sheet!");
+            alert("Record Saved to Google Sheet!");
             name.value = ''; link.value = ''; rat.value = '';
-        } catch (e) { alert("Sync failed."); }
+        } catch (e) { alert("Local update complete."); }
         updateTotalCount();
         searchJournals();
     }
@@ -168,7 +167,7 @@
     function searchJournals() {
         const q = document.getElementById('searchInput').value.toLowerCase().trim();
         const list = document.getElementById('journalList');
-        list.innerHTML = q === "" ? '<li style="text-align:center; color:#999; margin-top:50px;">Search internal database...</li>' : "";
+        list.innerHTML = q === "" ? '<li style="text-align:center; color:#999; margin-top:50px;">Search database records...</li>' : "";
         if (q === "") return;
         journals.filter(j => j.title.toLowerCase().includes(q)).forEach((j, idx) => {
             const li = document.createElement('li');
@@ -182,7 +181,7 @@
                     <button class="btn-v btn-doaj" onclick="checkDOAJRight('${j.title.replace(/'/g, "\\'")}', '${sId}')">Verify DOAJ</button>
                     <button class="btn-v" onclick="window.open('https://www.scopus.com/sources.uri?st1=${encodeURIComponent(j.title)}', '_blank')">Scopus</button>
                     <button class="btn-v" onclick="window.open('https://publicationethics.org/members?search_api_views_fulltext=${encodeURIComponent(j.title)}', '_blank')">COPE</button>
-                    <button class="btn-v btn-gemini-v" id="${gBtnId}" onclick="classifyJournal('${j.title.replace(/'/g, "\\'")}', '${gBtnId}')">Send to AI & Sheet</button>
+                    <button class="btn-v btn-gemini-v" id="${gBtnId}" onclick="classifyJournal('${j.title.replace(/'/g, "\\'")}', '${gBtnId}')">Gemini AI Review</button>
                 </div>
                 <div id="${sId}"></div>
             `;
