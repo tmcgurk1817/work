@@ -79,7 +79,7 @@
 </div>
 
 <div class="version-info">
-    <time datetime="2026-04-16">Updated Apr 16, 2026 Ver 5.9</time>
+    <time datetime="2026-04-16">Updated Apr 16, 2026 Ver 6.0</time>
 </div>
 
 <script>
@@ -136,10 +136,17 @@
         try {
             const response = await fetch(WEB_APP_URL, { method: 'GET', redirect: 'follow' });
             const sheetData = await response.json();
-            journals = sheetData.reverse();
+            
+            // --- UPDATED SORTING LOGIC ---
+            // Sorts the journal array alphabetically by title before displaying
+            journals = sheetData.sort((a, b) => {
+                return a.title.localeCompare(b.title, undefined, { sensitivity: 'base' });
+            });
+            // -----------------------------
+            
             loadMsg.textContent = "Database Synced.";
             updateTotalCount();
-            displayJournals(); // This will now properly trigger once journals array is filled
+            displayJournals(); 
         } catch (e) { 
             loadMsg.textContent = "Offline Mode - Please click 'Force Sync'."; 
             console.error("Fetch Error:", e);
@@ -152,7 +159,11 @@
         const rat = document.getElementById('newJournalRationale');
         if (!name.value || !rat.value) return alert("Required fields missing.");
         const entry = { title: name.value.trim(), link: link.value.trim(), rationale: rat.value.trim() };
-        journals.unshift(entry);
+        
+        // Add locally then re-sort to maintain order
+        journals.push(entry);
+        journals.sort((a, b) => a.title.localeCompare(b.title, undefined, { sensitivity: 'base' }));
+
         try {
             await fetch(WEB_APP_URL, { method: 'POST', mode: 'no-cors', body: JSON.stringify(entry) });
             alert("Record Saved to Google Sheet!");
@@ -167,7 +178,6 @@
         const list = document.getElementById('journalList');
         list.innerHTML = "";
         
-        // Show all if query is empty, otherwise filter
         const filtered = q === "" ? journals : journals.filter(j => j.title.toLowerCase().includes(q));
         
         if (filtered.length === 0) {
@@ -203,7 +213,6 @@
         const l = document.createElement("a"); l.href = encodeURI(csv); l.download = "gpe_database.csv"; l.click();
     }
     
-    // Initial data fetch
     window.onload = fetchFromSheet;
 </script>
 </body>
