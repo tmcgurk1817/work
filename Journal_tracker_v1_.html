@@ -51,8 +51,8 @@
             <div class="section-box">
                 <h2>2. Internal Database</h2>
                 <div style="display:flex; gap:5px;">
-                    <input type="text" id="searchInput" onkeyup="searchJournals()" placeholder="Search GPE records...">
-                    <button style="background:#95a5a6; width:auto;" onclick="clearSearch()">X</button>
+                    <input type="text" id="searchInput" onkeyup="displayJournals()" placeholder="Search GPE records...">
+                    <button style="background:#95a5a6; width:auto;" onclick="clearSearch()">Clear</button>
                 </div>
             </div>
 
@@ -76,7 +76,7 @@
 </div>
 
 <div class="version-info">
-    <time datetime="2026-04-16">Updated Apr 16, 2026 Ver 5.7</time>
+    <time datetime="2026-04-16">Updated Apr 16, 2026 Ver 5.8</time>
 </div>
 
 <script>
@@ -85,27 +85,16 @@
 
     async function classifyJournal(journalName, btnId) {
         if (!journalName || !journalName.trim()) { alert("Please enter a journal name first."); return; }
-        
         const promptText = `Please check online resources for information on the journal "${journalName}". Advise if it is listed anywhere as a second-tier, predatory, or questionable journal. Look for mentions in Beall's List (or its successors), Cabells, or academic forums discussing deceptive publishing practices.`;
-
-        try {
-            await navigator.clipboard.writeText(promptText);
-        } catch (err) {
+        try { await navigator.clipboard.writeText(promptText); } catch (err) {
             const textArea = document.createElement("textarea");
-            textArea.value = promptText;
-            document.body.appendChild(textArea);
-            textArea.select();
-            document.execCommand("copy");
-            document.body.removeChild(textArea);
+            textArea.value = promptText; document.body.appendChild(textArea);
+            textArea.select(); document.execCommand("copy"); document.body.removeChild(textArea);
         }
-
         const geminiUrl = `https://gemini.google.com/app?q=${encodeURIComponent(promptText)}`;
         window.open(geminiUrl, '_blank');
-
         fetch('https://hooks.zapier.com/hooks/catch/27249740/uj6xzh2/', {
-            method: 'POST',
-            mode: 'no-cors',
-            headers: { 'Content-Type': 'application/json' },
+            method: 'POST', mode: 'no-cors', headers: { 'Content-Type': 'application/json' },
             body: JSON.stringify({ journal_name: journalName })
         }).catch(error => console.error('Zapier Error:', error));
     }
@@ -145,6 +134,7 @@
             journals = sheetData.reverse();
             document.getElementById('loadingMessage').textContent = "Database Synced.";
             updateTotalCount();
+            displayJournals(); // MODIFIED: Loads full list on startup
         } catch (e) { document.getElementById('loadingMessage').textContent = "Offline Mode."; }
     }
 
@@ -161,15 +151,23 @@
             name.value = ''; link.value = ''; rat.value = '';
         } catch (e) { alert("Local update complete."); }
         updateTotalCount();
-        searchJournals();
+        displayJournals();
     }
 
-    function searchJournals() {
+    // MODIFIED: This function now displays all journals if search is empty
+    function displayJournals() {
         const q = document.getElementById('searchInput').value.toLowerCase().trim();
         const list = document.getElementById('journalList');
-        list.innerHTML = q === "" ? '<li style="text-align:center; color:#999; margin-top:50px;">Search database records...</li>' : "";
-        if (q === "") return;
-        journals.filter(j => j.title.toLowerCase().includes(q)).forEach((j, idx) => {
+        list.innerHTML = "";
+        
+        const filtered = q === "" ? journals : journals.filter(j => j.title.toLowerCase().includes(q));
+        
+        if (filtered.length === 0) {
+            list.innerHTML = '<li style="text-align:center; color:#999; margin-top:50px;">No matching records found.</li>';
+            return;
+        }
+
+        filtered.forEach((j, idx) => {
             const li = document.createElement('li');
             li.className = 'journal-item';
             const sId = `st-${idx}`;
@@ -189,7 +187,7 @@
         });
     }
 
-    function clearSearch() { document.getElementById('searchInput').value = ""; searchJournals(); }
+    function clearSearch() { document.getElementById('searchInput').value = ""; displayJournals(); }
     function updateTotalCount() { document.getElementById('totalCount').textContent = journals.length; }
     function exportToCSV() {
         let csv = "data:text/csv;charset=utf-8,Title,Link,Rationale\n";
