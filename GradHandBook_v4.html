@@ -24,7 +24,7 @@
 
         h1 { color: #800000; margin: 10px 0; }
         h2 { color: #800000; border-bottom: 1px solid #ccc; padding-bottom: 5px; margin-top: 40px; }
-        h3 { color: #555; margin-bottom: 10px; }
+        h3 { color: #555; margin-bottom: 10px; margin-top: 25px; }
 
         .main-container {
             display: grid;
@@ -33,480 +33,593 @@
             align-items: start;
         }
 
-        /* Sticky Left Column containing TOC and Search */
-        #toc-column {
+        .sidebar {
             position: sticky;
             top: 20px;
             background: #f9f9f9;
             padding: 20px;
-            border-radius: 8px;
-            height: fit-content;
+            border: 1px solid #ddd;
+            border-radius: 5px;
             max-height: 90vh;
             overflow-y: auto;
-            border: 1px solid #ddd;
-            box-sizing: border-box;
         }
 
-        /* Search Box styling inside TOC */
-        #search-container {
-            background: white;
-            padding: 15px;
-            border: 2px solid #800000;
-            border-radius: 8px;
-            margin-bottom: 20px;
-            display: flex;
-            flex-direction: column;
-            gap: 8px;
-        }
-
-        #toc-column h2 { margin-top: 0; font-size: 1.2em; }
-        #toc-column h3 { font-size: 1em; margin-top: 20px; }
-        #toc-column ul { list-style-type: disc; padding-left: 20px; font-size: 0.9em; }
+        .search-box { margin-bottom: 20px; }
+        .search-box input { width: 100%; padding: 8px; box-sizing: border-box; border: 1px solid #ccc; border-radius: 4px; margin-bottom: 10px; }
         
-        #toc-column a { 
-            text-decoration: none; 
-            color: #800000; 
-            font-weight: bold; 
-            display: block; 
-            padding: 8px 0; 
-        }
-        #toc-column a:hover { text-decoration: underline; }
+        /* Reset Button Styles */
+        .reset-btn { width: 100%; padding: 8px; background: #dc3545; color: white; border: none; border-radius: 4px; cursor: pointer; margin-bottom: 10px; font-size: 0.95em; }
+        .reset-btn:hover { background: #c82333; }
+        
+        #nav-controls { display: none; align-items: center; gap: 10px; margin-bottom: 15px; font-size: 0.9em; }
+        #nav-controls button { padding: 4px 8px; cursor: pointer; }
 
-        /* Submenu Styling */
-        .submenu {
-            display: none;
-            list-style-type: none !important;
-            padding-left: 15px !important;
-            margin-top: -5px;
+        .nav-links { list-style: none; padding: 0; margin: 0; }
+        .nav-links li { margin-bottom: 8px; }
+        .nav-links a { text-decoration: none; color: #0056b3; font-size: 0.95em; display: block; }
+        .nav-links a:hover { text-decoration: underline; color: #800000; }
+        .nav-links ul { padding-left: 15px; margin-top: 5px; border-left: 2px solid #ddd; margin-left: 5px;}
+
+        .content-area section { margin-bottom: 50px; }
+        
+        /* Back to Top Button Styles */
+        .back-to-top { margin-top: 20px; padding: 8px 15px; background: #e9ecef; border: 1px solid #ccc; border-radius: 4px; cursor: pointer; color: #333; font-size: 0.9em; transition: background 0.2s; }
+        .back-to-top:hover { background: #d3d9df; }
+        
+        .highlight { background-color: yellow; font-weight: bold; }
+        .highlight.current { background-color: orange; color: white; }
+        
+        .version-tag { position: fixed; bottom: 10px; right: 10px; font-size: 12px; color: #666; background: rgba(255, 255, 255, 0.9); padding: 5px; border-radius: 4px; }
+
+        /* Alphabetical Index Styles */
+        .index-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
+            gap: 20px;
+            margin-top: 20px;
+        }
+        .index-group h3 {
+            color: #800000;
+            border-bottom: 2px solid #ddd;
+            margin-top: 0;
             margin-bottom: 10px;
+            padding-bottom: 5px;
         }
-        .submenu.active {
-            display: block;
+        .index-group ul {
+            list-style: none;
+            padding: 0;
+            margin: 0;
         }
-        .has-children > a::after {
-            content: ' ▼';
-            font-size: 0.7em;
-            vertical-align: middle;
-            color: #888;
+        .index-group li {
+            margin-bottom: 5px;
+            font-size: 0.95em;
         }
-        
-        #content-column { min-width: 0; }
-
-        .back-link { 
-            display: inline-block; 
-            margin-top: 10px; 
-            font-size: 0.9em; 
-            color: #800000; 
-            text-decoration: none; 
-            font-weight: bold; 
-            padding: 12px 0; 
+        .index-group a {
+            text-decoration: none;
+            color: #0056b3;
         }
-
-        table { width: 100%; border-collapse: collapse; margin: 20px 0; }
-        table, th, td { border: 1px solid #ddd; padding: 10px; text-align: left; }
-        th { background-color: #f4f4f4; }
-
-        .staff-contact { background-color: #f9f9f9; padding: 15px; border-left: 5px solid #800000; margin: 10px 0; }
-        .important-note { background-color: #fff3f3; padding: 10px; border: 1px solid #800000; margin: 10px 0; }
-
-        /* Responsive Search Controls */
-        .search-row { display: flex; gap: 8px; flex-wrap: wrap; }
-        #search-input { 
-            padding: 5px 10px; 
-            border: 1px solid #ccc; 
-            border-radius: 4px; 
-            flex: 1 1 180px; 
-            min-height: 44px; 
-            box-sizing: border-box;
-        }
-        .search-btn { 
-            background: #800000; 
-            color: white; 
-            border: none; 
-            padding: 10px 15px; 
-            border-radius: 4px; 
-            cursor: pointer; 
-            font-size: 0.85em; 
-            min-height: 44px; 
-            display: flex;
-            align-items: center;
-            justify-content: center;
-        }
-        #nav-controls { flex-wrap: wrap; gap: 10px; }
-        #search-info { font-size: 0.75em; color: #666; text-align: right; width: 100%; }
-        
-        .highlight { background-color: yellow; color: black; }
-        .highlight.current { background-color: orange; outline: 2px solid #800000; }
-
-        @media (max-width: 900px) {
-            .main-container { grid-template-columns: 1fr; }
-            #toc-column { position: relative; top: 0; max-height: none; }
-        }
-        
-        @media (max-width: 600px) {
-            h1 { font-size: 1.5em; }
-            table { font-size: 0.8em; display: block; overflow-x: auto; }
+        .index-group a:hover {
+            text-decoration: underline;
+            color: #800000;
         }
     </style>
 </head>
 <body>
 
-<header id="top">
-    <img src="https://raw.githubusercontent.com/tmcgurk1817/handbook/main/Logo.png" alt="Concordia Logo" style="max-width:200px;">
-    <h1>Department of Geography, Planning and Environment</h1>
-    <h2>Master of Science / Doctorate in Geography, Urban and Environmental Studies</h2>
-    <p><strong>STUDENT HANDBOOK</strong><br>Last updated on September 2, 2025</p>
-</header>
+    <header>
+        <h1>GPE Graduate Student Handbook (M.Sc. and Ph.D.)</h1>
+    </header>
 
-<div class="main-container">
-    <nav id="toc-column">
-        <div id="search-container">
-            <div class="search-row">
-                <input type="text" id="search-input" placeholder="Find in handbook..." onkeypress="if(event.key==='Enter') performSearch()">
-                <button class="search-btn" onclick="performSearch()">Find All</button>
-            </div>
-            <div class="search-row" id="nav-controls" style="display:none; justify-content: space-between; margin-top: 8px;">
-                <button class="search-btn" style="background:#555" onclick="clearHighlights()">Clear</button>
-                <div class="search-row">
-                    <button class="search-btn" onclick="jumpPrev()">Prev ↑</button>
-                    <button class="search-btn" onclick="jumpNext()">Next ↓</button>
+    <div class="main-container">
+        <aside class="sidebar">
+            <div class="search-box">
+                <input type="text" id="search-input" placeholder="Search handbook..." onkeyup="if(event.key === 'Enter') executeSearch()">
+                <button class="reset-btn" onclick="clearHighlights()">Reset Search</button>
+                <div id="nav-controls">
+                    <span id="search-info"></span>
+                    <button onclick="jumpPrev()">Prev</button>
+                    <button onclick="jumpNext()">Next</button>
                 </div>
             </div>
-            <div id="search-info"></div>
-        </div>
 
-        <h2>Table of Contents</h2>
-        <ul>
-            <li class="has-children">
-                <a href="#regulations" onclick="toggleSubmenu(event, 'regulations-sub')">Academic Regulations</a>
-                <ul class="submenu" id="regulations-sub">
-                    <li><a href="#gpa-maintenance" style="font-weight: normal;">GPA Maintenance</a></li>
-                    <li><a href="#c-rule" style="font-weight: normal;">C Rule</a></li>
-                    <li><a href="#f-rule" style="font-weight: normal;">F Rule</a></li>
-                    <li><a href="#duration" style="font-weight: normal;">Duration</a></li>
-                    <li><a href="#time-limit" style="font-weight: normal;">Time Limit</a></li>
-                    <li><a href="#gen-ai" style="font-weight: normal;">Generative AI</a></li>
-                </ul>
-            </li>
-            <li class="has-children">
-                <a href="#admission" onclick="toggleSubmenu(event, 'admission-sub')">Admission Requirements</a>
-                <ul class="submenu" id="admission-sub">
-                    <li><a href="#msc-admission" style="font-weight: normal;">M.Sc.</a></li>
-                    <li><a href="#phd-admission" style="font-weight: normal;">Ph.D.</a></li>
-                    <li><a href="#lang-prof" style="font-weight: normal;">Language Proficiency</a></li>
-                </ul>
-            </li>
-            <li class="has-children">
-                <a href="#comprehensive" onclick="toggleSubmenu(event, 'comp-sub')">Comp. Exam & Proposal</a>
-                <ul class="submenu" id="comp-sub">
-                    <li><a href="#model-1" style="font-weight: normal;">Model 1: Three-Essay</a></li>
-                    <li><a href="#model-2" style="font-weight: normal;">Model 2: Review Article</a></li>
-                    <li><a href="#thesis-proposal-henv810" style="font-weight: normal;">Thesis Proposal</a></li>
-                </ul>
-            </li>
-            <li class="has-children">
-                <a href="#consultation" onclick="toggleSubmenu(event, 'consult-sub')">Consultation</a>
-                <ul class="submenu" id="consult-sub">
-                    <li><a href="#gpd-contact" style="font-weight: normal;">Program Director</a></li>
-                    <li><a href="#gpa-contact" style="font-weight: normal;">Program Assistant</a></li>
-                </ul>
-            </li>
-            <li class="has-children">
-                <a href="#course-desc" onclick="toggleSubmenu(event, 'course-sub')">Course Descriptions</a>
-                <ul class="submenu" id="course-sub">
-                    <li><a href="#msc-courses" style="font-weight: normal;">M.Sc. Courses</a></li>
-                    <li><a href="#phd-courses" style="font-weight: normal;">Ph.D. Courses</a></li>
-                </ul>
-            </li>
-            <li><a href="#thesis-details">Detailed Information on Thesis</a></li>
-            <li><a href="#experiential">Experiential Learning (HENV 802)</a></li>
-            <li><a href="#fast-track">Fast-tracking from M.Sc.</a></li>
-            <li><a href="#msc-req">M.Sc. Program Requirements</a></li>
-            <li><a href="#objectives">M.Sc. and Ph.D. Objectives</a></li>
-            <li class="has-children">
-                <a href="#msc-sequence" onclick="toggleSubmenu(event, 'msc-seq-sub')">M.Sc. Normal Sequencing</a>
-                <ul class="submenu" id="msc-seq-sub">
-                    <li><a href="#msc-y1" style="font-weight: normal;">Year 1</a></li>
-                    <li><a href="#msc-y2" style="font-weight: normal;">Year 2</a></li>
-                </ul>
-            </li>
-            <li class="has-children">
-                <a href="#phd-sequence" onclick="toggleSubmenu(event, 'phd-seq-sub')">Ph.D. Normal Sequencing</a>
-                <ul class="submenu" id="phd-seq-sub">
-                    <li><a href="#phd-y1" style="font-weight: normal;">Year 1</a></li>
-                    <li><a href="#phd-y2" style="font-weight: normal;">Year 2</a></li>
-                    <li><a href="#phd-y34" style="font-weight: normal;">Year 3/4</a></li>
-                </ul>
-            </li>
-            <li><a href="#pedagogical">Pedagogical Training (HENV 801)</a></li>
-            <li><a href="#phd-req">Ph.D. Program Requirements</a></li>
-            <li><a href="#office-space">Policy on Office Space</a></li>
-            <li><a href="#msc-committee">Thesis Committee (M.Sc.)</a></li>
-            <li><a href="#phd-committee">Thesis Committee (Ph.D.)</a></li>
-        </ul>
-    </nav>
+            <ul class="nav-links">
+                <li><a href="#sec1">1. Consultation</a></li>
+                <li><a href="#sec2">2. M.Sc. and Ph.D. program objectives</a></li>
+                <li><a href="#sec3">3. Admission Requirements</a>
+                    <ul>
+                        <li><a href="#sec3-1">3.1 M.Sc</a></li>
+                        <li><a href="#sec3-2">3.2 Ph.D</a></li>
+                    </ul>
+                </li>
+                <li><a href="#sec4">4. Academic Regulations</a></li>
+                <li><a href="#sec5">5. M.Sc. Program Requirements</a>
+                    <ul>
+                        <li><a href="#sec5-1">5.1 Thesis Committee</a></li>
+                        <li><a href="#sec5-2">5.2 Normal sequencing of the two-year program</a></li>
+                    </ul>
+                </li>
+                <li><a href="#sec6">6. Ph.D. Program Requirements</a>
+                    <ul>
+                        <li><a href="#sec6-1">6.1 Fast-tracking from M.Sc. program</a></li>
+                        <li><a href="#sec6-2">6.2 Thesis Committee</a></li>
+                        <li><a href="#sec6-3">6.3 Comprehensive Examination and Thesis Proposal</a></li>
+                        <li><a href="#sec6-4">6.4 Experiential Learning (HENV 802)</a></li>
+                        <li><a href="#sec6-5">6.5 Pedagogical Training (HENV 801)</a></li>
+                        <li><a href="#sec6-6">6.6 Normal sequencing of the Ph.D. program</a></li>
+                    </ul>
+                </li>
+                <li><a href="#sec7">7. Course Descriptions</a>
+                    <ul>
+                        <li><a href="#sec7-1">7.1 Required courses for M.Sc. program</a></li>
+                        <li><a href="#sec7-2">7.2 Required courses for Ph.D. program</a></li>
+                        <li><a href="#sec7-3">7.3 Elective courses for M.Sc. and Ph.D. programs</a></li>
+                    </ul>
+                </li>
+                <li><a href="#sec8">8. Detailed Information on the Master's and Ph.D. Thesis</a>
+                    <ul>
+                        <li><a href="#sec8-1">8.1 M.Sc</a></li>
+                        <li><a href="#sec8-2">8.2 Ph.D</a></li>
+                    </ul>
+                </li>
+                <li><a href="#sec9">9. Policy on Office Space for M.Sc. and Ph.D. Students</a></li>
+                <li style="margin-top: 20px; font-weight: bold; border-top: 1px solid #ddd; padding-top: 10px;"><a href="#sec-index">Alphabetical Index</a></li>
+            </ul>
+        </aside>
 
-    <main id="content-column">
-        <section id="regulations">
-            <h2>ACADEMIC REGULATIONS</h2>
-            <p id="gpa-maintenance"><strong>GPA Maintenance Requirement.</strong> The academic progress of students is monitored at the end of each term. To continue in the program, students must remain in good academic standing, which is to maintain an assessment grade point average (AGPA) of at least 3.00 on a minimum of 12 credits. Students whose AGPA falls below 3.00 are considered to be on academic probation. Students whose AGPA falls below 3.00 for any two review periods are considered to be in failed standing.</p>
-            <p id="c-rule"><strong>C Rule.</strong> Graduate students who receive a grade of C for any course during their studies will be required to attend a review meeting with the Graduate Program Director. The decision as to whether or not the student will continue in the program, rests with the Program Director. After the aforementioned meeting, if a continuation is granted, a request will be made to the School of Graduate Studies. Students who receive more than one grade of C for multiple courses during their studies will be withdrawn from the program. Students who have been withdrawn may request readmission. If readmitted, if another grade of C is obtained after readmission, the student will be withdrawn from the program, and will not be considered for readmission again.</p>
-            <p id="f-rule"><strong>F Rule.</strong> Students who receive a failing grade in any course during their studies will be withdrawn from the program, unless a continuation in the program is requested by the Program Director and approved by the Dean of Graduate Studies. If withdrawn, students may apply for readmission. Students who receive another failing grade after readmission will be withdrawn from the program and will not be reconsidered for readmission again.</p>
-            <p id="duration"><strong>Duration of Programs.</strong> It is expected that full-time students will complete the requirements for most master's/magisteriate degree programs within 6 terms (2 years). The expected time to completion for a doctoral degree for full-time students is 12 terms (4 years).</p>
-            <p id="time-limit"><strong>Time Limit.</strong> Program time limits indicate the maximum program duration specified by the university. The time limit for a master's/magisteriate degree for full-time students is 9 terms (3 years), and for part-time students is 15 terms (5 years). The time limit for a doctoral degree is 18 terms (6 years) of full-time study or 24 terms (8 years) of part-time study. A change of status once you have begun your degree does not equate to additional terms within your time limit. The number of remaining terms will be calculated by the Office of the Registrar and pro-rated. Every effort should be made to complete a thesis within the time limit provided. In exceptional circumstances a time limit extension may be requested, and upon recommendation of the GPD and approval of the School of Graduate Studies, short extensions may be permitted. Graduation Requirement. In order to graduate, students must have a cumulative GPA of at least 3.00.</p>
-            <p id="gen-ai"><strong>Generative Artificial Intelligence (AI).</strong> As pointed out by Concordia’s Centre for Teaching and Learning (CTL), within the complex landscape of GenAI integration in higher education, it is essential to find a balance between “the pedagogical benefits and ethical challenges” of GenAI capabilities (e.g. ChatGPT). To help find this balance, the CTL proposes a framework and some guidelines. Graduate students and supervisors are encouraged to read this document and to CLEARLY DEFINE what is permitted - or not - in terms of the use of GenAI, before commencing each major requirement of the graduate program. Students who want to use GenAI for certain aspects of their research, should first discuss this possibility with their supervisor and the committee members. If the student, the supervisor and the committee members agree on the relevance of the use of GenAI for the student’s research, they need to clearly define the extent and the limits of this use. This agreement could range from a simple sentence to a much more detailed document for a project in which GenAI might play a more central role. This agreement and a detailed description of how GenAI has been used throughout the research should appear clearly in the final thesis. For more information about how to use GenAI in higher education and at Concordia please refer to the framework and guidelines produced by the CTL.</p>
-            <a href="#top" class="back-link">↑ Back to Top</a>
-        </section>
-
-        <section id="admission">
-            <h2>ADMISSION REQUIREMENTS</h2>
-            <h3 id="msc-admission">M.SC.</h3>
-            <p>The normal requirements for admission into the M.Sc. are a minimum GPA of 3.30/4.33 (“B+” average or better) in a B.A. or B.Sc. program in Geography, Urban Planning, Environmental Science, or a related field of study from a recognized university. Applicants are selected on the basis of a sound undergraduate academic record, strong letters of recommendation, and a convincing statement of purpose which clearly describes their academic interest in the program and intended area of research. In addition, admission is contingent on the availability of an appropriate faculty member from within the GPE Department to serve as research supervisor. Some applicants with deficiencies in their undergraduate preparation may be required to take a qualifying program. Others may be required to complete certain prerequisite courses in addition to the regular graduate program.</p>
-            <h3 id="phd-admission">PH.D.</h3>
-            <p>The normal requirement for admission into the Ph.D. is a M.A. or M.Sc. in Geography, Urban Planning, Environmental Science, or a related field of study from a recognized university. Applicants are selected on the basis of a sound academic record, strong letters of recommendation, and a convincing statement of purpose which clearly describes their academic interest in the program and intended area of research. In addition, admission is contingent on the availability of an appropriate faculty member from within the GPE Department to serve as research supervisor. It is also possible for students currently registered in our Department’s M.Sc. program to apply for permission to fast-track directly to doctoral studies. This fast-track option is reserved for exceptional students who have demonstrated outstanding research potential during the first year of their M.Sc. program, and requires the recommendation of their supervisor and other faculty members from within the Department of Geography, Planning and Environment.</p>
-            <h3 id="lang-prof">Language Proficiency Requirements for all Degrees</h3>
-            <p>The language of instruction at Concordia is English. Any student, whose first language is other than English, must demonstrate proficiency in English. Several proficiency tests are accepted. Additional information on accepted tests and their scores can be found here: http://www.concordia.ca/admissions/graduate/requirements/english-language-proficiency.html</p>
-            <a href="#top" class="back-link">↑ Back to Top</a>
-        </section>
-
-        <section id="comprehensive">
-            <h2>COMPREHENSIVE EXAMINATION AND THESIS PROPOSAL</h2>
-            <p>The comprehensive exam is normally completed in the fall term of the 2nd year of the program and must be completed within 2 years from entry into the doctoral program. It consists of one or two questions related to the thesis field, and another one or two questions for each of two cognate fields. Cognate fields are areas of knowledge that aid the student to situate their research within a broader context.</p>
-            <p>The comprehensive examination consists of a written and oral component. To begin, the student and supervisor define fields and compile a reading list of 60-80 articles. The exam should be scheduled within three months of confirming the list. Each committee member sends questions to the supervisor, who assembles a total of 3 or 6 questions. The use of GenAI (e.g. ChatGPT) is NOT ALLOWED for the comprehensive exam. Any use during a comprehensive examination will be considered as an academic offense.</p>
-            <h3 id="model-1">Model 1: The Three-Essay Model</h3>
-            <p>The student responds to 6 questions (2 per field) and selects one question from each set on which they will prepare an essay (~3000 words each). Students generally have 3 days (72 hours) to complete each essay (9 days in total).</p>
-            <h3 id="model-2">Model 2: The Review Article Model</h3>
-            <p>The student receives 3 questions and selects one to submit a review article of approximately 7500 words within four weeks. The review article should be of sufficient quality and scope that it shows potential for publication.</p>
-            <h3 id="thesis-proposal-henv810">Thesis Proposal (HENV 810)</h3>
-            <p>A detailed thesis proposal (7500 words) should normally be submitted to the thesis committee within the first 20 months of the student’s program. The committee evaluates the written proposal and holds a meeting with a 15-minute presentation. In some cases, students may write their thesis proposal in advance and defend it at the same time as the comprehensive examination.</p>
-            <a href="#top" class="back-link">↑ Back to Top</a>
-        </section>
-
-        <section id="consultation">
-            <h2>CONSULTATION</h2>
-            <div class="staff-contact" id="gpd-contact">
-                <strong>Graduate Program Director: Dr. Sébastien Caquard</strong><br>
-                <a href="mailto:sebastien.caquard@concordia.ca">sebastien.caquard@concordia.ca</a>
+        <main class="content-area" id="content-area">
+            
+            <section id="sec1">
+                <h2>1. Consultation</h2>
+                <p><strong>Graduate Program Director:</strong> Dr. Sébastien Caquard (sebastien.caquard@concordia.ca)</p>
                 <p>The Graduate Program Director (GPD) is responsible for, and makes decisions regarding, all academic and administrative matters affecting graduate students. The GPD is also available to mentor and assist students who require academic advice. Students may meet with the GPD to discuss any matter relating to the M.Sc. and Ph.D. programs and their academic progress. Appointments can be made via email.</p>
-            </div>
-            <div class="staff-contact" id="gpa-contact">
-                <strong>Graduate Program Assistant: Jennifer Srey</strong><br>
-                <a href="mailto:jennifer.srey@concordia.ca">jennifer.srey@concordia.ca</a>
-                <p>The Graduate Program Assistant (GPA) assists with registration and performs all administrative and admission duties for the department’s graduate students. The GPA follows students’ progress throughout their residency, maintains and updates all graduate students’ files, and notifies the Graduate Program Director of any potential problems. The GPA advises students regarding academic deadlines, procedures and awards, comprehensive exams and thesis defences, grade sheets, and prepares student requests on behalf of graduate students. The GPA answers general questions students might have about the programs and consults the Graduate Program Director when necessary. Students can make in person or online appoints to meet with the GPA at any time during their studies.</p>
-            </div>
-            <a href="#top" class="back-link">↑ Back to Top</a>
-        </section>
+                
+                <p><strong>Graduate Program Assistant:</strong> Jennifer Srey (jennifer.srey@concordia.ca)</p>
+                <p>The Graduate Program Assistant (GPA) assists with registration and performs all administrative and admission duties for the department's graduate students. The GPA follows students' progress throughout their residency, maintains and updates all graduate students' files, and notifies the Graduate Program Director of any potential problems. The GPA advises students regarding academic deadlines, procedures and awards, comprehensive exams and thesis defences, grade sheets, and prepares student requests on behalf of graduate students. The GPA answers general questions students might have about the programs and consults the Graduate Program Director when necessary. Students can make in person or online appoints to meet with the GPA at any time during their studies.</p>
+                <button class="back-to-top" onclick="window.scrollTo({top: 0, behavior: 'smooth'})">↑ Back to top of page</button>
+            </section>
 
-        <section id="course-desc">
-            <h2>COURSE DESCRIPTIONS</h2>
-            <h3 id="msc-courses">Required M.Sc. Courses</h3>
-            <p><strong><a href="https://www.concordia.ca/academics/graduate/calendar/current/arts-and-science-courses/geography-planning-and-environment-courses.html#11038" target="_blank">HENV 605 Advanced Qualitative Research Methods (3 credits)</a></strong>: Foundational theories in Human Geography and Urban Studies; qualitative research paradigms and methodologies.</p>
-            <p><strong><a href="https://www.concordia.ca/academics/graduate/calendar/current/arts-and-science-courses/geography-planning-and-environment-courses.html#6353" target="_blank">HENV 610 Advanced Quantitative Research Methods (3 credits)</a></strong>: Experimental design and data analysis methods using R; statistical tests, regression, and mixed effects models.</p>
-            <p><strong><a href="https://www.concordia.ca/academics/graduate/calendar/current/arts-and-science-courses/geography-planning-and-environment-courses.html#11039" target="_blank">HENV 615 Research Proposal Seminar (3 credits)</a></strong>: Deepening conceptual frameworks; classroom discussions and attendance of departmental research seminars.</p>
-            <p><strong><a href="https://www.concordia.ca/academics/graduate/calendar/current/arts-and-science-courses/geography-planning-and-environment-courses.html#11047" target="_blank">HENV 685 Thesis Proposal (3 credits)</a></strong>: Formulation of research topic; written proposal and oral presentation to the Department.</p>
-            <p><strong><a href="https://www.concordia.ca/academics/graduate/calendar/current/arts-and-science-courses/geography-planning-and-environment-courses.html#11049" target="_blank">HENV 695 Thesis (30 credits)</a></strong>: Carrying out original research. Should not exceed 100 pages. Research-creation option available.</p>
-            <h3 id="phd-courses">Required Ph.D. Courses</h3>
-            <p><strong><a href="https://www.concordia.ca/academics/graduate/calendar/current/arts-and-science-courses/geography-planning-and-environment-courses.html#11050" target="_blank">HENV 801 Pedagogical Training (3 credits)</a></strong>: Teaching and communication skills; attend university teaching seminar and give four undergraduate lectures.</p>
-            <p><strong><a href="https://www.concordia.ca/academics/graduate/calendar/current/arts-and-science-courses/geography-planning-and-environment-courses.html#11051" target="_blank">HENV 802 Experiential Learning (3 credits)</a></strong>: Practical experience in field of research; minimum 200 hours in external sector.</p>
-            <p><strong><a href="https://www.concordia.ca/academics/graduate/calendar/current/arts-and-science-courses/geography-planning-and-environment-courses.html#11052" target="_blank">HENV 805 Research Proposal Seminar (3 credits)</a></strong>: Examination of conceptual frameworks through student presentations.</p>
-            <p><strong><a href="https://www.concordia.ca/academics/graduate/calendar/current/arts-and-science-courses/geography-planning-and-environment-courses.html#11053" target="_blank">HENV 810 Thesis Proposal (3 credits)</a></strong>: Rationale, design, methodology, and literature review; assessed by committee.</p>
-            <p><strong><a href="https://www.concordia.ca/academics/graduate/calendar/current/arts-and-science-courses/geography-planning-and-environment-courses.html#11054" target="_blank">HENV 885 Comprehensive Exam (6 credits)</a></strong>: Knowledge of three areas of concentration; evaluated on written and oral responses.</p>
-            <p><strong><a href="https://www.concordia.ca/academics/graduate/calendar/current/arts-and-science-courses/geography-planning-and-environment-courses.html#11055" target="_blank">HENV 895 Research and Thesis (66 credits)</a></strong>: Planning and execution of innovative and original research; defended orally.</p>
-            <a href="#top" class="back-link">↑ Back to Top</a>
-        </section>
+            <section id="sec2">
+                <h2>2. M.Sc. and Ph.D. program objectives</h2>
+                <p>The M.Sc. and Ph.D. programs are designed to provide students with the theoretical foundations and methodological tools necessary to contribute to the understanding of human and environmental systems. Through an emphasis on both specialization and interdisciplinary perspectives, students are given the opportunity to carry out in-depth research work in any of the Department's areas of specialization covering three broad categories of environment: the natural or biophysical environment; the human, cultural or behavioural environment; and the urban, built or designed environment. In addition to contributing to the advancement of knowledge, students will be well placed to enter a wide range of careers in environmental, urban planning and public policy fields.</p>
+                <button class="back-to-top" onclick="window.scrollTo({top: 0, behavior: 'smooth'})">↑ Back to top of page</button>
+            </section>
 
-        <section id="thesis-details">
-            <h2>DETAILED INFORMATION ON THE MASTER’S AND PH.D. THESIS</h2>
-            <p>Students have the option of writing their theses in traditional, manuscript-based, or research-creation formats. The Master’s Thesis will normally not be more than 40,000 words (around 100 pages). Electronic copies in Word and PDF formats must be emailed to the GPA at least 3 weeks before the scheduled defence. For Ph.D. students, defenses are administered by the University's Thesis Office. A typical traditional Ph.D. thesis is about 100,000 words, while manuscript-based or research-creation theses are around 60,000 words.</p>
-            <a href="#top" class="back-link">↑ Back to Top</a>
-        </section>
+            <section id="sec3">
+                <h2>3. Admission Requirements</h2>
+                
+                <h3 id="sec3-1">3.1 M.Sc</h3>
+                <p>The normal requirements for admission into the M.Sc. are a minimum GPA of 3.30/4.33 ("B+" average or better) in a B.A. or B.Sc. program in Geography, Urban Planning, Environmental Science, or a related field of study from a recognized university. Applicants are selected on the basis of a sound undergraduate academic record, strong letters of recommendation, and a convincing statement of purpose which clearly describes their academic interest in the program and intended area of research. In addition, admission is contingent on the availability of an appropriate faculty member from within the GPE Department to serve as research supervisor. Some applicants with deficiencies in their undergraduate preparation may be required to take a qualifying program. Others may be required to complete certain prerequisite courses in addition to the regular graduate program.</p>
+                
+                <h3 id="sec3-2">3.2 Ph.D</h3>
+                <p>The normal requirement for admission into the Ph.D. is a M.A. or M.Sc. in Geography, Urban Planning, Environmental Science, or a related field of study from a recognized university. Applicants are selected on the basis of a sound academic record, strong letters of recommendation, and a convincing statement of purpose which clearly describes their academic interest in the program and intended area of research. In addition, admission is contingent on the availability of an appropriate faculty member from within the GPE Department to serve as research supervisor.</p>
+                <p>It is also possible for students currently registered in our Department's M.Sc. program to apply for permission to fast-track directly to doctoral studies. This fast-track option is reserved for exceptional students who have demonstrated outstanding research potential during the first year of their M.Sc. program, and requires the recommendation of their supervisor and other faculty members from within the Department of Geography, Planning and Environment.</p>
+                <p><strong>Language Proficiency Requirements for all Degrees:</strong><br>
+                The language of instruction at Concordia is English. Any student, whose first language is other than English, must demonstrate proficiency in English. Several proficiency tests are accepted. Additional information on accepted tests and their scores can be found here: <a href="http://www.concordia.ca/admissions/graduate/requirements/english-language-proficiency.html" target="_blank">English Language Proficiency</a></p>
+                <button class="back-to-top" onclick="window.scrollTo({top: 0, behavior: 'smooth'})">↑ Back to top of page</button>
+            </section>
 
-        <section id="experiential">
-            <h2>EXPERIENTIAL LEARNING (HENV 802)</h2>
-            <p>A 3-credit requirement for students to work for a minimum of 200 hours in either the private sector, a research laboratory outside Concordia, a non-profit organization, or government. This should normally be completed during the second year of the program. Funding programs such as Mitacs Globalink or Mitacs Accelerate are encouraged.</p>
-            <a href="#top" class="back-link">↑ Back to Top</a>
-        </section>
+            <section id="sec4">
+                <h2>4. Academic Regulations</h2>
+                <p><strong>GPA Maintenance Requirement.</strong> The academic progress of students is monitored at the end of each term. To continue in the program, students must remain in good academic standing, which is to maintain an assessment grade point average (AGPA) of at least 3.00 on a minimum of 12 credits. Students whose AGPA falls below 3.00 are considered to be on academic probation. Students whose AGPA falls below 3.00 for any two review periods are considered to be in failed standing.</p>
+                
+                <p><strong>C Rule.</strong> Graduate students who receive a grade of C for any course during their studies will be required to attend a review meeting with the Graduate Program Director. The decision as to whether or not the student will continue in the program, rests with the Program Director. After the aforementioned meeting, if a continuation is granted, a request will be made to the School of Graduate Studies. Students who receive more than one grade of C for multiple courses during their studies will be withdrawn from the program. Students who have been withdrawn may request readmission. If readmitted, if another grade of C is obtained after readmission, the student will be withdrawn from the program, and will not be considered for readmission again.</p>
+                
+                <p><strong>F Rule.</strong> Students who receive a failing grade in any course during their studies will be withdrawn from the program, unless a continuation in the program is requested by the Program Director and approved by the Dean of Graduate Studies. If withdrawn, students may apply for readmission. Students who receive another failing grade after readmission will be withdrawn from the program and will not be reconsidered for readmission again.</p>
+                
+                <p><strong>Duration of Programs.</strong> It is expected that full-time students will complete the requirements for most master's/magisteriate degree programs within 6 terms (2 years). The expected time to completion for a doctoral degree for full-time students is 12 terms (4 years).</p>
+                
+                <p><strong>Time Limit.</strong> Program time limits indicate the maximum program duration specified by the university. The time limit for a master's/magisteriate degree for full-time students is 9 terms (3 years), and for part-time students is 15 terms (5 years). The time limit for a doctoral degree is 18 terms (6 years) of full-time study or 24 terms (8 years) of part-time study. A change of status once you have begun your degree does not equate to additional terms within your time limit. The number of remaining terms will be calculated by the Office of the Registrar and pro-rated. Every effort should be made to complete a thesis within the time limit provided. In exceptional circumstances a time limit extension may be requested, and upon recommendation of the GPD and approval of the School of Graduate Studies, short extensions may be permitted.</p>
+                
+                <p><strong>Graduation Requirement.</strong> In order to graduate, students must have a cumulative GPA of at least 3.00.</p>
+                
+                <p><strong>Generative Artificial Intelligence (AI).</strong> As pointed out by Concordia's Centre for Teaching and Learning (CTL), within the complex landscape of GenAI integration in higher education, it is essential to find a balance between "the pedagogical benefits and ethical challenges" of GenAI capabilities (e.g. ChatGPT). To help find this balance, the CTL proposes a framework and some guidelines. Graduate students and supervisors are encouraged to read this document and to CLEARLY DEFINE what is permitted - or not - in terms of the use of GenAI, before commencing each major requirement of the graduate program.</p>
+                <p>Students who want to use GenAI for certain aspects of their research, should first discuss this possibility with their supervisor and the committee members. If the student, the supervisor and the committee members agree on the relevance of the use of GenAI for the student's research, they need to clearly define the extent and the limits of this use. This agreement could range from a simple sentence (e.g. "I plan to use ChatGPT only to edit the language of the final version of my manuscript") to a much more detailed document for a project in which GenAI might play a more central role. This agreement and a detailed description of how GenAI has been used throughout the research should appear clearly in the final thesis (e.g. which tools were used? To perform which tasks? Using which prompts?).</p>
+                <p>For more information about how to use GenAI in higher education and at Concordia please refer to the framework and guidelines produced by the CTL: <a href="https://www.concordia.ca/ctl/tech-tools/teach-with-technology/guidelines-gen-ai.html" target="_blank">Guidelines on GenAI</a></p>
+                <button class="back-to-top" onclick="window.scrollTo({top: 0, behavior: 'smooth'})">↑ Back to top of page</button>
+            </section>
 
-        <section id="fast-track">
-            <h2>FAST-TRACKING FROM M.SC. PROGRAM</h2>
-            <p>Students enrolled in the M.Sc. who have excelled in coursework and shown substantial evidence of outstanding performance in research (for example, holding a competitive grant) may apply for permission to proceed directly to doctoral studies without submitting a master’s thesis. A candidate entering the doctoral program under accelerated admission will normally have completed their M.Sc. coursework and may have elective courses taken during their M.Sc. transferred to their Ph.D. program.</p>
-            <a href="#top" class="back-link">↑ Back to Top</a>
-        </section>
+            <section id="sec5">
+                <h2>5. M.Sc. Program Requirements</h2>
+                <ol>
+                    <li><strong>Total program requirement:</strong> 45 credits</li>
+                    <li><strong>Residence:</strong> The minimum residence requirement is one year (three semesters) of full-time graduate study, or the equivalent in part-time study.</li>
+                    <li><strong>Courses:</strong> All students must take the following:
+                        <ul>
+                            <li>9 credits: HENV 605 or HENV 610, HENV 615, HENV 685.</li>
+                            <li>6 credits in elective courses chosen from: GEOG 620, GEOG 625, HENV 620, HENV 625, HENV 630, HENV 635, HENV 640, HENV 645, HENV 650, HENV 655, HENV 660, HENV 665, HENV 670, HENV 675, HENV 680, HENV 690.</li>
+                        </ul>
+                    </li>
+                    <li><strong>Thesis:</strong> HENV 695 (30 credits).</li>
+                </ol>
 
-        <section id="msc-req">
-            <h2>M.SC. PROGRAM REQUIREMENTS</h2>
-            <p>Total program requirement: 45 credits. Residence: The minimum residence requirement is one year (three semesters) of full-time graduate study, or the equivalent in part-time study.</p>
-            <ul>
-                <li><strong>9 credits</strong>: HENV 605 or HENV 610, HENV 615, HENV 685.</li>
-                <li><strong>6 credits</strong>: Choose from elective courses GEOG 620, GEOG 625, HENV 620, HENV 625, HENV 630, HENV 635, HENV 640, HENV 645, HENV 650, HENV 655, HENV 660, HENV 665, HENV 670, HENV 675, HENV 680, HENV 690.</li>
-                <li><strong>Thesis</strong>: HENV 695 (30 credits).</li>
-            </ul>
-            <a href="#top" class="back-link">↑ Back to Top</a>
-        </section>
+                <h3 id="sec5-1">5.1 Thesis Committee</h3>
+                <p>A thesis committee must be formed by February of the first year in the program, and the student must provide the Graduate Program Director and the Graduate Program Assistant with the information regarding the makeup of the committee membership. The committee is comprised of three members: the supervisor, and two other members who can contribute to the appropriate training of the student in the field of study. If there is a co-supervisor, the committee will have four members (two supervisors and two other members). Normally, not more than one thesis committee member should be from another department and/or university. A member from outside the university would normally hold a Ph.D. degree.</p>
+                <p>The role of the thesis committee is:</p>
+                <ol>
+                    <li>To evaluate the thesis proposal (HENV 685). This is a Pass/Fail course. The student must submit a written thesis proposal (a sound rationale for the proposed research, a detailed description of the research design and methodology, and a comprehensive literature review) which will be evaluated by all members of the thesis committee. After the written part of the proposal has been accepted by the committee, the student will present orally their proposal to the committee.</li>
+                    <li>To evaluate the final thesis and the oral defence. The defence committee should be comprised of the supervisor and one of the two thesis committee members, in addition to an external examiner who has not previously been exposed to the student's research.</li>
+                </ol>
+                
+                <h3 id="sec5-2">5.2 Normal sequencing of the two-year program for a full-time student</h3>
+                <p><strong>Year 1</strong></p>
+                <ul>
+                    <li><strong>Early September:</strong> First meeting of research proposal seminar (HENV 615).</li>
+                    <li><strong>Fall term:</strong> Student will take core methodological course (HENV 605 or HENV 610) and ideally at least one of the elective courses in order to have more time to work on the thesis proposal during the winter term.</li>
+                    <li><strong>Winter term:</strong> Student will typically complete remaining elective course(s).</li>
+                    <li><strong>Mid-January:</strong> Student to submit the literature review of the thesis proposal in HENV 615.</li>
+                    <li><strong>February:</strong> Student submits to GPA and GPD the names of their thesis committee members.</li>
+                    <li><strong>March-April:</strong> Oral presentations of the thesis proposal are scheduled in HENV 615. Written thesis proposal is submitted to supervisor for first approval.</li>
+                    <li><strong>April-May:</strong> Written part of the thesis proposal circulated to thesis committee. Once approved, a meeting with the thesis committee is scheduled, where student presents orally for about 15 minutes, followed by questions and discussion with the thesis committee to provide feedback on thesis proposal to ensure that student is on the right track for data collection and analysis. The time allotted to the committee meeting is normally 1 hour.</li>
+                    <li><strong>Summer:</strong> Student can begin research activities immediately following approval of the thesis proposal by the thesis committee. Students will typically work full time on research activities from this time, until the research is completed.</li>
+                </ul>
+                <p><strong>Year 2</strong></p>
+                <ul>
+                    <li><strong>Fall semester:</strong> The student will typically be in the completion stages of research, and can begin writing up results for the thesis.</li>
+                    <li><strong>Spring semester:</strong> For Spring convocation, the final draft of the thesis must be submitted by March 15. The thesis must be successfully defended, revised and submitted in final form by April 1.</li>
+                    <li><strong>Summer semester:</strong> For Fall convocation, the final draft of the thesis must be submitted by August 15. The thesis must be successfully defended, revised, and submitted in final form by September 1.</li>
+                </ul>
+                <button class="back-to-top" onclick="window.scrollTo({top: 0, behavior: 'smooth'})">↑ Back to top of page</button>
+            </section>
 
-        <section id="objectives">
-            <h2>M.SC. AND PH.D. PROGRAM OBJECTIVES</h2>
-            <p>The M.Sc. and Ph.D. programs are designed to provide students with the theoretical foundations and methodological tools necessary to contribute to the understanding of human and environmental systems. Through an emphasis on both specialization and interdisciplinary perspectives, students are given the opportunity to carry out in-depth research work in any of the Department’s areas of specialization covering three broad categories of environment: the natural or biophysical environment; the human, cultural or behavioural environment; and the urban, built or designed environment. In addition to contributing to the advancement of knowledge, students will be well placed to enter a wide range of careers in environmental, urban planning and public policy fields.</p>
-            <a href="#top" class="back-link">↑ Back to Top</a>
-        </section>
+            <section id="sec6">
+                <h2>6. Ph.D. Program Requirements</h2>
+                <ol>
+                    <li><strong>Total program requirement:</strong> 90 credits</li>
+                    <li><strong>Residence:</strong> The minimum period of residence is two years (six terms) of full-time graduate study beyond the master's degree or three years (nine terms) of full-time graduate study (or the equivalent in part-time study) beyond the bachelor's degree for those students who are permitted to enroll for doctoral studies without completing a master's degree.</li>
+                    <li><strong>Courses:</strong> All students must take the following:
+                        <ul>
+                            <li>9 credits: HENV 801, HENV 802, HENV 805.</li>
+                            <li>6 credits in elective courses chosen from: HENV 605, HENV 610, HENV 620, HENV 625, HENV 630, HENV 635, HENV 640, HENV 645, HENV 650, HENV 655, HENV 660, HENV 665, HENV 670, HENV 675, HENV 680, or HENV 690.</li>
+                        </ul>
+                    </li>
+                    <li><strong>Thesis Proposal:</strong> HENV 810 (3 credits).</li>
+                    <li><strong>Comprehensive exam:</strong> HENV 885 (6 credits).</li>
+                    <li><strong>Research and Thesis:</strong> HENV 895 (66 credits).</li>
+                </ol>
+                
+                <h3 id="sec6-1">6.1 Fast-tracking from M.Sc. program</h3>
+                <p>Upon recommendation by full-time faculty members of the Department of Geography, Planning and Environment, students enrolled in the Master of Science in Geography, Urban and Environmental Studies at Concordia University who have excelled in their M.Sc. coursework, and who have also shown substantial evidence of outstanding performance in research (for example, holding a competitive grant [SSHRC/NSERC, FRQSC/FRQNT or a similar type of funding]) may apply for permission to proceed directly to doctoral studies without submitting a master's thesis (fast-tracking). A candidate entering the doctoral program under accelerated admission (fast-tracking) from the M.Sc. program will normally have completed their M.Sc. coursework and may have elective courses taken during their M.Sc. transferred to their Ph.D. program.</p>
+                
+                <h3 id="sec6-2">6.2 Thesis Committee</h3>
+                <p>A thesis committee must be formed by February of the first year in the program, and the student must provide the GPD and the GPA with the information on the members of their thesis committee. The committee is comprised of three members: the supervisor, and two other members who can contribute to the appropriate training of the student in the field of study. If there is a co-supervisor, the committee will have four members (two supervisors and two other members). Usually, one thesis committee member is based in another department and/or university. A member from outside the university would normally hold a Ph.D. degree.</p>
+                <p>The role of the thesis committee is:</p>
+                <ol>
+                    <li>To provide guidance on the thesis research.</li>
+                    <li>To define, with the supervisor(s), the knowledge areas for the comprehensive exam, and to draft comprehensive exam questions in these areas.</li>
+                    <li>To evaluate the thesis proposal (HENV 810) and comprehensive exam (HENV 885).</li>
+                    <li>To evaluate the final thesis and the oral defence, along with two additional thesis examiners: one internal examiner from a different department at Concordia, and one external examiner from a different university.</li>
+                </ol>
+                
+                <h3 id="sec6-3">6.3 Comprehensive Examination and Thesis Proposal</h3>
+                <p><strong>General Structure of the Comprehensive Examination</strong></p>
+                <p>The comprehensive exam is normally completed in the fall term of the 2nd year of the program and must be completed within 2 years from entry into the doctoral program. The student along with their supervisor (and thesis committee) will agree on the precise schedule of the Doctoral Comprehensive exam and inform the Graduate Program Assistant of the agreed upon schedule.</p>
+                <p>The comprehensive exam committee consists of the thesis committee. The committee prepares a comprehensive exam consisting of one or two questions related to the declared topic (the thesis field), and another one or two questions for each of two cognate fields. Cognate fields are defined broadly here as areas of knowledge that will aid the student to situate their research within a broader disciplinary and/or heuristic and/or epistemological context. Those fields are important to the student's more general training; they may or may not link directly to the thesis topic.</p>
+                <p>The comprehensive examination consists of a written and oral component. To set the comprehensive exam process in motion, the student in consultation with their supervisor should define the comprehensive exam fields (i.e. the thesis and two cognate fields) and compile a list of readings. The suggested number of readings is 60-80 articles in total, with one book being equivalent to four articles. The supervisor and student should consult the other members of the thesis committee as needed in this process. The exam should be scheduled within three months of the student receiving a confirmed reading list.</p>
+                <p>Based on the agreed upon fields for the reading list, each committee member sends one or two (depending on the selected exam model as described below) exam questions to the supervisor. The supervisor will then assemble the questions received from committee members as well as their own questions for a total of 3 or 6 questions (1 or 2 questions per field). This set of questions is then submitted to the GPA.</p>
+                <p>On the day/time scheduled to begin the written component of the exam, the GPA will send the relevant questions to the student, with a copy to the GPD, supervisor and thesis committee members. This step formally triggers the initiation of the written component of the exam. The student is responsible for being available for the scheduled period of the exam. This includes making arrangements with work and family, so that they can dedicate as much time as possible to writing the exam. In cases where students anticipate that they will have difficulty making such arrangements (e.g. for reasons of childcare), they must consult with their supervisor in advance of the writing period to discuss and, if necessary, modify the standard timeline.</p>
+                <p>Once the student receives the exam questions, they must choose the questions to answer. While undertaking the exam, they must adhere to the Academic Code of Conduct: <a href="https://www.concordia.ca/artsci/students/academic-integrity.html" target="_blank">Academic Integrity</a>. This includes refraining from seeking assistance from the supervisor or anyone else. The expectation is that the written work submitted for the comprehensive exam is the student's own work and that all other sources are fully acknowledged, consistent with scholarly convention. The supervisor of the student is responsible for supporting the student (morally and logistically), including assisting where possible, to provide relief from other tasks, such as RA work, during the period of the exam. The supervisor is not, however, permitted to provide the student with any ideas or leads related to the comprehensive exam.</p>
+                <p>All committee members are expected to assess the exam in its entirety and be prepared to ask questions at the oral comprehensive examination. At the oral comprehensive examination, which is scheduled in a time slot of 90 minutes and within three weeks of the essays being submitted, the student answers one or two rounds of questions about the submitted essays and the questions that were not answered. Following these questions, the examination committee meets in camera to assess the student's performance. At this stage, a pass/fail grade is assigned for the comprehensive exam (HENV 885), considering both the written and oral components of the exam.</p>
+                <p>In addition, the committee will complete a Comprehensive Exam Evaluation form that provides a qualitative ranking of the oral and written components of the exam as well as a brief written critique. This form is submitted to the Graduate Program Assistant, and may be used within the Department for internal awards and fellowships.</p>
+                <p>If the majority of examiners decide not to pass the student, they must arrive at a consensus on the student's performance and review the options: either failing the student, or requesting additional examination material from the student. In the latter case, the committee will provide feedback to the student followed by a request for additional written work. The deadline for the extra work is at the discretion of the committee, but the timeframe should not exceed three weeks. The examination committee will then meet to reassess the grade for the exam.</p>
+                <p><strong>The use of GenAI (e.g. ChatGPT) is NOT ALLOWED for the comprehensive exam.</strong> Any use of GenAI during a comprehensive examination will be considered as an academic offense. Note: The only exception concerns the editing of the final version of the student's essay. This use of GenAI must be approved in advance by all committee members prior to the examination. In such cases, the student must submit as part of their comprehensive exam: (1) the final essay edited by GenAI, (2) the unedited version of the essay, and (3) the exact prompt used to request the edit. The committee may consult any of these documents when assessing the quality of the exam. Any other use of GenAI during the comprehensive examination will be considered an academic offense.</p>
+                
+                <p><strong>COMPREHENSIVE EXAMINATION MODELS</strong><br>
+                With regards to the precise format of the exam, there are two possible models from which the student, in consultation with their supervisor, can select. Each model is outlined below.</p>
+                <p><strong>Model 1: The Three-Essay Model</strong><br>
+                In the case of the three-essay model, the student is responsible for being able to respond to all 6 questions provided by the thesis committee (2 questions per field). For the written component, they must select one question from each set (Thesis; Cognate 1; Cognate 2) on which they will prepare and submit an essay. Each essay should be approximately 3000 words or less. The student will generally have 3 days (72 hours) to complete each essay (9 days in total for 3 essays), with the timing of the first essay beginning from the moment of reception of the first set of questions (e.g. when 2 questions relating to the thesis topic are sent to the student, this will trigger the first 72-hour essay). Accommodation in terms of the time-frame of the exam can be made, if the supervisor, in consultation with the student, identifies a need for it. This accommodation is at the discretion of the GPD. Given the condensed timeline for the writing of these essays, students will be evaluated primarily on the content of the essays, rather than on the quality of the writing itself. There should be no more than one week of break-time between the writing of each of essay. Each essay is submitted to the Graduate Program Assistant after the 72-hour period. Note that the student is responsible for answering questions pertaining to the full set of 6 questions in the oral component of the exam.</p>
+                <p><strong>Model 2: The Review Article Model</strong><br>
+                In this case, the student receives 3 questions, which can be positioned in relation to each field (i.e. one question per field) or which can integrate the literature across the three exam fields. The expectation is that the questions will be of broader scope suitable for a more in-depth review article that draws on the literature from the complete reading list. As in Model 1, the student is responsible for being able to respond to all three questions during the oral examination. For the written component, they must select one question from the set of three questions on which they will prepare and submit a review article of approximately 7500 words. The student will have four weeks to complete the review article, and it will be submitted to the Graduate Program Assistant. The review article should be of sufficient quality and scope that it shows potential to be suitable for publication in the peer-reviewed literature. As described by the multi-disciplinary journal FACETS, a review article presents "a critical synthesis or overview of information on an important topic." Some review articles can also include a new analysis of previously published data (a meta-analysis) in which the article is able to infer new results and conclusions that emerge from a previously published body of literature.</p>
+                
+                <p><strong>Thesis Proposal (HENV 810)</strong><br>
+                A detailed thesis proposal (7500 words) should normally be submitted to the thesis committee within the first 20 months of the student's program. The committee will evaluate a written thesis proposal and will hold a committee meeting, in which the student is invited to make a presentation lasting no longer than 15 minutes. After the presentation and questions from the committee, the thesis committee meets in camera to assess the student's proposal. The time allotted to the committee meeting is normally 1 to 1.5 hours. If the proposal is deemed satisfactory, it will result in a Pass grade for HENV 810. Otherwise, the committee may give feedback to the candidate followed by a request for a revised proposal, on which the final grade will be based.</p>
+                <p>The thesis proposal meeting should be completed within two months following the completion of the comprehensive examination process. In some cases (subject to the approval of the supervisor and thesis committee, and normally restricted to cases where students have well-developed research when they begin their Ph.D.), students will have the option of writing their thesis proposal in advance of the comprehensive exam process. In this case, the thesis proposal will be presented and defended to the supervisory committee at the same time as the comprehensive examination. In such cases the oral comprehensive examination would be scheduled in a time slot of 2.5 hours maximum, with the first part (90 minutes) devoted to the comprehensive exam. This is followed by an oral presentation by the student on their thesis proposal lasting no longer than 15 minutes. The committee would therefore question the student on both the comprehensive exam questions and the proposed research.</p>
 
-        <section id="msc-sequence">
-            <h2>NORMAL SEQUENCING OF THE TWO-YEAR PROGRAM (M.SC.)</h2>
-            <h3 id="msc-y1">Year 1</h3>
-            <ul>
-                <li><strong>Early September</strong>: First meeting of research proposal seminar (HENV 615).</li>
-                <li><strong>Fall term</strong>: Student will take core methodological course (HENV 605 or HENV 610) and ideally at least one of the elective courses.</li>
-                <li><strong>Winter term</strong>: Student will typically complete remaining elective course(s).</li>
-                <li><strong>Mid-January</strong>: Student to submit the literature review of the thesis proposal in HENV 615.</li>
-                <li><strong>February</strong>: Student submits to GPA and GPD the names of their thesis committee members.</li>
-                <li><strong>March-April</strong>: Oral presentations of the thesis proposal are scheduled in HENV 615. Written thesis proposal is submitted to supervisor for first approval.</li>
-                <li><strong>April-May</strong>: Written part of the thesis proposal circulated to thesis committee. Once approved, a meeting with the thesis committee is scheduled.</li>
-                <li><strong>Summer</strong>: Student can begin research activities immediately following approval.</li>
-            </ul>
-            <h3 id="msc-y2">Year 2</h3>
-            <ul>
-                <li><strong>Fall semester</strong>: The student will typically be in the completion stages of research, and can begin writing up results for the thesis.</li>
-                <li><strong>Spring semester</strong>: For Spring convocation, the final draft of the thesis must be submitted by March 15.</li>
-                <li><strong>Summer semester</strong>: For Fall convocation, the final draft of the thesis must be submitted by August 15.</li>
-            </ul>
-            <a href="#top" class="back-link">↑ Back to Top</a>
-        </section>
+                <h3 id="sec6-4">6.4 Experiential Learning (HENV 802)</h3>
+                <p>One unique feature of the Ph.D. program is a 3-credit requirement for students to work for a minimum of 200 hours (either full-time or part-time) in either the private sector in a field relevant to their doctoral research, or in a research laboratory based outside Concordia University (in a non-profit organization or in the government). This should normally be completed during the second year of the program. Acquiring experience in a research laboratory in a foreign country is encouraged. For funding, students are encouraged to use programs such as Mitacs Globalink Research Award to study abroad in a research laboratory, or Mitacs Accelerate to work with a private company or a non-profit organization (<a href="https://www.mitacs.ca/" target="_blank">https://www.mitacs.ca/</a>). Please contact the GPA for the relevant forms associated with this course, which must be completed.</p>
+                
+                <h3 id="sec6-5">6.5 Pedagogical Training (HENV 801)</h3>
+                <p>Another unique feature of the Ph.D. program, is a 3-credit requirement to teach at least 4 lectures at the undergraduate level, to help ensure that each student acquires strong teaching and communication skills, which are useful for both academic and non-academic positions. Candidates are also required to attend a seminar in university teaching in collaboration with the Centre for Teaching and Learning Services of Concordia University prior to teaching the lectures. The choice of which classes the student will teach will be made in consultation with the supervisor. In most cases, students will present in an undergraduate course taught by the supervisor, but this is not a requirement and arrangements can be made with other members of the Department, based on the expertise of the student and the content of the course. Please contact the GPA for the relevant form that is associated with this course which must be completed by the professor overseeing the class(es).</p>
+                
+                <h3 id="sec6-6">6.6 Normal sequencing of the Ph.D. program for a full-time student</h3>
+                <p><strong>Year 1</strong></p>
+                <ul>
+                    <li><strong>Early September:</strong> First meeting of research proposal seminar (HENV 805)</li>
+                    <li><strong>Fall term:</strong> Student will take one or two of the elective courses to ideally have more time to begin work on the comprehensive exams and thesis proposal during the winter term.</li>
+                    <li><strong>Winter term:</strong> Student will take remaining elective course(s) and/or work on developing research questions and thesis proposal.</li>
+                    <li><strong>Early February:</strong> Student to submit to GPA and GPD the names of the thesis committee members.</li>
+                    <li><strong>April:</strong> Articulation of the research questions (within HENV 805). Oral presentations of the draft thesis proposal are scheduled in HENV 805.</li>
+                    <li><strong>May:</strong> First meeting of the student with the thesis committee to discuss research questions and proposed activities for Year 2.</li>
+                    <li><strong>Summer:</strong> Students work on their comprehensive exams and thesis proposal.</li>
+                </ul>
+                <p><strong>Year 2</strong></p>
+                <ul>
+                    <li><strong>Fall term:</strong> Comprehensive exam and Thesis Proposal</li>
+                    <li><strong>Winter to summer:</strong> Experiential Learning (HENV 802) and continuation in research</li>
+                </ul>
+                <p><strong>Year 3</strong></p>
+                <ul>
+                    <li><strong>Fall or winter term:</strong> Pedagogical Training (HENV 801) and continuation in research</li>
+                    <li><strong>Summer:</strong> First draft of final thesis ready, or continuation in research</li>
+                </ul>
+                <p><strong>Year 4</strong></p>
+                <ul>
+                    <li><strong>Fall or winter term:</strong> Submit final thesis and thesis defense. Thesis submission deadlines are February 14th and July 18th for Spring and Fall Convocation, respectively.</li>
+                </ul>
+                <button class="back-to-top" onclick="window.scrollTo({top: 0, behavior: 'smooth'})">↑ Back to top of page</button>
+            </section>
 
-        <section id="phd-sequence">
-            <h2>NORMAL SEQUENCING OF THE PH.D. PROGRAM</h2>
-            <h3 id="phd-y1">Year 1</h3>
-            <ul>
-                <li><strong>Early September</strong>: First meeting of research proposal seminar (HENV 805).</li>
-                <li><strong>Fall/Winter</strong>: Take elective courses and develop research questions.</li>
-                <li><strong>Early February</strong>: Submit committee names to GPA and GPD.</li>
-                <li><strong>April/May</strong>: Articulation of research questions and first meeting with committee.</li>
-            </ul>
-            <h3 id="phd-y2">Year 2</h3>
-            <ul>
-                <li><strong>Fall term</strong>: Comprehensive exam and Thesis Proposal.</li>
-                <li><strong>Winter to Summer</strong>: Experiential Learning (HENV 802) and continuation in research.</li>
-            </ul>
-            <h3 id="phd-y34">Year 3/4</h3>
-            <ul>
-                <li><strong>Year 3</strong>: Pedagogical Training (HENV 801) and research.</li>
-                <li><strong>Year 4</strong>: Submit final thesis and defense. Submission deadlines are Feb 14 and July 18.</li>
-            </ul>
-            <a href="#top" class="back-link">↑ Back to Top</a>
-        </section>
+            <section id="sec7">
+                <h2>7. Course Descriptions</h2>
+                
+                <h3 id="sec7-1">7.1 Required courses for M.Sc. program</h3>
+                <p><strong>HENV 605 Advanced Qualitative Research Methods (3 credits)</strong><br>
+                This course considers some of the foundational theories that inform contemporary research in the fields of Human Geography and Urban Studies. It also explores a spectrum of qualitative research paradigms, theories and advanced methodologies relevant to social science.</p>
+                
+                <p><strong>HENV 610 Advanced Quantitative Research Methods (3 credits)</strong><br>
+                This course considers experimental design and advanced data analysis methods in Geography and Environmental Sciences. The course focuses on statistical analysis of quantitative data, using the R programming environment. Specific topics include data exploration and plotting, advanced statistical tests, linear regression, statistical model selection, non-parametric tests and mixed effects models.</p>
+                
+                <p><strong>HENV 615 Research Proposal Seminar (3 credits)</strong><br>
+                This seminar provides an opportunity to extend, deepen, and apply the conceptual and methodological frameworks presented in the core and elective courses, through a combination of classroom discussions and attendance of departmental research seminars. Students are taught research and presentation skills and are guided through the process of preparing their thesis research proposals. Presentation of the student's proposed research to their thesis committee members is a requirement for successful completion of this course. The Research Proposal Seminar will meet approximately ten times over two semesters. The first meeting will be early in September, at which the schedule for the following meetings will be determined.</p>
+                
+                <p><strong>HENV 685 Thesis Proposal (3 credits)</strong><br>
+                Students are required to select their research topic and formulate a research proposal under the supervision of a thesis supervisor and with input from a thesis committee. The written proposal will include a sound rationale for the proposed research, a detailed description of the research design and methodology, and a comprehensive literature review. Students are also required to present an oral presentation of their proposal to the Department. The thesis proposal must be formally approved by the thesis committee and the Graduate Program Director before research activities can begin. The thesis proposal should be completed before the end of the second semester of residency in the Program and after a minimum of 6 credits in the Program have been taken.</p>
+                
+                <p><strong>HENV 695 Thesis (30 credits)</strong><br>
+                Students are required to demonstrate their ability to carry out original, independent research. The thesis, which will be researched and written under the direction of a supervisor and thesis committee, should normally not exceed 100 pages and include a literature review, research objectives, methodology, analysis of findings and concluding reflections. Students also have the option to produce a research-creation thesis. The research-creation thesis is comprised of a practical component of creative production or a prototype as well as a written component of approximately 40-50 pages, which written includes a literature review (pertaining to content or format/media employed), a theoretical and methodological contextualization, a critical reflection on the research creation and its outcomes, and other areas as deemed necessary by the student and the student's thesis committee. For the research-creation, it is expected that one of the committee members specializes in the format or genre used for the creative component. A digital reproduction of the creative component must be attached to the manuscript at the time of submission. Upon completion of the thesis, the student will be required to defend their thesis before an external examiner and their thesis committee.</p>
 
-        <section id="pedagogical">
-            <h2>PEDAGOGICAL TRAINING (HENV 801)</h2>
-            <p>A 3-credit requirement to teach at least 4 lectures at the undergraduate level. Candidates are also required to attend a seminar in university teaching prior to lecturing. The choice of classes is made in consultation with the supervisor. The course is graded on a pass/fail basis.</p>
-            <a href="#top" class="back-link">↑ Back to Top</a>
-        </section>
+                <h3 id="sec7-2">7.2 Required courses for Ph.D. program</h3>
+                <p><strong>HENV 801 Pedagogical Training (3 credits)</strong><br>
+                The objective of this course is to ensure that all Ph.D. students acquire strong teaching and other communication skills which are useful for both academic and non-academic positions. Candidates are required to attend a seminar in university teaching in collaboration with the Centre for Teaching and Learning Services of Concordia University. Following the successful completion of this seminar, candidates are required to give four lectures (normally 75 minutes each) to undergraduate classes. The course is graded on a pass/fail basis.</p>
+                
+                <p><strong>HENV 802 Experiential Learning (3 credits)</strong><br>
+                The objective of this course is to ensure that all students acquire some practical experience in their field of research. Candidates are required to work for a minimum of 200 hours (either full-time or part-time) in either the private sector in a field relevant to their doctoral research, in a research laboratory based outside Concordia University, in a non-profit organization or in the government. The course is graded on a pass/fail basis.</p>
+                
+                <p><strong>HENV 805 Research Proposal Seminar (3 credits)</strong><br>
+                Conceptual and methodological frameworks related to human interventions in the environment in the built, social and natural environment are examined through various student presentations and exchanges on their research topic. This course includes completion of the oral presentation of the research proposal.</p>
+                
+                <p><strong>HENV 810 Thesis Proposal (3 credits)</strong><br>
+                Students are required to select their research topic and formulate a thesis proposal under the supervision of a thesis supervisor and with input from a supervisory committee. The written proposal includes a sound rationale for the proposed research, a detailed description of the research design and methodology, and a comprehensive literature review. The thesis proposal is assessed by the supervisory committee and approved by the Graduate Program Director.</p>
+                
+                <p><strong>HENV 885 Comprehensive Exam (6 credits)</strong><br>
+                The comprehensive exam is prepared in consultation with the supervisory committee and aims to ensure that the student has a sound knowledge of three areas of concentration within their field of research. The examining committee consists of the supervisory committee plus one additional member of the Department of Geography, Planning and Environment and is chaired by the Graduate Program Director. The student is evaluated on the quality of the written and oral responses to questions.</p>
+                
+                <p><strong>HENV 895 Research and Thesis (66 credits)</strong><br>
+                A major portion of the doctoral program involves the planning and execution of innovative and original research under the direction of a supervisor or two co-supervisors. The thesis is examined by a Thesis Examining Committee and is defended orally.</p>
 
-        <section id="phd-req">
-            <h2>PH.D. PROGRAM REQUIREMENTS</h2>
-            <p>Total program requirement: 90 credits. Residence: The minimum period of residence is two years (six terms) of full-time graduate study beyond the master’s degree or three years (nine terms) of full-time graduate study beyond the bachelor’s degree for fast-tracked students.</p>
-            <ul>
-                <li><strong>9 credits</strong>: HENV 801, HENV 802, HENV 805.</li>
-                <li><strong>6 credits</strong> in elective courses chosen from: HENV 605, HENV 610, HENV 620, HENV 625, HENV 630, HENV 635, HENV 640, HENV 645, HENV 650, HENV 655, HENV 660, HENV 665, HENV 670, HENV 675, HENV 680, or HENV 690.</li>
-                <li><strong>Thesis Proposal</strong>: HENV 810 (3 credits).</li>
-                <li><strong>Comprehensive exam</strong>: HENV 885 (6 credits).</li>
-                <li><strong>Research and Thesis</strong>: HENV 895 (66 credits).</li>
-            </ul>
-            <a href="#top" class="back-link">↑ Back to Top</a>
-        </section>
+                <h3 id="sec7-3">7.3 Elective courses for M.Sc. and Ph.D. programs</h3>
+                <p><strong>MSc</strong> - List of graduate courses, including electives offered by the department in the past: <a href="https://www.concordia.ca/academics/graduate/calendar/current/arts-and-science-programs/geography-urban-and-environmental-studies-msc.html" target="_blank">MSc Courses</a></p>
+                <p><strong>PhD</strong> - List of graduate courses - including electives - offered by the department in the past: <a href="https://www.concordia.ca/academics/graduate/calendar/current/arts-and-science-programs/geography-urban-and-environmental-studies-phd.html" target="_blank">PhD Courses</a></p>
+                <p>To see which courses are available on a yearly basis, you can use the class schedule search tool available on myconcordia.ca</p>
+                <button class="back-to-top" onclick="window.scrollTo({top: 0, behavior: 'smooth'})">↑ Back to top of page</button>
+            </section>
 
-        <section id="office-space">
-            <h2>POLICY ON OFFICE SPACE</h2>
-            <p>The Department provides office space for research-based graduate students. Students in labs will have space reserved within those labs; others will be assigned to shared spaces within the department. Office space and computer access are for a duration of 6 terms (2 years) for M.Sc. students and 12 terms (4 years) for Ph.D. students.</p>
-            <a href="#top" class="back-link">↑ Back to Top</a>
-        </section>
+            <section id="sec8">
+                <h2>8. Detailed Information on the Master's and Ph.D. Thesis</h2>
+                <p>Students have the option of writing their Master's or Ph.D. theses in one of three formats: a traditional thesis, a manuscript-based thesis or a research-creation thesis. Please consult the Thesis Regulations at the School of Graduate Studies for submission: <a href="http://www.concordia.ca/content/dam/sgs/docs/handbooks/thesispreparationguide.pdf" target="_blank">Thesis Preparation Guide</a></p>
+                <p>Students are required to consult the Graduate Program Calendar for submission dates to ensure timely graduation and appropriate submission dates for specific graduation periods.</p>
+                
+                <h3 id="sec8-1">8.1 M.Sc</h3>
+                <p>Our Departmental process for preparing, submitting and defending a Master's Thesis is summarised below, with additional information available on the Concordia University Thesis Office website: <a href="https://www.concordia.ca/gradstudies/students/thesis-based/process.html" target="_blank">Thesis Process</a></p>
+                <ol>
+                    <li>The Department of Geography, Planning and Environment requires that the form Notification of Thesis Deposition be submitted to the GPA approximately 6-8 weeks before the proposed defence date.</li>
+                    <li>The Master's Thesis will normally not be more than 40,000 words (around 100 pages at 1.5 line spacing) in length. It is expected that the length of the written component of the research-creation thesis will normally not be more than 20,000 words.</li>
+                    <li>An electronic copy in both Word and PDF formats will be emailed to the GPA at least 3 weeks before the scheduled defence. The GPA will coordinate the sending of the thesis to both the external and internal examiners. Students are not to distribute copies of the thesis to the Examination Committee unless specifically instructed otherwise. If paper copies are required by any of the Examination Committee members, the GPA will notify the student that they must provide a spiral-bound copy directly to the examiner in question.</li>
+                    <li>The Master's Thesis Examination Committee will consist of:
+                        <ul>
+                            <li>Faculty supervisor(s)</li>
+                            <li>One internal examiner, selected from the two members of the thesis committee</li>
+                            <li>One external examiner (from outside the Department and/or University)</li>
+                        </ul>
+                    </li>
+                    <li>The supervisor(s) will select the external examiner to serve on the Thesis Examination Committee, subject to approval by the Graduate Program Director.</li>
+                    <li>Once selected, the external and internal examiners, as well as the supervisor, will be provided with the Examiner's Preliminary Evaluation of a Master's Thesis form.</li>
+                    <li>A defence date will be set 3-4 weeks from the time the examination committee is provided with Examiner's Preliminary Evaluation of a Master's Thesis. This can be cancelled if the external examiner recommends against an oral defence of the Master's Thesis at this time. The examination committee will evaluate the thesis and forward the Examiner's Preliminary Evaluation of a Master's Thesis to the Graduate Program Director at least one week prior to the scheduled defence date.</li>
+                    <li>The Examining Committee can render one of two decisions, subject to a majority vote:
+                        <ul>
+                            <li><strong>Accepted:</strong> A thesis may be accepted as submitted or accepted with modifications (minor or major). Modifications are defined as revisions which can be made typically within six months and to the satisfaction of the supervisor.</li>
+                            <li><strong>Not Accepted:</strong> A thesis may be re-submitted only once, no more than 6 months after the initial defence date, to the same Examining Committee.</li>
+                        </ul>
+                    </li>
+                    <li>If the Master's Thesis Examination Committee recommends accepting a thesis after the oral defence with any modifications, the candidate must re-submit a final draft to their supervisor, based on the Committee's recommendation(s), with all necessary modifications and corrections. The supervisor will confirm with the GPA when all modifications and corrections have been done.</li>
+                    <li>Students must then submit the final version of the Thesis Office electronically using Spectrum, Concordia University's Research Repository. They must also notify the GPA when Spectrum submission is complete. Students are encouraged to submit as soon as they can, and to remain in communication with the GPA, in order to have sufficient time to overcome any unexpected difficulties and facilitate graduation.</li>
+                </ol>
+                <p>The final version must contain all revisions required by the Examining Committee and/or formatting revisions required by the Thesis Office. The electronic submission must be in PDF/a format (archival PDF). A guide to preparing your thesis for deposit in Spectrum can be found here: <a href="https://www.concordia.ca/gradstudies/students/thesis-based/process/send-your-final-submission.html" target="_blank">Final Submission Guide</a>. To deposit the thesis, students must log on to Spectrum using their Concordia Netname and password, and follow the instructions using the HELP button. They will be provided with detailed instructions.</p>
 
-        <section id="msc-committee">
-            <h2>THESIS COMMITTEE (M.SC.)</h2>
-            <p>A thesis committee must be formed by February of the first year in the program, and the student must provide the Graduate Program Director and the Graduate Program Assistant with the information regarding the makeup of the committee membership. The committee is comprised of three members: the supervisor, and two other members who can contribute to the appropriate training of the student in the field of study. If there is a co-supervisor, the committee will have four members (two supervisors and two other members). Normally, not more than one thesis committee member should be from another department and/or university. A member from outside the university would normally hold a Ph.D. degree.</p>
-            <p>The role of the thesis committee is to evaluate the thesis proposal (HENV 685). This is a Pass/Fail course. The student must submit a written thesis proposal (a sound rationale for the proposed research, a detailed description of the research design and methodology, and a comprehensive literature review) which will be evaluated by all members of the thesis committee. After the written part of the proposal has been accepted by the committee, the student will present orally their proposal to the committee. The committee also evaluates the final thesis and the oral defence.</p>
-            <a href="#top" class="back-link">↑ Back to Top</a>
-        </section>
+                <h3 id="sec8-2">8.2 Ph.D</h3>
+                <p>Ph.D. defences are administrated by Concordia University's Thesis Office and both students and supervisors should review their requirements by consulting this link: <a href="https://www.concordia.ca/gradstudies/students/thesis-based/process.html" target="_blank">Thesis Process</a></p>
+                <p>Concordia requires that the Doctoral Thesis Examination Committee Form be submitted to the Thesis Office (thesis@concordia.ca) with a copy to our department GPA 6-8 weeks before the proposed defence date.</p>
+                <p>Doctoral theses can take the form of a traditional chapter-based, manuscript-based, and research-creation thesis. As a guideline, a typical traditional chapter-based PhD thesis in our department is about 100,000 words (around 250 pages at 1.5 line spacing) while a research-creation and a manuscript-based PhD thesis are more about 60,000 words (around 150 pages at 1.5 line spacing). These values can vary considerably depending on the project as well as on the importance given to the creative work in a research-creation investigation.</p>
+                <p>Details for thesis preparation can be found in the Thesis Preparation Guide: <a href="https://www.concordia.ca/content/dam/sgs/docs/handbooks/thesispreparationguide.pdf" target="_blank">Thesis Preparation Guide</a></p>
+                <button class="back-to-top" onclick="window.scrollTo({top: 0, behavior: 'smooth'})">↑ Back to top of page</button>
+            </section>
 
-        <section id="phd-committee">
-            <h2>THESIS COMMITTEE (PH.D.)</h2>
-            <p>A thesis committee must be formed by February of the first year in the program. The committee is comprised of three members: the supervisor, and two other members who can contribute to the appropriate training of the student in the field of study. Usually, one thesis committee member is based in another department and/or university. The role of the committee is to provide guidance on the thesis research, define knowledge areas for the comprehensive exam, evaluate the thesis proposal (HENV 810) and comprehensive exam (HENV 885), and evaluate the final thesis and oral defence.</p>
-            <a href="#top" class="back-link">↑ Back to Top</a>
-        </section>
-    </main>
-</div>
+            <section id="sec9">
+                <h2>9. Policy on Office Space for M.Sc. and Ph.D. Students</h2>
+                <p>The Department provides office space for research-based graduate students. Students working under the supervision of a faculty member with a research laboratory (<a href="https://www.concordia.ca/artsci/geography-planning-environment/research.html" target="_blank">GPE Research</a>) will be based in these lab spaces will have space reserved for them within the respective lab. Faculty members are expected to provide computers for their labs.</p>
+                <p>Students that are not supervised by a faculty member with dedicated space, will be assigned to shared spaces, with shared computers, within the graduate student rooms in the department. Office space and computer access are for a duration of 6 terms (2 years) for M.Sc. students and of 12 terms (4 years) for Ph.D. students.</p>
+                <button class="back-to-top" onclick="window.scrollTo({top: 0, behavior: 'smooth'})">↑ Back to top of page</button>
+            </section>
 
-<script>
-function toggleSubmenu(event, submenuId) {
-    // Check if the click was directly on the link or the parent element
-    const submenu = document.getElementById(submenuId);
-    if (submenu) {
-        submenu.classList.toggle('active');
-    }
-}
+            <section id="sec-index">
+                <h2>Alphabetical Index</h2>
+                <div class="index-grid">
+                    <div class="index-group">
+                        <h3>A</h3>
+                        <ul>
+                            <li><a href="#sec4">Academic Regulations</a></li>
+                            <li><a href="#sec3">Admission Requirements</a></li>
+                            <li><a href="#sec4">Assessment Grade Point Average (AGPA)</a></li>
+                        </ul>
+                    </div>
+                    <div class="index-group">
+                        <h3>C</h3>
+                        <ul>
+                            <li><a href="#sec4">C Rule</a></li>
+                            <li><a href="#sec6-3">Comprehensive Examination</a></li>
+                            <li><a href="#sec1">Consultation</a></li>
+                            <li><a href="#sec7">Course Descriptions</a></li>
+                        </ul>
+                    </div>
+                    <div class="index-group">
+                        <h3>D</h3>
+                        <ul>
+                            <li><a href="#sec4">Duration of Programs</a></li>
+                        </ul>
+                    </div>
+                    <div class="index-group">
+                        <h3>E</h3>
+                        <ul>
+                            <li><a href="#sec7-3">Elective courses</a></li>
+                            <li><a href="#sec6-4">Experiential Learning (HENV 802)</a></li>
+                        </ul>
+                    </div>
+                    <div class="index-group">
+                        <h3>F</h3>
+                        <ul>
+                            <li><a href="#sec4">F Rule</a></li>
+                            <li><a href="#sec6-1">Fast-tracking (M.Sc. to Ph.D.)</a></li>
+                        </ul>
+                    </div>
+                    <div class="index-group">
+                        <h3>G</h3>
+                        <ul>
+                            <li><a href="#sec4">Generative Artificial Intelligence (AI)</a></li>
+                            <li><a href="#sec1">Graduate Program Assistant (GPA)</a></li>
+                            <li><a href="#sec1">Graduate Program Director (GPD)</a></li>
+                            <li><a href="#sec4">Graduation Requirement</a></li>
+                        </ul>
+                    </div>
+                    <div class="index-group">
+                        <h3>L</h3>
+                        <ul>
+                            <li><a href="#sec3-2">Language Proficiency</a></li>
+                        </ul>
+                    </div>
+                    <div class="index-group">
+                        <h3>M</h3>
+                        <ul>
+                            <li><a href="#sec5">M.Sc. Program Requirements</a></li>
+                            <li><a href="#sec8-1">Manuscript-based thesis</a></li>
+                        </ul>
+                    </div>
+                    <div class="index-group">
+                        <h3>O</h3>
+                        <ul>
+                            <li><a href="#sec9">Office Space</a></li>
+                        </ul>
+                    </div>
+                    <div class="index-group">
+                        <h3>P</h3>
+                        <ul>
+                            <li><a href="#sec6-5">Pedagogical Training (HENV 801)</a></li>
+                            <li><a href="#sec6">Ph.D. Program Requirements</a></li>
+                        </ul>
+                    </div>
+                    <div class="index-group">
+                        <h3>R</h3>
+                        <ul>
+                            <li><a href="#sec8-1">Research-creation thesis</a></li>
+                            <li><a href="#sec7">Research Proposal Seminar</a></li>
+                        </ul>
+                    </div>
+                    <div class="index-group">
+                        <h3>T</h3>
+                        <ul>
+                            <li><a href="#sec5-1">Thesis Committee (M.Sc.)</a></li>
+                            <li><a href="#sec6-2">Thesis Committee (Ph.D.)</a></li>
+                            <li><a href="#sec6-3">Thesis Proposal</a></li>
+                            <li><a href="#sec4">Time Limit</a></li>
+                        </ul>
+                    </div>
+                </div>
+                <button class="back-to-top" onclick="window.scrollTo({top: 0, behavior: 'smooth'})">↑ Back to top of page</button>
+            </section>
 
-let currentMatches = [];
-let currentIndex = -1;
+        </main>
+    </div>
 
-function performSearch() {
-    clearHighlightsInternal();
-    const searchTerm = document.getElementById('search-input').value.trim();
-    if (!searchTerm) return;
-    const walker = document.createTreeWalker(document.getElementById('content-column'), NodeFilter.SHOW_TEXT, null, false);
-    const nodes = [];
-    let node;
-    while(node = walker.nextNode()) {
-        if (node.parentElement.tagName !== 'SCRIPT' && node.parentElement.tagName !== 'STYLE' && node.textContent.toLowerCase().includes(searchTerm.toLowerCase())) {
-            nodes.push(node);
+    <script>
+        let currentMatches = [];
+        let currentIndex = 0;
+
+        function executeSearch() {
+            clearHighlightsInternal();
+            const term = document.getElementById('search-input').value.trim();
+            if (!term) {
+                clearHighlights();
+                return;
+            }
+            
+            const contentArea = document.getElementById('content-area');
+            const regex = new RegExp(`(${term})`, 'gi');
+            
+            walkAndHighlight(contentArea, regex);
+            
+            currentMatches = document.querySelectorAll('.highlight');
+            if (currentMatches.length > 0) {
+                document.getElementById('nav-controls').style.display = 'flex';
+                currentIndex = 0; 
+                scrollAndFocus(); 
+                updateSearchInfo();
+            } else {
+                document.getElementById('nav-controls').style.display = 'none';
+            }
         }
-    }
-    nodes.forEach(node => {
-        const regex = new RegExp(`(${searchTerm})`, 'gi');
-        const span = document.createElement('span');
-        span.innerHTML = node.textContent.replace(regex, '<mark class="highlight">$1</mark>');
-        node.parentNode.replaceChild(span, node);
-    });
-    currentMatches = document.querySelectorAll('.highlight');
-    if (currentMatches.length > 0) {
-        document.getElementById('nav-controls').style.display = 'flex';
-        currentIndex = 0; scrollAndFocus(); updateSearchInfo();
-    }
-}
 
-function scrollAndFocus() {
-    const el = currentMatches[currentIndex];
-    el.classList.add('current');
-    el.scrollIntoView({ behavior: 'smooth', block: 'center' });
-}
+        function walkAndHighlight(node, regex) {
+            if (node.nodeType === 3) { // Text node
+                const match = node.nodeValue.match(regex);
+                if (match) {
+                    const span = document.createElement('span');
+                    span.innerHTML = node.nodeValue.replace(regex, '<span class="highlight">$1</span>');
+                    node.parentNode.replaceChild(span, node);
+                }
+            } else if (node.nodeType === 1 && node.childNodes && !/(script|style)/i.test(node.tagName)) {
+                for (let i = 0; i < node.childNodes.length; i++) {
+                    walkAndHighlight(node.childNodes[i], regex);
+                }
+            }
+        }
 
-function updateSearchInfo() {
-    document.getElementById('search-info').textContent = `${currentIndex + 1} of ${currentMatches.length} matches.`;
-}
+        function scrollAndFocus() {
+            const el = currentMatches[currentIndex];
+            el.classList.add('current');
+            el.scrollIntoView({ behavior: 'smooth', block: 'center' });
+        }
 
-function clearHighlightsInternal() {
-    document.querySelectorAll('.highlight').forEach(h => {
-        const p = h.parentNode; p.replaceChild(document.createTextNode(h.textContent), h); p.normalize();
-    });
-}
+        function updateSearchInfo() {
+            document.getElementById('search-info').textContent = `${currentIndex + 1} of ${currentMatches.length} matches.`;
+        }
 
-function clearHighlights() {
-    clearHighlightsInternal();
-    document.getElementById('nav-controls').style.display = 'none';
-    document.getElementById('search-input').value = "";
-}
+        function clearHighlightsInternal() {
+            document.querySelectorAll('.highlight').forEach(h => {
+                const p = h.parentNode; 
+                p.replaceChild(document.createTextNode(h.textContent), h); 
+                p.normalize();
+            });
+        }
 
-function jumpNext() {
-    if (!currentMatches.length) return;
-    currentMatches[currentIndex].classList.remove('current');
-    currentIndex = (currentIndex + 1) % currentMatches.length;
-    scrollAndFocus(); updateSearchInfo();
-}
+        function clearHighlights() {
+            clearHighlightsInternal();
+            document.getElementById('nav-controls').style.display = 'none';
+            document.getElementById('search-input').value = "";
+        }
 
-function jumpPrev() {
-    if (!currentMatches.length) return;
-    currentMatches[currentIndex].classList.remove('current');
-    currentIndex = (currentIndex - 1 + currentMatches.length) % currentMatches.length;
-    scrollAndFocus(); updateSearchInfo();
-}
-</script>
+        function jumpNext() {
+            if (!currentMatches.length) return;
+            currentMatches[currentIndex].classList.remove('current');
+            currentIndex = (currentIndex + 1) % currentMatches.length;
+            scrollAndFocus(); updateSearchInfo();
+        }
 
+        function jumpPrev() {
+            if (!currentMatches.length) return;
+            currentMatches[currentIndex].classList.remove('current');
+            currentIndex = (currentIndex - 1 + currentMatches.length) % currentMatches.length;
+            scrollAndFocus(); updateSearchInfo();
+        }
+    </script>
+
+    <time class="version-tag" datetime="2026-04-24">Updated Apr 24, 2026 Ver 3.0</time>
 </body>
 </html>
